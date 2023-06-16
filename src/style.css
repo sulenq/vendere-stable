@@ -1,0 +1,49 @@
+* {
+  /* border: 1px solid black !important; */
+  box-sizing: border-box !important;
+  font-family: 'Poppins', sans-serif;
+  scroll-behavior: smooth;
+}
+
+:root {
+  --primary-light: #dde8fd;
+  --primary: #5a8cf0;
+  --primary-hover: #6a99f6;
+  --primary-active: #5483e1;
+  --light-gray: #c7c7c7;
+  --divider: #92929242;
+}
+
+.container {
+  width: 100%;
+  max-width: 2560px;
+}
+.wrapper {
+  width: 100%;
+  border-bottom: 1px solid var(--divider);
+  justify-content: center;
+}
+.btn {
+  border-radius: 0 !important;
+  padding: 0 24px !important;
+}
+.primary-btn {
+  background: var(--primary) !important;
+  color: white !important;
+}
+.primary-btn:hover {
+  background: var(--primary-hover) !important;
+}
+.primary-btn:active {
+  background: var(--primary-active) !important;
+}
+.modal {
+  border-radius: 0 !important;
+}
+.input {
+  border-radius: 0 !important;
+}
+.input:focus-visible {
+  border: 1px solid var(--primary) !important;
+}
+/* ROOT BG */
