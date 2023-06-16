@@ -171,7 +171,7 @@ const SignIn = () => {
               h={'inherit'}
               className={'btn primary-btn'}
               onClick={() => {
-                navigate('/admin-products');
+                navigate('/admin');
               }}
             >
               SIGN IN
@@ -229,7 +229,12 @@ const Header = () => {
 
 const Body = () => {
   return (
-    <VStack px={'24px'} h={'inherit'} justifyContent={'center'}>
+    <VStack
+      className={'container'}
+      px={'24px'}
+      h={'inherit'}
+      justifyContent={'center'}
+    >
       <Text
         fontSize={'xxx-large'}
         textAlign={'center'}
@@ -246,7 +251,7 @@ const Body = () => {
 function LandingPage() {
   return (
     <VStack id={'mainContainer'}>
-      <VStack h={'100vh'}>
+      <VStack h={'100vh'} w={'100%'}>
         <Header />
         <Body />
       </VStack>
