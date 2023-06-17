@@ -13,6 +13,10 @@
   --light-gray: #c7c7c7;
   --divider: #92929242;
 }
+::selection {
+  background-color: #5a8cf0;
+  color: #ffffff;
+}
 
 .wrapper {
   width: 100%;
@@ -27,11 +31,11 @@
 
 .btn {
   border-radius: 0 !important;
-  padding: 0 24px !important;
+  padding: 8px 24px !important;
 }
 .sBtn {
   border-radius: 0 !important;
-  padding: 0 16px !important;
+  padding: 8px 16px !important;
 }
 .primary-btn {
   background: var(--primary) !important;
@@ -45,6 +49,12 @@
 }
 .modal {
   border-radius: 0 !important;
+}
+.closeBtn {
+  border-radius: 0 !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
 }
 .input {
   border-radius: 0 !important;
@@ -61,7 +71,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: #000;
+  background: #000000;
   color: white;
 }
 .navIconContainer {
@@ -72,5 +82,15 @@
 .navIconContainer:hover {
   background: #2a2a2a;
   cursor: pointer;
+}
+
+.modalContent {
+  border-radius: 0 !important;
+  margin: 0 12px !important;
+}
+.modalFooter {
+  border-radius: 0 !important;
+  height: 50px;
+  padding: 0 !important;
 }
 /* ROOT BG */
