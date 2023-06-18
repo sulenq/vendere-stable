@@ -133,11 +133,7 @@ const TopBar = () => {
   const formattedDate = date.toLocaleDateString('id-ID', options);
 
   return (
-    <HStack
-      w={'100%'}
-      justifyContent={'space-between'}
-      borderBottom="1px solid var(--divider)"
-    >
+    <HStack w={'100%'} justifyContent={'space-between'}>
       <Text px={'16px'}>{formattedDate}</Text>
       <HStack spacing={null}>
         <Button variant={'ghost'} borderRadius={'0 !important'} p={'8px'}>
@@ -157,7 +153,12 @@ const PageHeader = props => {
       justifyContent={'space-between'}
       borderBottom={'1px solid var(--divider)'}
     >
-      <Heading py={'8px'} px={'16px'}>
+      <Heading
+        w={props.hasAddBtn ? 'calc(100% - 120px)' : '100%'}
+        py={'8px'}
+        px={'16px'}
+        borderTop="1px solid var(--divider)"
+      >
         {props.title}
       </Heading>
       {props.hasAddBtn ? (
