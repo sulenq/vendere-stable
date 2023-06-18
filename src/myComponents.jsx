@@ -135,7 +135,7 @@ const TopBar = () => {
 
   return (
     <HStack w={'100%'} justifyContent={'space-between'}>
-      <Text px={'20px'}>{formattedDate}</Text>
+      <Text px={'18px'}>{formattedDate}</Text>
       <HStack spacing={null}>
         <Button
           variant={'ghost'}
@@ -161,7 +161,7 @@ const PageHeader = props => {
       <Heading
         w={props.hasAddBtn ? 'calc(100% - 120px)' : '100%'}
         py={'8px'}
-        px={'20px'}
+        px={'18px'}
         borderTop="1px solid var(--divider)"
       >
         {props.title}
@@ -1599,7 +1599,7 @@ const List = props => {
         <Input
           className={'input'}
           placeholder={'Search'}
-          px={'24px'}
+          px={'18px'}
           border={'none'}
           borderBottom={'1px solid var(--divider)'}
         />
@@ -1625,7 +1625,7 @@ const List = props => {
                 switch (h) {
                   default:
                     return (
-                      <Th key={index} px={'20px !important'}>
+                      <Th key={index} px={'18px !important'}>
                         {h}
                       </Th>
                     );
@@ -1633,7 +1633,7 @@ const List = props => {
                   case 'Stock':
                   case 'Action':
                     return (
-                      <Th key={index} px={'20px !important'} isNumeric>
+                      <Th key={index} px={'18px !important'} isNumeric>
                         {h}
                       </Th>
                     );
@@ -1659,7 +1659,7 @@ const List = props => {
                     return (
                       <Td
                         key={index}
-                        px={'20px !important'}
+                        px={'18px !important'}
                         isNumeric={
                           typeof data[bodyData] === 'number' ? true : null
                         }
