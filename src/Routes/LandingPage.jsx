@@ -184,13 +184,13 @@ const SignIn = () => {
 };
 
 const Header = () => {
-  const screenWidth = useWidthResizeListener();
+  const screenWidth = useWidthResizeListener;
 
   return (
     <HStack className={'wrapper'}>
       <HStack className={'container'}>
         <HStack spacing={null} w={'100%'} justifyContent={'space-between'}>
-          {screenWidth < 1080 ? (
+          {screenWidth < 1024 ? (
             <VStack
               spacing={null}
               alignItems={'flex-start'}

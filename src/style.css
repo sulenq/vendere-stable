@@ -14,7 +14,7 @@ body,
 }
 
 :root {
-  --primary-light: #dde8fd;
+  --primary-light: #5a8cf01a;
   --primary: #5a8cf0;
   --primary-hover: #6a99f6;
   --primary-active: #5483e1;
@@ -84,9 +84,13 @@ body,
 }
 .input {
   border-radius: 0 !important;
+  outline: none !important;
+  border: var(--divider);
 }
+.input:focus,
 .input:focus-visible {
-  border: 1px solid var(--primary) !important;
+  box-shadow: none !important;
+  border: 2px solid var(--primary) !important;
 }
 .nav {
   height: 100%;
@@ -121,12 +125,29 @@ body,
   padding: 0 !important;
 }
 
+.listItem {
+  user-select: none;
+  position: relative;
+}
+
 th {
   padding: 8px 16px !important;
 }
 td {
   padding: 16px !important;
 }
+.selectedList {
+  background: var(--primary-light);
+}
+.selectedList::after {
+  content: '';
+  width: 6px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  background: var(--primary);
+}
+
 .detailsBtn {
   color: var(--primary);
   cursor: pointer;

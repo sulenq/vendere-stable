@@ -12,10 +12,10 @@ function useWidthResizeListener() {
 function useReverseFormatNumber(num) {
   let cleanedString;
   const validNums = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-  const isNumValid = validNums.some(validNum => num.includes(validNum));
+  const isNumValid = validNums?.some(validNum => num?.includes(validNum));
   if (isNumValid) {
-    const numCapped = num.substring(0, 19);
-    cleanedString = numCapped.replace(/\./g, '');
+    const numCapped = num?.substring(0, 19);
+    cleanedString = numCapped?.replace(/\./g, '');
   } else {
     cleanedString = '0';
   }
@@ -26,7 +26,7 @@ function useFormatNumber(num) {
   let formattedNum;
   // console.log(num)
   if (num !== 0) {
-    formattedNum = num.toLocaleString('id-ID');
+    formattedNum = num?.toLocaleString('id-ID');
   } else {
     formattedNum = '';
   }

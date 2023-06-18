@@ -11,6 +11,7 @@ import MoneyOffCsredOutlinedIcon from '@mui/icons-material/MoneyOffCsredOutlined
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 import { ColorModeSwitcher } from './ColorModeSwitcher.js';
 import {
@@ -20,6 +21,7 @@ import {
 } from './myHooks.js';
 
 import {
+  Heading,
   VStack,
   HStack,
   Link,
@@ -45,6 +47,7 @@ import {
   AccordionPanel,
   AccordionIcon,
   Box,
+  SimpleGrid,
   Wrap,
   WrapItem,
   Table,
@@ -61,7 +64,7 @@ const Nav = () => {
   const currentUrlSplitted = currentUrl.pathname.split('/');
   const activeNav = currentUrlSplitted[currentUrlSplitted.length - 1];
 
-  if (screenWidth < 1080) {
+  if (screenWidth < 1024) {
     return (
       <HStack className={'navMobile'}>
         <Text>Nav Mobile</Text>
@@ -146,311 +149,33 @@ const TopBar = () => {
   );
 };
 
-const List = props => {
-  const ListFilter = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    // const [listData, setListData] = useState({});
-    const fn = useFormatNumber;
-    const rfn = useReverseFormatNumber;
-
-    function resetFilter() {
-      setFilter(filterReset);
-    }
-
-    const filterReset = {
-      category: [
-        { name: 'Foods', isChecked: false },
-        { name: 'Drinks', isChecked: false },
-        { name: 'Stationery', isChecked: false },
-        { name: 'Hygiene', isChecked: false },
-        { name: 'Medicine', isChecked: false },
-        { name: 'Electronics', isChecked: false },
-        { name: 'Cosmetics', isChecked: false },
-        { name: 'Other', isChecked: false },
-      ],
-      supplyLimit: 0,
-      priceRange: { min: 0, max: 0 },
-      colors: [
-        { name: 'Red', isChecked: false },
-        { name: 'Blue', isChecked: false },
-        { name: 'Green', isChecked: false },
-        { name: 'Yellow', isChecked: false },
-        { name: 'Purple', isChecked: false },
-        { name: 'Orange', isChecked: false },
-        { name: 'Black', isChecked: false },
-        { name: 'White', isChecked: false },
-        { name: 'Gray', isChecked: false },
-        { name: 'Brown', isChecked: false },
-        { name: 'Pink', isChecked: false },
-      ],
-    };
-
-    const [filter, setFilter] = useState({
-      category: [
-        { name: 'Foods', isChecked: false },
-        { name: 'Drinks', isChecked: false },
-        { name: 'Stationery', isChecked: false },
-        { name: 'Hygiene', isChecked: false },
-        { name: 'Medicine', isChecked: false },
-        { name: 'Electronics', isChecked: false },
-        { name: 'Cosmetics', isChecked: false },
-        { name: 'Other', isChecked: false },
-      ],
-      supplyLimit: 0,
-      priceRange: { min: 0, max: 0 },
-      colors: [
-        { name: 'Red', isChecked: false },
-        { name: 'Blue', isChecked: false },
-        { name: 'Green', isChecked: false },
-        { name: 'Yellow', isChecked: false },
-        { name: 'Purple', isChecked: false },
-        { name: 'Orange', isChecked: false },
-        { name: 'Black', isChecked: false },
-        { name: 'White', isChecked: false },
-        { name: 'Gray', isChecked: false },
-        { name: 'Brown', isChecked: false },
-        { name: 'Pink', isChecked: false },
-      ],
-    });
-
-    return (
-      <>
-        <IconButton
-          onClick={onOpen}
-          className={'btn'}
-          w={'50%'}
-          icon={<TuneOutlinedIcon />}
-        ></IconButton>
-
-        <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          scrollBehavior={'inside'}
-          isCentered
+const PageHeader = props => {
+  return (
+    <HStack
+      spacing={null}
+      w={'100%'}
+      justifyContent={'space-between'}
+      borderBottom={'1px solid var(--divider)'}
+    >
+      <Heading py={'8px'} px={'16px'}>
+        {props.title}
+      </Heading>
+      {props.hasAddBtn ? (
+        <Button
+          h={'100%'}
+          className={'btn primary-btn'}
+          w={'120px'}
+          leftIcon={<AddOutlinedIcon />}
         >
-          <ModalOverlay backdropFilter={'blur(5px)'} />
-          <ModalContent className={'modalContent'}>
-            <ModalCloseButton className={'closeBtn'} />
+          Add
+        </Button>
+      ) : null}
+    </HStack>
+  );
+};
 
-            <ModalHeader>
-              <VStack alignItems={'flex-start'} spacing={null}>
-                <Text>List Filter</Text>
-                <Text fontWeight={'normal'} fontSize={'sm'}>
-                  Click "APPLY" to apply filter to the list
-                </Text>
-              </VStack>
-            </ModalHeader>
-
-            <ModalBody>
-              <Accordion defaultIndex={[0, 1, 2]} allowMultiple>
-                {/* Category */}
-                <AccordionItem>
-                  <AccordionButton>
-                    <Box as="span" flex="1" textAlign="left">
-                      Category
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel pb={4}>
-                    <VStack alignItems={'flex-start'}>
-                      {filter?.category.map((c, index) => {
-                        return (
-                          <Checkbox
-                            key={index}
-                            isChecked={c.isChecked}
-                            onChange={e => {
-                              setFilter(prevState => ({
-                                ...prevState,
-                                category: prevState.category.map(item =>
-                                  item.name === c.name
-                                    ? { ...item, isChecked: !item.isChecked }
-                                    : item
-                                ),
-                              }));
-                            }}
-                          >
-                            {c.name}
-                          </Checkbox>
-                        );
-                      })}
-                    </VStack>
-                  </AccordionPanel>
-                </AccordionItem>
-
-                {/* Supply Limit */}
-                <AccordionItem>
-                  <AccordionButton>
-                    <Box as="span" flex="1" textAlign="left">
-                      Supply Limit
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel pb={4}>
-                    <Input
-                      className={'input'}
-                      placeholder={'Supply'}
-                      onFocus={e => {
-                        e.target.select();
-                      }}
-                      onChange={e => {
-                        setFilter(prevState => ({
-                          ...prevState,
-                          supplyLimit: parseInt(rfn(e.target.value)),
-                        }));
-                      }}
-                      value={fn(filter?.supplyLimit)}
-                    />
-                    <Text fontSize={'sm'} ml={'4px'} opacity={'0.5'}>
-                      Displays items with lower supply than the value above
-                    </Text>
-                  </AccordionPanel>
-                </AccordionItem>
-
-                {/* Price Range */}
-                <AccordionItem>
-                  <AccordionButton>
-                    <Box as="span" flex="1" textAlign="left">
-                      Price Range
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel pb={4}>
-                    <HStack spacing={null}>
-                      <Input
-                        className={'input'}
-                        onFocus={e => {
-                          e.target.select();
-                        }}
-                        onChange={e => {
-                          setFilter(prevState => ({
-                            ...prevState,
-                            priceRange: {
-                              ...prevState.priceRange,
-                              min: parseInt(rfn(e.target.value)),
-                            },
-                          }));
-                        }}
-                        placeholder={'Min'}
-                        value={fn(filter?.priceRange?.min)}
-                      />
-                      <Input
-                        className={'input'}
-                        placeholder={'Max'}
-                        onFocus={e => {
-                          e.target.select();
-                        }}
-                        onChange={e => {
-                          setFilter(prevState => ({
-                            ...prevState,
-                            priceRange: {
-                              ...prevState.priceRange,
-                              max: parseInt(rfn(e.target.value)),
-                            },
-                          }));
-                        }}
-                        value={fn(filter?.priceRange?.max)}
-                      />
-                    </HStack>
-                  </AccordionPanel>
-                </AccordionItem>
-
-                {/* Colors */}
-                <AccordionItem>
-                  <AccordionButton>
-                    <Box as="span" flex="1" textAlign="left">
-                      Color
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                  <AccordionPanel pb={4}>
-                    <Wrap>
-                      {filter?.colors.map((c, index) => {
-                        return (
-                          <WrapItem
-                            key={index}
-                            cursor={'pointer'}
-                            p={'6px 12px'}
-                            border={
-                              c.name === 'White' && c.isChecked
-                                ? '1px solid black'
-                                : '1px solid var(--divider)'
-                            }
-                            userSelect={'none'}
-                            onClick={() => {
-                              setFilter(prevState => ({
-                                ...prevState,
-                                colors: prevState.colors.map(item =>
-                                  item.name === c.name
-                                    ? { ...item, isChecked: !item.isChecked }
-                                    : item
-                                ),
-                              }));
-                            }}
-                            bg={
-                              c.name === 'Black' && c.isChecked
-                                ? 'black'
-                                : c.name === 'White' && c.isChecked
-                                ? 'white'
-                                : c.name === 'Brown' && c.isChecked
-                                ? '#b55e12'
-                                : c.isChecked
-                                ? `${c.name.toLowerCase()}.300`
-                                : null
-                            }
-                            color={
-                              c.name === 'White' && c.isChecked
-                                ? 'black'
-                                : c.isChecked
-                                ? 'white'
-                                : ''
-                            }
-                          >
-                            <Text>{c.name}</Text>
-                          </WrapItem>
-                        );
-                      })}
-                    </Wrap>
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
-            </ModalBody>
-
-            <ModalFooter className={'modalFooter'}>
-              <Button
-                className={'btn'}
-                h={'inherit'}
-                w={'50%'}
-                onClick={resetFilter}
-              >
-                RESET
-              </Button>
-              <Button
-                className={'btn primary-btn'}
-                h={'inherit'}
-                w={'50%'}
-                onClick={onClose}
-              >
-                APPLY
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    );
-  };
-
-  // function getListData(api) {
-  //   const token = '';
-  //   axios
-  //     .get(api, { Authorization: 'Bearer ' + token })
-  //     .then(r => {
-  //       console.log(r);
-  //     })
-  //     .catch(r => {
-  //       console.log(r);
-  //     });
-  // }
-
+const List = props => {
+  // const [listData, setListData] = useState({});
   const dummyListData = [
     {
       ID: 20,
@@ -1473,9 +1198,397 @@ const List = props => {
       modal: 3000,
     },
   ];
+  const fn = useFormatNumber;
+  const rfn = useReverseFormatNumber;
+  const filterData = props.filterData || {};
+
+  // function getListData(api) {
+  //   const token = '';
+  //   axios
+  //     .get(api, { Authorization: 'Bearer ' + token })
+  //     .then(r => {
+  //       console.log(r);
+  //     })
+  //     .catch(r => {
+  //       console.log(r);
+  //     });
+  // }
+
+  const ListFilter = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    function resetFilter() {
+      setFilter(filterReset);
+    }
+
+    const filterReset = JSON.parse(JSON.stringify(filterData));
+
+    const [filter, setFilter] = useState(
+      JSON.parse(JSON.stringify(filterData))
+    );
+
+    return (
+      <>
+        <IconButton
+          onClick={onOpen}
+          className={'btn'}
+          w={'50%'}
+          icon={<TuneOutlinedIcon />}
+        ></IconButton>
+
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          scrollBehavior={'inside'}
+          isCentered
+        >
+          <ModalOverlay backdropFilter={'blur(5px)'} />
+          <ModalContent className={'modalContent'}>
+            <ModalCloseButton className={'closeBtn'} />
+
+            <ModalHeader>
+              <VStack alignItems={'flex-start'} spacing={null}>
+                <Text>List Filter</Text>
+                <Text fontWeight={'normal'} fontSize={'sm'}>
+                  Click "APPLY" to apply filter to the list
+                </Text>
+              </VStack>
+            </ModalHeader>
+
+            <ModalBody>
+              <Accordion defaultIndex={[0, 1, 2]} allowMultiple>
+                {filter?.map((f, index) => {
+                  if (f.type === 'checkbox') {
+                    return (
+                      <AccordionItem key={index}>
+                        <AccordionButton>
+                          <Box as="span" flex="1" textAlign="left">
+                            {f.name}
+                          </Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel pb={4}>
+                          <VStack alignItems={'flex-start'}>
+                            {f?.item?.map((i, iIndex) => {
+                              return (
+                                <Checkbox
+                                  key={iIndex}
+                                  isChecked={i?.isChecked}
+                                  onChange={e => {
+                                    const prevState = JSON.parse(
+                                      JSON.stringify(filter)
+                                    );
+                                    prevState[index].item[iIndex].isChecked =
+                                      !prevState[index].item[iIndex].isChecked;
+                                    setFilter(prevState);
+                                  }}
+                                  py={'2px'}
+                                >
+                                  {i?.name}
+                                </Checkbox>
+                              );
+                            })}
+                          </VStack>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    );
+                  } else if (f.type === 'input') {
+                    return (
+                      <AccordionItem key={index}>
+                        <AccordionButton>
+                          <Box as="span" flex="1" textAlign="left">
+                            {f.name}
+                          </Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel pb={4}>
+                          <SimpleGrid columns={f?.columns}>
+                            {f?.item?.map((i, iIndex) => {
+                              return (
+                                <Input
+                                  key={iIndex}
+                                  className={'input'}
+                                  placeholder={i?.name}
+                                  onFocus={e => {
+                                    e.target.select();
+                                  }}
+                                  onChange={e => {
+                                    setFilter(prevState => {
+                                      prevState[index].item[iIndex].value =
+                                        parseInt(rfn(e.target.value));
+                                      return [...prevState];
+                                    });
+                                  }}
+                                  value={fn(filter[index].item[iIndex].value)}
+                                />
+                              );
+                            })}
+                          </SimpleGrid>
+                          {f?.hint ? (
+                            <Text fontSize={'sm'} ml={'4px'} opacity={'0.5'}>
+                              {f?.hint}
+                            </Text>
+                          ) : null}
+                        </AccordionPanel>
+                      </AccordionItem>
+                    );
+                  } else if (f.type === 'color') {
+                    return (
+                      <AccordionItem key={index}>
+                        <AccordionButton>
+                          <Box as="span" flex="1" textAlign="left">
+                            {f?.name}
+                          </Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel pb={4}>
+                          <Wrap>
+                            {f?.item?.map((i, iIndex) => {
+                              return (
+                                <WrapItem
+                                  key={iIndex}
+                                  cursor={'pointer'}
+                                  p={'6px 12px'}
+                                  border={
+                                    i?.name === 'White' && i?.isChecked
+                                      ? '1px solid black'
+                                      : '1px solid var(--divider)'
+                                  }
+                                  userSelect={'none'}
+                                  onClick={() => {
+                                    const prevState = JSON.parse(
+                                      JSON.stringify(filter)
+                                    );
+                                    prevState[index].item[iIndex].isChecked =
+                                      !prevState[index].item[iIndex].isChecked;
+                                    setFilter(prevState);
+                                  }}
+                                  bg={
+                                    i?.name === 'Black' && i?.isChecked
+                                      ? 'black'
+                                      : i?.name === 'White' && i?.isChecked
+                                      ? 'white'
+                                      : i?.name === 'Brown' && i?.isChecked
+                                      ? '#b55e12'
+                                      : i?.isChecked
+                                      ? `${i?.name?.toLowerCase()}.300`
+                                      : null
+                                  }
+                                  color={
+                                    i?.name === 'White' && i?.isChecked
+                                      ? 'black'
+                                      : i?.isChecked
+                                      ? 'white'
+                                      : ''
+                                  }
+                                >
+                                  <Text>{i?.name}</Text>
+                                </WrapItem>
+                              );
+                            })}
+                          </Wrap>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    );
+                  } else {
+                    return <Text>{`Filter Data '${f.name}' Invalid`}</Text>;
+                  }
+                })}
+
+                {/* <AccordionItem>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      Category
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <VStack alignItems={'flex-start'}>
+                      {filter?.category?.map((c, index) => {
+                        return (
+                          <Checkbox
+                            key={index}
+                            isChecked={c.isChecked}
+                            onChange={e => {
+                              setFilter(prevState => ({
+                                ...prevState,
+                                category: prevState.category.map(item =>
+                                  item.name === c.name
+                                    ? { ...item, isChecked: !item.isChecked }
+                                    : item
+                                ),
+                              }));
+                            }}
+                          >
+                            {c.name}
+                          </Checkbox>
+                        );
+                      })}
+                    </VStack>
+                  </AccordionPanel>
+                </AccordionItem>
+
+                <AccordionItem>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      Supply Limit
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <Input
+                      className={'input'}
+                      placeholder={'Supply'}
+                      onFocus={e => {
+                        e.target.select();
+                      }}
+                      onChange={e => {
+                        setFilter(prevState => ({
+                          ...prevState,
+                          supplyLimit: parseInt(rfn(e.target.value)),
+                        }));
+                      }}
+                      value={fn(filter?.supplyLimit)}
+                    />
+                    <Text fontSize={'sm'} ml={'4px'} opacity={'0.5'}>
+                      Displays items with lower supply than the value above
+                    </Text>
+                  </AccordionPanel>
+                </AccordionItem>
+
+                <AccordionItem>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      Price Range
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <HStack spacing={null}>
+                      <Input
+                        className={'input'}
+                        onFocus={e => {
+                          e.target.select();
+                        }}
+                        onChange={e => {
+                          setFilter(prevState => ({
+                            ...prevState,
+                            priceRange: {
+                              ...prevState?.priceRange,
+                              min: parseInt(rfn(e.target.value)),
+                            },
+                          }));
+                        }}
+                        placeholder={'Min'}
+                        value={fn(filter?.priceRange?.min)}
+                      />
+                      <Input
+                        className={'input'}
+                        placeholder={'Max'}
+                        onFocus={e => {
+                          e.target.select();
+                        }}
+                        onChange={e => {
+                          setFilter(prevState => ({
+                            ...prevState,
+                            priceRange: {
+                              ...prevState?.priceRange,
+                              max: parseInt(rfn(e.target.value)),
+                            },
+                          }));
+                        }}
+                        value={fn(filter?.priceRange?.max)}
+                      />
+                    </HStack>
+                  </AccordionPanel>
+                </AccordionItem>
+
+                <AccordionItem>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      Color
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    <Wrap>
+                      {filter?.colors?.map((c, index) => {
+                        return (
+                          <WrapItem
+                            key={index}
+                            cursor={'pointer'}
+                            p={'6px 12px'}
+                            border={
+                              c?.name === 'White' && c?.isChecked
+                                ? '1px solid black'
+                                : '1px solid var(--divider)'
+                            }
+                            userSelect={'none'}
+                            onClick={() => {
+                              setFilter(prevState => ({
+                                ...prevState,
+                                colors: prevState?.colors?.map(item =>
+                                  item.name === c.name
+                                    ? { ...item, isChecked: !item.isChecked }
+                                    : item
+                                ),
+                              }));
+                            }}
+                            bg={
+                              c?.name === 'Black' && c?.isChecked
+                                ? 'black'
+                                : c?.name === 'White' && c?.isChecked
+                                ? 'white'
+                                : c?.name === 'Brown' && c?.isChecked
+                                ? '#b55e12'
+                                : c?.isChecked
+                                ? `${c.name?.toLowerCase()}.300`
+                                : null
+                            }
+                            color={
+                              c?.name === 'White' && c?.isChecked
+                                ? 'black'
+                                : c?.isChecked
+                                ? 'white'
+                                : ''
+                            }
+                          >
+                            <Text>{c?.name}</Text>
+                          </WrapItem>
+                        );
+                      })}
+                    </Wrap>
+                  </AccordionPanel>
+                </AccordionItem> */}
+              </Accordion>
+            </ModalBody>
+
+            <ModalFooter className={'modalFooter'}>
+              <Button
+                className={'btn'}
+                h={'inherit'}
+                w={'50%'}
+                onClick={resetFilter}
+              >
+                RESET
+              </Button>
+              <Button
+                className={'btn primary-btn'}
+                h={'inherit'}
+                w={'50%'}
+                onClick={onClose}
+              >
+                APPLY
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  };
 
   return (
-    <VStack w={'100%'} spacing={null} overflow={'auto'}>
+    <VStack w={'100%'} spacing={null} overflow={'auto'} overflowX={'auto'}>
       <HStack id={'listSearch'} w={'100%'} spacing={null}>
         <Input
           className={'input'}
@@ -1493,29 +1606,60 @@ const List = props => {
           <ListFilter />
         </HStack>
       </HStack>
-      <VStack w={'100%'} overflow={'auto'}>
-        <Table variant="simple" w={'100%'}>
+      <Box
+        w={'100%'}
+        // border={'1px solid red'}
+        overflow={'auto'}
+        overflowX={'scoll'}
+      >
+        <Table variant="simple">
           <Thead>
             <Tr>
               {props.headers.map((h, index) => {
-                return h === 'Price' || h === 'Supply' || h === 'Action' ? (
-                  <Th key={index} isNumeric>
-                    {h}
-                  </Th>
-                ) : (
-                  <Th key={index}>{h}</Th>
-                );
+                switch (h) {
+                  default:
+                    return <Th key={index}>{h}</Th>;
+                  case 'Price':
+                  case 'Stock':
+                  case 'Action':
+                    return (
+                      <Th key={index} isNumeric>
+                        {h}
+                      </Th>
+                    );
+                }
               })}
             </Tr>
           </Thead>
-          <Tbody>
+          <Tbody overflow={'auto'} id={'listBody'}>
             {dummyListData.map((data, index) => {
               return (
-                <Tr key={index}>
-                  <Td>{data?.code}</Td>
-                  <Td>{data?.name}</Td>
-                  <Td isNumeric>{data?.price}</Td>
-                  <Td isNumeric>{data?.stock}</Td>
+                <Tr
+                  key={index}
+                  className={index === 0 ? 'listItem selectedList' : 'listItem'}
+                  onClick={e => {
+                    const listBody = document.querySelectorAll('#listBody tr');
+                    listBody.forEach(l => {
+                      l.classList.remove('selectedList');
+                    });
+                    e.currentTarget.classList.add('selectedList');
+                  }}
+                >
+                  {props.body.map((bodyData, index) => {
+                    return (
+                      <Td
+                        key={index}
+                        isNumeric={
+                          typeof data[bodyData] === 'number' ? true : null
+                        }
+                      >
+                        {typeof data[bodyData] === 'number'
+                          ? fn(data[bodyData])
+                          : data[bodyData]}
+                      </Td>
+                    );
+                  })}
+
                   <Td isNumeric className={'detailsBtn'}>
                     details
                   </Td>
@@ -1524,9 +1668,27 @@ const List = props => {
             })}
           </Tbody>
         </Table>
-      </VStack>
+      </Box>
     </VStack>
   );
 };
 
-export { Nav, TopBar, List };
+const Details = props => {
+  return (
+    <VStack w={'100%'} h={'100%'} overflow={'auto'}>
+      <VStack w={'100%'}>
+        {props.hasImage ? (
+          <Image
+            src={'../img/noImage.jpg'}
+            boxSize={'100%'}
+            objectFit={'cover'}
+            borderBottom={'1px solid var(--divider)'}
+          />
+        ) : null}
+      </VStack>
+      <Text></Text>
+    </VStack>
+  );
+};
+
+export { Nav, TopBar, List, Details, PageHeader };
