@@ -63,14 +63,18 @@ body,
   border-radius: 0 !important;
   padding: 8px 16px !important;
 }
-.primary-btn {
+.primaryBtn {
   background: var(--primary) !important;
   color: white !important;
 }
-.primary-btn:hover {
+.primaryDarkBtn {
+  background: var(--primary-active) !important;
+  color: white !important;
+}
+.primaryBtn:hover {
   background: var(--primary-hover) !important;
 }
-.primary-btn:active {
+.primaryBtn:active {
   background: var(--primary-active) !important;
 }
 .modal {

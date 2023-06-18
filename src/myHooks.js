@@ -9,6 +9,10 @@ function useWidthResizeListener() {
   return screenWidth;
 }
 
+function useIdFormatDate() {
+  return { day: 'numeric', month: 'long', year: 'numeric' };
+}
+
 function useReverseFormatNumber(num) {
   let cleanedString;
   const validNums = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
@@ -34,4 +38,9 @@ function useFormatNumber(num) {
   return formattedNum;
 }
 
-export { useWidthResizeListener, useFormatNumber, useReverseFormatNumber };
+export {
+  useWidthResizeListener,
+  useFormatNumber,
+  useReverseFormatNumber,
+  useIdFormatDate,
+};

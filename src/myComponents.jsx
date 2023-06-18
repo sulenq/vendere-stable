@@ -18,6 +18,7 @@ import {
   useWidthResizeListener,
   useFormatNumber,
   useReverseFormatNumber,
+  useIdFormatDate,
 } from './myHooks.js';
 
 import {
@@ -64,7 +65,7 @@ const Nav = () => {
   const currentUrlSplitted = currentUrl.pathname.split('/');
   const activeNav = currentUrlSplitted[currentUrlSplitted.length - 1];
 
-  if (screenWidth < 1024) {
+  if (screenWidth < 1200) {
     return (
       <HStack className={'navMobile'}>
         <Text>Nav Mobile</Text>
@@ -129,17 +130,21 @@ const Nav = () => {
 
 const TopBar = () => {
   const date = new Date();
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  const options = useIdFormatDate();
   const formattedDate = date.toLocaleDateString('id-ID', options);
 
   return (
     <HStack w={'100%'} justifyContent={'space-between'}>
-      <Text px={'16px'}>{formattedDate}</Text>
+      <Text px={'24px'}>{formattedDate}</Text>
       <HStack spacing={null}>
-        <Button variant={'ghost'} borderRadius={'0 !important'} p={'8px'}>
+        <Button
+          variant={'ghost'}
+          borderRadius={'0 !important'}
+          px={'16px !Important'}
+        >
           <Icon as={RefreshOutlinedIcon} />
         </Button>
-        <ColorModeSwitcher ml={'0 !important'} />
+        <ColorModeSwitcher px={'16px !Important'} ml={'0 !important'} />
       </HStack>
     </HStack>
   );
@@ -156,7 +161,7 @@ const PageHeader = props => {
       <Heading
         w={props.hasAddBtn ? 'calc(100% - 120px)' : '100%'}
         py={'8px'}
-        px={'16px'}
+        px={'24px'}
         borderTop="1px solid var(--divider)"
       >
         {props.title}
@@ -164,7 +169,7 @@ const PageHeader = props => {
       {props.hasAddBtn ? (
         <Button
           h={'100%'}
-          className={'btn primary-btn'}
+          className={'btn primaryBtn'}
           w={'120px'}
           leftIcon={<AddOutlinedIcon />}
         >
@@ -176,7 +181,6 @@ const PageHeader = props => {
 };
 
 const List = props => {
-  // const [listData, setListData] = useState({});
   const dummyListData = [
     {
       ID: 20,
@@ -1203,6 +1207,7 @@ const List = props => {
   const rfn = useReverseFormatNumber;
   const filterData = props.filterData || {};
 
+  // const [listData, setListData] = useState({});
   // function getListData(api) {
   //   const token = '';
   //   axios
@@ -1574,7 +1579,7 @@ const List = props => {
                 RESET
               </Button>
               <Button
-                className={'btn primary-btn'}
+                className={'btn primaryBtn'}
                 h={'inherit'}
                 w={'50%'}
                 onClick={onClose}
@@ -1589,11 +1594,12 @@ const List = props => {
   };
 
   return (
-    <VStack w={'100%'} spacing={null} overflow={'auto'} overflowX={'auto'}>
+    <VStack w={'100%'} spacing={null} overflow={'auto'}>
       <HStack id={'listSearch'} w={'100%'} spacing={null}>
         <Input
           className={'input'}
-          placeholder="Search"
+          placeholder={'Search'}
+          px={'24px'}
           border={'none'}
           borderBottom={'1px solid var(--divider)'}
         />
@@ -1609,9 +1615,8 @@ const List = props => {
       </HStack>
       <Box
         w={'100%'}
-        // border={'1px solid red'}
         overflow={'auto'}
-        overflowX={'scoll'}
+        // border={'1px solid red'}
       >
         <Table variant="simple">
           <Thead>
@@ -1619,12 +1624,16 @@ const List = props => {
               {props.headers.map((h, index) => {
                 switch (h) {
                   default:
-                    return <Th key={index}>{h}</Th>;
+                    return (
+                      <Th key={index} px={'24px !important'}>
+                        {h}
+                      </Th>
+                    );
                   case 'Price':
                   case 'Stock':
                   case 'Action':
                     return (
-                      <Th key={index} isNumeric>
+                      <Th key={index} px={'24px !important'} isNumeric>
                         {h}
                       </Th>
                     );
@@ -1650,6 +1659,7 @@ const List = props => {
                     return (
                       <Td
                         key={index}
+                        px={'24px !important'}
                         isNumeric={
                           typeof data[bodyData] === 'number' ? true : null
                         }
@@ -1675,8 +1685,16 @@ const List = props => {
 };
 
 const Details = props => {
+  const options = useIdFormatDate();
+  const fn = useFormatNumber;
+
   return (
-    <VStack w={'100%'} h={'100%'} overflow={'auto'}>
+    <VStack
+      w={'100%'}
+      spacing={null}
+      alignItems={'flex-start'}
+      overflow={'auto'}
+    >
       <VStack w={'100%'}>
         {props.hasImage ? (
           <Image
@@ -1687,7 +1705,51 @@ const Details = props => {
           />
         ) : null}
       </VStack>
-      <Text></Text>
+      <VStack w={'100%'} spacing={null}>
+        {props?.keys?.map((k, index) => {
+          const createdAt = new Date(props?.detailsData?.CreatedAt);
+          const updatedAt = new Date(props?.detailsData?.UpdatedAt);
+          const formattedCreatedAt = createdAt.toLocaleDateString(
+            'id-ID',
+            options
+          );
+          const formattedUpdateddAt = updatedAt.toLocaleDateString(
+            'id-ID',
+            options
+          );
+
+          return (
+            <HStack
+              key={index}
+              w={'100%'}
+              borderBottom={
+                '1px solid var(--divider)'
+                // index !== props?.keysName?.length - 1
+                //   ? '1px solid var(--divider)'
+                //   : null
+              }
+              px={'24px'}
+              py={'12px'}
+              alignItems={'flex-start'}
+            >
+              <Text w={'120px'} opacity={'0.5'}>
+                {props.keysName[index]}
+              </Text>
+              <Text w={'calc(100% - 120px)'} wordBreak={'break-all'}>
+                {k === 'user_id'
+                  ? props?.detailsData[`${k}`]
+                  : k === 'CreatedAt'
+                  ? formattedCreatedAt
+                  : k === 'UpdatedAt'
+                  ? formattedUpdateddAt
+                  : typeof props?.detailsData[`${k}`] === 'number'
+                  ? fn(props?.detailsData[`${k}`])
+                  : props?.detailsData[`${k}`]}
+              </Text>
+            </HStack>
+          );
+        })}
+      </VStack>
     </VStack>
   );
 };

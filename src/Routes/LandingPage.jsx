@@ -72,7 +72,7 @@ const SignUp = () => {
             <Button
               w={'50%'}
               h={'inherit'}
-              className={'btn primary-btn'}
+              className={'btn primaryBtn'}
               onClick={onClose}
             >
               SIGN UP
@@ -96,7 +96,7 @@ const SignIn = () => {
 
   return (
     <>
-      <Button className={'btn primary-btn'} h={'67px'} onClick={onOpen}>
+      <Button className={'btn primaryBtn'} h={'67px'} onClick={onOpen}>
         SIGN IN
       </Button>
 
@@ -169,7 +169,7 @@ const SignIn = () => {
             <Button
               w={'50%'}
               h={'inherit'}
-              className={'btn primary-btn'}
+              className={'btn primaryBtn'}
               onClick={() => {
                 navigate('/admin');
               }}
@@ -190,7 +190,7 @@ const Header = () => {
     <HStack className={'wrapper'}>
       <HStack className={'container'}>
         <HStack spacing={null} w={'100%'} justifyContent={'space-between'}>
-          {screenWidth < 1024 ? (
+          {screenWidth < 1200 ? (
             <VStack
               spacing={null}
               alignItems={'flex-start'}
