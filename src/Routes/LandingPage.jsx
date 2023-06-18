@@ -31,7 +31,7 @@ const SignUp = () => {
       </Button>
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay backdropFilter="blur(5px)" />
+        <ModalOverlay backdropFilter="blur(0px)" />
         <ModalContent className={'modal'}>
           <ModalHeader textAlign={'center'}>
             <Text>Signing Up</Text>
@@ -62,7 +62,7 @@ const SignUp = () => {
               <Text fontSize={'sm'}>*shop name is required</Text>
               <Text fontSize={'sm'}>*e-mail is required</Text>
               <Text fontSize={'sm'}>*password is required</Text>
-              <Text fontSize={'sm'}>*confirm password didn't match</Text>
+              <Text fontSize={'sm'}>*confirm password</Text>
             </VStack>
           </ModalBody>
           <ModalFooter p={'0'} h={'50px'}>
@@ -101,7 +101,7 @@ const SignIn = () => {
       </Button>
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay backdropFilter="blur(5px)" />
+        <ModalOverlay backdropFilter="blur(0px)" />
         <ModalContent className={'modal'}>
           <ModalHeader textAlign={'center'}>
             <Text>Let's Gooo</Text>
@@ -160,6 +160,9 @@ const SignIn = () => {
             >
               <Text fontSize={'sm'}>*e-mail required</Text>
               <Text fontSize={'sm'}>*password required</Text>
+              <Text fontSize={'sm'}>
+                *this only demo, just select role and click SIGN IN
+              </Text>
             </VStack>
           </ModalBody>
           <ModalFooter p={'0'} h={'50px'}>

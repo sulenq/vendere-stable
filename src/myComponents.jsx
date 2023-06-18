@@ -1248,7 +1248,7 @@ const List = props => {
           scrollBehavior={'inside'}
           isCentered
         >
-          <ModalOverlay backdropFilter={'blur(5px)'} />
+          <ModalOverlay backdropFilter={'blur(0px)'} />
           <ModalContent className={'modalContent'}>
             <ModalCloseButton className={'closeBtn'} />
 
