@@ -184,7 +184,7 @@ const SignIn = () => {
 };
 
 const Header = () => {
-  const screenWidth = useWidthResizeListener;
+  const screenWidth = useWidthResizeListener();
 
   return (
     <HStack className={'wrapper'}>
