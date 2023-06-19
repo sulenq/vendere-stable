@@ -31,7 +31,7 @@ const SignUp = () => {
       </Button>
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay backdropFilter="blur(0px)" />
+        <ModalOverlay backdropFilter="blur(5px)" />
         <ModalContent className={'modal'}>
           <ModalHeader textAlign={'center'}>
             <Text>Signing Up</Text>
@@ -101,7 +101,7 @@ const SignIn = () => {
       </Button>
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay backdropFilter="blur(0px)" />
+        <ModalOverlay backdropFilter="blur(5px)" />
         <ModalContent className={'modal'}>
           <ModalHeader textAlign={'center'}>
             <Text>Let's Gooo</Text>

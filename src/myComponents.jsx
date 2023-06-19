@@ -230,7 +230,7 @@ const List = props => {
         ></IconButton>
 
         <Modal isOpen={isOpen} scrollBehavior={'inside'} isCentered>
-          <ModalOverlay backdropFilter={'blur(0px)'} />
+          <ModalOverlay backdropFilter={'blur(5px)'} />
           <ModalContent className={'modalContent'}>
             <ModalHeader className={'modalHeader'}>
               <VStack alignItems={'flex-start'} spacing={null}>
@@ -583,9 +583,10 @@ const DetailsModal = props => {
         props.setDetailsModalIsOpen(false);
       }}
       scrollBehavior={'inside'}
+      initialFocusRef={null}
       isCentered
     >
-      <ModalOverlay />
+      <ModalOverlay backdropFilter={'blur(5px)'} />
       <ModalContent className={'modalContent'}>
         <ModalCloseButton
           className={'modalCloseBtn'}

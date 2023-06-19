@@ -1099,7 +1099,7 @@ function AdminProducts() {
       selectedListData: selectedListData,
     });
     if (screenWidth < 1200) {
-      console.log('open Details Modal');
+      // console.log('open Details Modal');
       setDetailsModalIsOpen(true);
     }
   }
