@@ -119,12 +119,16 @@ body,
   position: absolute !important;
   top: 0 !important;
   right: 0 !important;
-  padding: 30px;
+  padding: 31px 24px;
   font-size: 14px !important;
 }
 .modalContent {
   border-radius: 0 !important;
   /* margin: 0 12px !important; */
+}
+.modalHeader {
+  padding: 16px !important;
+  border-bottom: 1px solid var(--divider);
 }
 .modalFooter {
   border-radius: 0 !important;

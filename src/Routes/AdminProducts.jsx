@@ -1041,7 +1041,7 @@ function AdminProducts() {
   ];
   const listData = dummyListData;
   const [detailsData, dispatch] = useReducer(listReducer, {});
-  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(true);
+  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const filterData = [
     {
       name: 'Category',

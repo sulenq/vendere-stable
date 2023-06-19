@@ -232,7 +232,7 @@ const List = props => {
         <Modal isOpen={isOpen} scrollBehavior={'inside'} isCentered>
           <ModalOverlay backdropFilter={'blur(0px)'} />
           <ModalContent className={'modalContent'}>
-            <ModalHeader>
+            <ModalHeader className={'modalHeader'}>
               <VStack alignItems={'flex-start'} spacing={null}>
                 <Text>List Filter</Text>
                 <Text fontWeight={'normal'} fontSize={'sm'}>
@@ -547,7 +547,7 @@ const Details = props => {
                 //   ? '1px solid var(--divider)'
                 //   : null
               }
-              px={'24px'}
+              px={'16px'}
               py={'12px'}
               alignItems={'flex-start'}
             >
@@ -593,7 +593,7 @@ const DetailsModal = props => {
             props.setDetailsModalIsOpen(false);
           }}
         />
-        <ModalHeader>Details</ModalHeader>
+        <ModalHeader className={'modalHeader'}>Details</ModalHeader>
         <ModalBody pt={'0 !important'} p={'16px 0'}>
           {props.detailsComponent}
         </ModalBody>
