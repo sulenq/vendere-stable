@@ -1,5 +1,7 @@
 import { useReducer, useState } from 'react';
 
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
 import {
   Nav,
   TopBar,
@@ -8,13 +10,32 @@ import {
   PageHeader,
   DetailsModal,
 } from '../myComponents';
-import { useWidthResizeListener, listReducer } from '../utils.js';
+import {
+  useWidthResizeListener,
+  listReducer,
+  useFormatNumber,
+  useReverseFormatNumber,
+} from '../utils.js';
 
-import { VStack, HStack, Button } from '@chakra-ui/react';
+import {
+  VStack,
+  HStack,
+  Button,
+  Input,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Text,
+  Icon,
+  Box,
+} from '@chakra-ui/react';
 
 function AdminProducts() {
   // Page Utils
   const screenWidth = useWidthResizeListener();
+  const fn = useFormatNumber;
+  const rfn = useReverseFormatNumber;
 
   // Page Data
   const dummyListData = [
@@ -1042,6 +1063,14 @@ function AdminProducts() {
   const listData = dummyListData;
   const [detailsData, dispatch] = useReducer(listReducer, {});
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
+  const [addData, setAddData] = useState({
+    code: '',
+    name: '',
+    stock: '',
+    price: '',
+    category: '',
+    color: '',
+  });
   const filterData = [
     {
       name: 'Category',
@@ -1052,8 +1081,8 @@ function AdminProducts() {
         { name: 'Stationery', isChecked: false },
         { name: 'Hygiene', isChecked: false },
         { name: 'Medicine', isChecked: false },
-        { name: 'Electronics', isChecked: false },
-        { name: 'Cosmetics', isChecked: false },
+        { name: 'Electronic', isChecked: false },
+        { name: 'Cosmetic', isChecked: false },
         { name: 'Other', isChecked: false },
       ],
     },
@@ -1092,6 +1121,122 @@ function AdminProducts() {
     },
   ];
 
+  //Page Components
+  const FormAddData = () => {
+    return (
+      <VStack w={'100%'} spacing={'16px'}>
+        <Input className={'input'} placeholder={'Code'} />
+        <Input className={'input'} placeholder={`Product's Name`} />
+        <Input
+          className={'input'}
+          placeholder={'Stock'}
+          onChange={e => {
+            setAddData(prevState => ({
+              ...prevState,
+              stock: parseInt(rfn(e.target.value)),
+            }));
+          }}
+          value={fn(addData?.stock)}
+        />
+        <Input
+          className={'input'}
+          placeholder={'Price'}
+          onChange={e => {
+            setAddData(prevState => ({
+              ...prevState,
+              price: parseInt(rfn(e.target.value)),
+            }));
+          }}
+          value={fn(addData?.price)}
+        />
+        <Menu>
+          <MenuButton className={'selectBtn'} as={Button} w={'100%'}>
+            <HStack w={'100%'} justifyContent={'space-between'}>
+              <Text>{addData?.category || 'Category'}</Text>
+              <Icon as={KeyboardArrowDownIcon} />
+            </HStack>
+          </MenuButton>
+          <MenuList>
+            {filterData[0]?.item?.map((c, index) => {
+              return (
+                <MenuItem
+                  key={index}
+                  onClick={() => {
+                    setAddData({ ...addData, category: c?.name });
+                  }}
+                >
+                  {c?.name}
+                </MenuItem>
+              );
+            })}
+          </MenuList>
+        </Menu>
+        <Menu>
+          <MenuButton className={'selectBtn'} as={Button} w={'100%'}>
+            <HStack w={'100%'} justifyContent={'space-between'}>
+              <HStack>
+                {addData?.color ? (
+                  <Box
+                    bg={
+                      addData.color === 'Black'
+                        ? 'black'
+                        : addData.color === 'White'
+                        ? 'white'
+                        : addData.color === 'Brown'
+                        ? '#b55e12'
+                        : `${addData.color?.toLowerCase()}.300`
+                    }
+                    border={
+                      addData.color === 'White'
+                        ? '1px solid var(--divider)'
+                        : null
+                    }
+                    w={'10px'}
+                    h={'12px'}
+                  ></Box>
+                ) : null}
+                <Text>{addData?.color || 'Color'}</Text>
+              </HStack>
+              <Icon as={KeyboardArrowDownIcon} />
+            </HStack>
+          </MenuButton>
+          <MenuList>
+            {filterData[3]?.item?.map((c, index) => {
+              return (
+                <MenuItem
+                  key={index}
+                  onClick={() => {
+                    setAddData({ ...addData, color: c?.name });
+                  }}
+                >
+                  <HStack>
+                    <Box
+                      bg={
+                        c?.name === 'Black'
+                          ? 'black'
+                          : c?.name === 'Whcte'
+                          ? 'whcte'
+                          : c?.name === 'Brown'
+                          ? '#b55e12'
+                          : `${c?.name?.toLowerCase()}.300`
+                      }
+                      border={
+                        c?.name === 'White' ? '1px solid var(--divider)' : null
+                      }
+                      w={'10px'}
+                      h={'12px'}
+                    ></Box>
+                    <Text>{c?.name}</Text>
+                  </HStack>
+                </MenuItem>
+              );
+            })}
+          </MenuList>
+        </Menu>
+      </VStack>
+    );
+  };
+
   // Page Functions
   function handleSelectList(selectedListData) {
     dispatch({
@@ -1102,6 +1247,10 @@ function AdminProducts() {
       // console.log('open Details Modal');
       setDetailsModalIsOpen(true);
     }
+  }
+
+  function handleAddData() {
+    console.log(addData);
   }
 
   return (
@@ -1124,7 +1273,12 @@ function AdminProducts() {
             spacing={null}
             overflow={'auto'}
           >
-            <PageHeader title={'Products'} hasAddBtn />
+            <PageHeader
+              title={'Products'}
+              hasAddBtn
+              formAddData={<FormAddData />}
+              onAddData={handleAddData}
+            />
 
             <List
               listData={listData}
@@ -1140,7 +1294,7 @@ function AdminProducts() {
               detailsComponent={
                 <Details
                   detailsData={detailsData}
-                  keys={[
+                  detailsKeys={[
                     'code',
                     'name',
                     'stock',
@@ -1149,7 +1303,7 @@ function AdminProducts() {
                     'UpdatedAt',
                     'user_id',
                   ]}
-                  keysName={[
+                  detailsNames={[
                     'Code',
                     'Name',
                     'Stock',
@@ -1178,7 +1332,7 @@ function AdminProducts() {
 
                 <Details
                   detailsData={detailsData}
-                  keys={[
+                  detailsKeys={[
                     'code',
                     'name',
                     'stock',
@@ -1187,7 +1341,7 @@ function AdminProducts() {
                     'UpdatedAt',
                     'user_id',
                   ]}
-                  keysName={[
+                  detailsNames={[
                     'Code',
                     'Name',
                     'Stock',

@@ -124,10 +124,11 @@ body,
 }
 .modalContent {
   border-radius: 0 !important;
-  /* margin: 0 12px !important; */
+  margin: 12px 12px !important;
 }
 .modalHeader {
   padding: 16px !important;
+  font-size: 20px !important;
   border-bottom: 1px solid var(--divider);
 }
 .modalFooter {
@@ -170,10 +171,17 @@ td {
 .boxing {
   border: 1px solid red;
 }
+.acordion {
+  padding: 12px 24px !important;
+}
+.selectBtn {
+  font-weight: normal !important;
+  border-radius: 0 !important;
+}
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1200px) {
   * {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 /* ROOT BG */

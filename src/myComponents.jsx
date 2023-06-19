@@ -171,6 +171,56 @@ const TopBar = () => {
   );
 };
 
+const AddBtn = props => {
+  // Utils
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // Data
+  // const [addData, setAddData] = useState({});
+
+  return (
+    <>
+      <Button
+        className={'btn primaryBtn'}
+        onClick={onOpen}
+        h={'100%'}
+        w={'120px'}
+        leftIcon={<AddOutlinedIcon />}
+      >
+        ADD
+      </Button>
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay backdropFilter={'blur(0)'} />
+        <ModalContent className={'modalContent'}>
+          <ModalHeader className={'modalHeader'}>
+            <Text fontSize={'20px'}>{'Adding ' + props.title}</Text>
+          </ModalHeader>
+          <ModalBody py={'24px'}>{props.formAddData}</ModalBody>
+          <ModalFooter className={'modalFooter'}>
+            <HStack w={'100%'} h={'50px'} spacing={null}>
+              <Button className={'btn'} onClick={onClose} h={'100%'} w={'50%'}>
+                CANCEL
+              </Button>
+              <Button
+                className={'btn primaryBtn'}
+                onClick={() => {
+                  props.onAddData();
+                  onClose();
+                }}
+                h={'100%'}
+                w={'50%'}
+              >
+                ADD
+              </Button>
+            </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
 const PageHeader = props => {
   return (
     <HStack
@@ -188,14 +238,11 @@ const PageHeader = props => {
         {props.title}
       </Heading>
       {props.hasAddBtn ? (
-        <Button
-          h={'100%'}
-          className={'btn primaryBtn'}
-          w={'120px'}
-          leftIcon={<AddOutlinedIcon />}
-        >
-          Add
-        </Button>
+        <AddBtn
+          title={props.title}
+          formAddData={props.formAddData}
+          onAddData={props.onAddData}
+        />
       ) : null}
     </HStack>
   );
@@ -234,28 +281,28 @@ const List = props => {
         <Modal isOpen={isOpen} scrollBehavior={'inside'} isCentered>
           <ModalOverlay backdropFilter={'blur(5px)'} />
           <ModalContent className={'modalContent'}>
-            <ModalHeader className={'modalHeader'}>
+            <ModalHeader className={'modalHeader'} borderBottom={'none'}>
               <VStack alignItems={'flex-start'} spacing={null}>
-                <Text>List Filter</Text>
+                <Text fontSize={'20px'}>List Filter</Text>
                 <Text fontWeight={'normal'} fontSize={'sm'}>
                   Click "APPLY" to apply filter to the list
                 </Text>
               </VStack>
             </ModalHeader>
 
-            <ModalBody pt={'0'} pb={'24px'}>
+            <ModalBody p={'0'}>
               <Accordion defaultIndex={[]} allowMultiple>
                 {filter?.map((f, index) => {
                   if (f.type === 'checkbox') {
                     return (
                       <AccordionItem key={index}>
-                        <AccordionButton>
+                        <AccordionButton className={'acordion'}>
                           <Box as="span" flex="1" textAlign="left">
                             {f.name}
                           </Box>
                           <AccordionIcon />
                         </AccordionButton>
-                        <AccordionPanel pb={4}>
+                        <AccordionPanel pb={4} className={'acordion'}>
                           <VStack alignItems={'flex-start'}>
                             {f?.item?.map((i, iIndex) => {
                               return (
@@ -283,13 +330,13 @@ const List = props => {
                   } else if (f.type === 'input') {
                     return (
                       <AccordionItem key={index}>
-                        <AccordionButton>
+                        <AccordionButton className={'acordion'}>
                           <Box as="span" flex="1" textAlign="left">
                             {f.name}
                           </Box>
                           <AccordionIcon />
                         </AccordionButton>
-                        <AccordionPanel pb={4}>
+                        <AccordionPanel pb={4} className={'acordion'}>
                           <SimpleGrid columns={f?.columns}>
                             {f?.item?.map((i, iIndex) => {
                               return (
@@ -323,13 +370,13 @@ const List = props => {
                   } else if (f.type === 'color') {
                     return (
                       <AccordionItem key={index}>
-                        <AccordionButton>
+                        <AccordionButton className={'acordion'}>
                           <Box as="span" flex="1" textAlign="left">
                             {f?.name}
                           </Box>
                           <AccordionIcon />
                         </AccordionButton>
-                        <AccordionPanel pb={4}>
+                        <AccordionPanel pb={4} className={'acordion'}>
                           <Wrap>
                             {f?.item?.map((i, iIndex) => {
                               return (
@@ -518,7 +565,7 @@ const Details = props => {
       overflow={'auto'}
     >
       <VStack w={'100%'}>
-        {props.hasImage ? (
+        {props?.hasImage ? (
           <Image
             src={'../img/noImage.jpg'}
             boxSize={'100%'}
@@ -528,7 +575,7 @@ const Details = props => {
         ) : null}
       </VStack>
       <VStack w={'100%'} spacing={null}>
-        {props?.keys?.map((k, index) => {
+        {props?.detailsKeys?.map((k, index) => {
           const createdAt = new Date(props?.detailsData?.CreatedAt);
           const updatedAt = new Date(props?.detailsData?.UpdatedAt);
           const formattedCreatedAt = createdAt?.toLocaleDateString(
@@ -543,18 +590,13 @@ const Details = props => {
             <HStack
               key={index}
               w={'100%'}
-              borderBottom={
-                '1px solid var(--divider)'
-                // index !== props?.keysName?.length - 1
-                //   ? '1px solid var(--divider)'
-                //   : null
-              }
+              borderBottom={'1px solid var(--divider)'}
               px={'16px'}
               py={'12px'}
               alignItems={'flex-start'}
             >
               <Text w={'120px'} opacity={'0.5'}>
-                {props?.keysName[index]}
+                {props?.detailsNames[index]}
               </Text>
               <Text w={'calc(100% - 120px)'} wordBreak={'break-all'}>
                 {!props?.detailsData[`${k}`]
@@ -591,7 +633,9 @@ const DetailsModal = props => {
       <ModalOverlay backdropFilter={'blur(5px)'} />
       <ModalContent className={'modalContent'}>
         <ModalCloseButton className={'modalCloseBtn'} />
-        <ModalHeader className={'modalHeader'}>Details</ModalHeader>
+        <ModalHeader className={'modalHeader'}>
+          <Text fontSize={'20px'}>Details</Text>
+        </ModalHeader>
         <ModalBody pt={'0 !important'} p={'16px 0'}>
           {props.detailsComponent}
         </ModalBody>

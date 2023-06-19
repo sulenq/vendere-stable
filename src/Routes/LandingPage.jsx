@@ -32,9 +32,9 @@ const SignUp = () => {
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay backdropFilter="blur(5px)" />
-        <ModalContent className={'modal'}>
-          <ModalHeader textAlign={'center'}>
-            <Text>Signing Up</Text>
+        <ModalContent className={'modalContent'}>
+          <ModalHeader className={'modalHeader'} textAlign={'center'}>
+            <Text fontSize={'20px'}>Signing Up</Text>
             <Text fontSize={'sm'} fontWeight={'normal'}>
               Create admin account for your shop!
             </Text>
@@ -65,7 +65,7 @@ const SignUp = () => {
               <Text fontSize={'sm'}>*confirm password</Text>
             </VStack>
           </ModalBody>
-          <ModalFooter p={'0'} h={'50px'}>
+          <ModalFooter className={'modalFooter'}>
             <Button w={'50%'} h={'inherit'} className={'btn'} onClick={onClose}>
               CLOSE
             </Button>
@@ -102,9 +102,9 @@ const SignIn = () => {
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay backdropFilter="blur(5px)" />
-        <ModalContent className={'modal'}>
-          <ModalHeader textAlign={'center'}>
-            <Text>Let's Gooo</Text>
+        <ModalContent className={'modalContent'}>
+          <ModalHeader className={'modalHeader'} textAlign={'center'}>
+            <Text fontSize={'20px'}>Let's Gooo</Text>
             <Text fontSize={'sm'} fontWeight={'normal'}>
               Let's do some work!
             </Text>
@@ -239,13 +239,15 @@ const Body = () => {
       justifyContent={'center'}
     >
       <Text
-        fontSize={'xxx-large'}
+        fontSize={'42px'}
         textAlign={'center'}
         fontWeight={'bold'}
         lineHeight={'3.75rem'}
       >
         Responsive, powerful system to{' '}
-        <span style={{ color: 'var(--primary)' }}>grow your bussiness</span>
+        <span style={{ color: 'var(--primary)', fontSize: '42px' }}>
+          grow your bussiness
+        </span>
       </Text>
     </VStack>
   );
