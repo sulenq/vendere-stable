@@ -66,12 +66,14 @@ const Nav = () => {
   const activeNav = currentUrlSplitted[currentUrlSplitted.length - 1];
 
   if (screenWidth < 1200) {
+    // Nav Mobile
     return (
       <HStack className={'navMobile'}>
         <Text>Nav Mobile</Text>
       </HStack>
     );
   } else {
+    // Nav
     return (
       <VStack
         id={'nav'}
@@ -588,12 +590,7 @@ const DetailsModal = props => {
     >
       <ModalOverlay backdropFilter={'blur(5px)'} />
       <ModalContent className={'modalContent'}>
-        <ModalCloseButton
-          className={'modalCloseBtn'}
-          onClose={() => {
-            props.setDetailsModalIsOpen(false);
-          }}
-        />
+        <ModalCloseButton className={'modalCloseBtn'} />
         <ModalHeader className={'modalHeader'}>Details</ModalHeader>
         <ModalBody pt={'0 !important'} p={'16px 0'}>
           {props.detailsComponent}

@@ -170,4 +170,10 @@ td {
 .boxing {
   border: 1px solid red;
 }
+
+@media screen and (max-width: 1400px) {
+  * {
+    font-size: 12px;
+  }
+}
 /* ROOT BG */
