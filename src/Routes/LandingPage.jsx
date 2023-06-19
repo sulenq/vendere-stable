@@ -1,5 +1,5 @@
 import { ColorModeSwitcher } from '../ColorModeSwitcher.js';
-import { useWidthResizeListener } from '../myHooks.js';
+import { useWidthResizeListener } from '../utils.js';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
