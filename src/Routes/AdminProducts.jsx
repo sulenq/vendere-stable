@@ -11,7 +11,6 @@ import {
   DetailsModal,
   InputModal,
 } from '../myComponents';
-import SplashScreen from './SplashScreen';
 import { useWidthResizeListener, listReducer } from '../utils.js';
 
 import { VStack, HStack, Button } from '@chakra-ui/react';
@@ -1340,7 +1339,6 @@ function AdminProducts() {
       },
     ],
   };
-  const [splashScreen, setSplashScreen] = useState(true);
 
   // Page Functions
   function handleSelectList(selectedListData) {
@@ -1358,13 +1356,8 @@ function AdminProducts() {
     console.log(addDataFromModal);
   }
 
-  setTimeout(() => {
-    setSplashScreen(false);
-  }, 1000);
-
   return (
     <HStack id={'appContainer'} spacing={null} h={'100vh'}>
-      {splashScreen ? <SplashScreen /> : null}
       <Nav />
       <VStack spacing={null} w={'100%'} h={'100%'}>
         <TopBar />
