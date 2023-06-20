@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 import {
   Nav,
@@ -9,33 +9,16 @@ import {
   Details,
   PageHeader,
   DetailsModal,
+  InputModal,
 } from '../myComponents';
-import {
-  useWidthResizeListener,
-  listReducer,
-  useFormatNumber,
-  useReverseFormatNumber,
-} from '../utils.js';
+import SplashScreen from './SplashScreen';
+import { useWidthResizeListener, listReducer } from '../utils.js';
 
-import {
-  VStack,
-  HStack,
-  Button,
-  Input,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  Text,
-  Icon,
-  Box,
-} from '@chakra-ui/react';
+import { VStack, HStack, Button } from '@chakra-ui/react';
 
 function AdminProducts() {
   // Page Utils
   const screenWidth = useWidthResizeListener();
-  const fn = useFormatNumber;
-  const rfn = useReverseFormatNumber;
 
   // Page Data
   const dummyListData = [
@@ -50,6 +33,8 @@ function AdminProducts() {
       stock: 1068,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Yellow',
     },
     {
       ID: 14,
@@ -62,6 +47,8 @@ function AdminProducts() {
       stock: 1075,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Orange',
     },
     {
       ID: 27,
@@ -74,6 +61,8 @@ function AdminProducts() {
       stock: 1071,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'White',
     },
     {
       ID: 24,
@@ -86,6 +75,8 @@ function AdminProducts() {
       stock: 1020,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Brown',
     },
     {
       ID: 23,
@@ -98,6 +89,8 @@ function AdminProducts() {
       stock: 1052,
       user_id: 13,
       modal: 5000,
+      category: 'Drink',
+      color: 'Blue',
     },
     {
       ID: 81,
@@ -110,6 +103,8 @@ function AdminProducts() {
       stock: 1094,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Orange',
     },
     {
       ID: 83,
@@ -122,6 +117,8 @@ function AdminProducts() {
       stock: 1104,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Pink',
     },
     {
       ID: 18,
@@ -134,6 +131,8 @@ function AdminProducts() {
       stock: 1082,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'White',
     },
     {
       ID: 28,
@@ -146,6 +145,8 @@ function AdminProducts() {
       stock: 1085,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'White',
     },
     {
       ID: 15,
@@ -158,6 +159,8 @@ function AdminProducts() {
       stock: 1090,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Yellow',
     },
     {
       ID: 29,
@@ -170,6 +173,8 @@ function AdminProducts() {
       stock: 1086,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'White',
     },
     {
       ID: 126,
@@ -182,6 +187,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Red',
     },
     {
       ID: 26,
@@ -194,6 +201,8 @@ function AdminProducts() {
       stock: 45,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Brown',
     },
     {
       ID: 128,
@@ -206,6 +215,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 91,
@@ -218,6 +229,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Brown',
     },
     {
       ID: 129,
@@ -230,6 +243,8 @@ function AdminProducts() {
       stock: 95,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 114,
@@ -242,6 +257,8 @@ function AdminProducts() {
       stock: 100,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 21,
@@ -254,6 +271,8 @@ function AdminProducts() {
       stock: 75,
       user_id: 13,
       modal: 3000,
+      category: 'Food',
+      color: 'White',
     },
     {
       ID: 90,
@@ -266,6 +285,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Brown',
     },
     {
       ID: 130,
@@ -278,6 +299,8 @@ function AdminProducts() {
       stock: 100,
       user_id: 13,
       modal: 0,
+      category: 'Other',
+      color: 'Orange',
     },
     {
       ID: 92,
@@ -290,6 +313,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Green',
     },
     {
       ID: 124,
@@ -302,6 +327,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 116,
@@ -314,6 +341,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Pink',
     },
     {
       ID: 89,
@@ -326,6 +355,8 @@ function AdminProducts() {
       stock: 97,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 30,
@@ -338,6 +369,8 @@ function AdminProducts() {
       stock: 27,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Red',
     },
     {
       ID: 119,
@@ -350,6 +383,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Brown',
     },
     {
       ID: 118,
@@ -362,6 +397,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Pink',
     },
     {
       ID: 96,
@@ -374,6 +411,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Brown',
     },
     {
       ID: 98,
@@ -386,6 +425,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Red',
     },
     {
       ID: 95,
@@ -398,6 +439,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Brown',
     },
     {
       ID: 104,
@@ -410,6 +453,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Green',
     },
     {
       ID: 103,
@@ -422,6 +467,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'White',
     },
     {
       ID: 127,
@@ -434,6 +481,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'White',
     },
     {
       ID: 141,
@@ -446,6 +495,8 @@ function AdminProducts() {
       stock: 999,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Yellow',
     },
     {
       ID: 25,
@@ -458,6 +509,8 @@ function AdminProducts() {
       stock: 94,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Brown',
     },
     {
       ID: 87,
@@ -470,6 +523,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 88,
@@ -482,6 +537,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 16,
@@ -494,6 +551,8 @@ function AdminProducts() {
       stock: 1069,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Yellow',
     },
     {
       ID: 22,
@@ -506,6 +565,8 @@ function AdminProducts() {
       stock: 26,
       user_id: 13,
       modal: 1000,
+      category: 'Drink',
+      color: 'Blue',
     },
     {
       ID: 99,
@@ -518,6 +579,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Blue',
     },
     {
       ID: 101,
@@ -530,6 +593,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Brown',
     },
     {
       ID: 100,
@@ -542,6 +607,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Blue',
     },
     {
       ID: 102,
@@ -554,6 +621,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Black',
     },
     {
       ID: 121,
@@ -566,6 +635,8 @@ function AdminProducts() {
       stock: 95,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 105,
@@ -578,6 +649,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'White',
     },
     {
       ID: 106,
@@ -590,6 +663,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'White',
     },
     {
       ID: 107,
@@ -602,6 +677,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Other',
+      color: 'Yellow',
     },
     {
       ID: 108,
@@ -614,6 +691,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 113,
@@ -626,6 +705,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'White',
     },
     {
       ID: 115,
@@ -638,6 +719,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'White',
     },
     {
       ID: 85,
@@ -650,6 +733,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 125,
@@ -662,6 +747,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 112,
@@ -674,6 +761,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Red',
     },
     {
       ID: 117,
@@ -686,6 +775,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Yellow',
     },
     {
       ID: 111,
@@ -698,6 +789,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Red',
     },
     {
       ID: 120,
@@ -710,6 +803,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Yellow',
     },
     {
       ID: 131,
@@ -722,6 +817,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Other',
+      color: 'Orange',
     },
     {
       ID: 122,
@@ -734,6 +831,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Yellow',
     },
     {
       ID: 123,
@@ -746,6 +845,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Red',
     },
     {
       ID: 132,
@@ -758,6 +859,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Red',
     },
     {
       ID: 133,
@@ -770,6 +873,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Yellow',
     },
     {
       ID: 136,
@@ -782,6 +887,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Other',
+      color: 'Red',
     },
     {
       ID: 134,
@@ -794,6 +901,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Other',
+      color: 'Purple',
     },
     {
       ID: 137,
@@ -806,6 +915,8 @@ function AdminProducts() {
       stock: 99,
       user_id: 13,
       modal: 0,
+      category: 'Other',
+      color: 'Red',
     },
     {
       ID: 17,
@@ -818,6 +929,8 @@ function AdminProducts() {
       stock: 181,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Red',
     },
     {
       ID: 82,
@@ -830,6 +943,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Pink',
     },
     {
       ID: 86,
@@ -842,6 +957,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Green',
     },
     {
       ID: 135,
@@ -854,6 +971,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Other',
+      color: 'Purple',
     },
     {
       ID: 97,
@@ -866,6 +985,8 @@ function AdminProducts() {
       stock: 96,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Blue',
     },
     {
       ID: 93,
@@ -878,6 +999,8 @@ function AdminProducts() {
       stock: 97,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Blue',
     },
     {
       ID: 94,
@@ -890,6 +1013,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Red',
     },
     {
       ID: 84,
@@ -902,6 +1027,8 @@ function AdminProducts() {
       stock: 96,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Orange',
     },
     {
       ID: 109,
@@ -914,6 +1041,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'Blue',
     },
     {
       ID: 110,
@@ -926,6 +1055,8 @@ function AdminProducts() {
       stock: 98,
       user_id: 13,
       modal: 0,
+      category: 'Hygiene',
+      color: 'White',
     },
     {
       ID: 11,
@@ -938,6 +1069,8 @@ function AdminProducts() {
       stock: 117,
       user_id: 13,
       modal: 3050,
+      category: 'Food',
+      color: 'White',
     },
     {
       ID: 19,
@@ -950,6 +1083,8 @@ function AdminProducts() {
       stock: 82,
       user_id: 13,
       modal: 1000,
+      category: 'Food',
+      color: 'Red',
     },
     {
       ID: 138,
@@ -962,6 +1097,8 @@ function AdminProducts() {
       stock: 999,
       user_id: 13,
       modal: 0,
+      category: 'Food',
+      color: 'Brown',
     },
     {
       ID: 139,
@@ -974,6 +1111,8 @@ function AdminProducts() {
       stock: 999,
       user_id: 13,
       modal: 0,
+      category: 'Food',
+      color: 'Red',
     },
     {
       ID: 140,
@@ -986,6 +1125,8 @@ function AdminProducts() {
       stock: 999,
       user_id: 13,
       modal: 0,
+      category: 'Food',
+      color: 'Yellow',
     },
     {
       ID: 142,
@@ -998,6 +1139,8 @@ function AdminProducts() {
       stock: 999,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Brown',
     },
     {
       ID: 143,
@@ -1010,6 +1153,8 @@ function AdminProducts() {
       stock: 999,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Green',
     },
     {
       ID: 144,
@@ -1022,6 +1167,8 @@ function AdminProducts() {
       stock: 999,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Purple',
     },
     {
       ID: 145,
@@ -1034,6 +1181,8 @@ function AdminProducts() {
       stock: 999,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Red',
     },
     {
       ID: 146,
@@ -1046,6 +1195,8 @@ function AdminProducts() {
       stock: 1499,
       user_id: 13,
       modal: 0,
+      category: 'Drink',
+      color: 'Blue',
     },
     {
       ID: 12,
@@ -1058,24 +1209,40 @@ function AdminProducts() {
       stock: 57,
       user_id: 13,
       modal: 3000,
+      category: 'Food',
+      color: 'Purple',
     },
   ];
   const listData = dummyListData;
+  const detailsKeys = [
+    'code',
+    'name',
+    'stock',
+    'price',
+    'category',
+    'color',
+    'CreatedAt',
+    'UpdatedAt',
+    'user_id',
+  ];
+  const detailsNames = [
+    'Code',
+    'Name',
+    'Stock',
+    'Price (Rp)',
+    'Category',
+    'Color',
+    'Created at',
+    'Updated at',
+    'Created by',
+  ];
   const [detailsData, dispatch] = useReducer(listReducer, {});
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
-  const [addData, setAddData] = useState({
-    code: '',
-    name: '',
-    stock: '',
-    price: '',
-    category: '',
-    color: '',
-  });
-  const filterData = [
+  const filterItems = [
     {
       name: 'Category',
       type: 'checkbox',
-      item: [
+      items: [
         { name: 'Food', isChecked: false },
         { name: 'Drink', isChecked: false },
         { name: 'Stationery', isChecked: false },
@@ -1090,14 +1257,14 @@ function AdminProducts() {
       name: 'Supply Limit',
       type: 'input',
       columns: 1,
-      item: [{ name: 'Supply', value: 0 }],
+      items: [{ name: 'Supply', value: 0 }],
       hint: 'Displays the list with lower supply than the value above',
     },
     {
       name: 'Price Range',
       type: 'input',
       columns: 2,
-      item: [
+      items: [
         { name: 'Min', value: 0 },
         { name: 'Max', value: 0 },
       ],
@@ -1105,7 +1272,7 @@ function AdminProducts() {
     {
       name: 'Color',
       type: 'color',
-      item: [
+      items: [
         { name: 'Red', isChecked: false },
         { name: 'Blue', isChecked: false },
         { name: 'Green', isChecked: false },
@@ -1120,122 +1287,60 @@ function AdminProducts() {
       ],
     },
   ];
-
-  //Page Components
-  const FormAddData = () => {
-    return (
-      <VStack w={'100%'} spacing={'16px'}>
-        <Input className={'input'} placeholder={'Code'} />
-        <Input className={'input'} placeholder={`Product's Name`} />
-        <Input
-          className={'input'}
-          placeholder={'Stock'}
-          onChange={e => {
-            setAddData(prevState => ({
-              ...prevState,
-              stock: parseInt(rfn(e.target.value)),
-            }));
-          }}
-          value={fn(addData?.stock)}
-        />
-        <Input
-          className={'input'}
-          placeholder={'Price'}
-          onChange={e => {
-            setAddData(prevState => ({
-              ...prevState,
-              price: parseInt(rfn(e.target.value)),
-            }));
-          }}
-          value={fn(addData?.price)}
-        />
-        <Menu>
-          <MenuButton className={'selectBtn'} as={Button} w={'100%'}>
-            <HStack w={'100%'} justifyContent={'space-between'}>
-              <Text>{addData?.category || 'Category'}</Text>
-              <Icon as={KeyboardArrowDownIcon} />
-            </HStack>
-          </MenuButton>
-          <MenuList>
-            {filterData[0]?.item?.map((c, index) => {
-              return (
-                <MenuItem
-                  key={index}
-                  onClick={() => {
-                    setAddData({ ...addData, category: c?.name });
-                  }}
-                >
-                  {c?.name}
-                </MenuItem>
-              );
-            })}
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton className={'selectBtn'} as={Button} w={'100%'}>
-            <HStack w={'100%'} justifyContent={'space-between'}>
-              <HStack>
-                {addData?.color ? (
-                  <Box
-                    bg={
-                      addData.color === 'Black'
-                        ? 'black'
-                        : addData.color === 'White'
-                        ? 'white'
-                        : addData.color === 'Brown'
-                        ? '#b55e12'
-                        : `${addData.color?.toLowerCase()}.300`
-                    }
-                    border={
-                      addData.color === 'White'
-                        ? '1px solid var(--divider)'
-                        : null
-                    }
-                    w={'10px'}
-                    h={'12px'}
-                  ></Box>
-                ) : null}
-                <Text>{addData?.color || 'Color'}</Text>
-              </HStack>
-              <Icon as={KeyboardArrowDownIcon} />
-            </HStack>
-          </MenuButton>
-          <MenuList>
-            {filterData[3]?.item?.map((c, index) => {
-              return (
-                <MenuItem
-                  key={index}
-                  onClick={() => {
-                    setAddData({ ...addData, color: c?.name });
-                  }}
-                >
-                  <HStack>
-                    <Box
-                      bg={
-                        c?.name === 'Black'
-                          ? 'black'
-                          : c?.name === 'Whcte'
-                          ? 'whcte'
-                          : c?.name === 'Brown'
-                          ? '#b55e12'
-                          : `${c?.name?.toLowerCase()}.300`
-                      }
-                      border={
-                        c?.name === 'White' ? '1px solid var(--divider)' : null
-                      }
-                      w={'10px'}
-                      h={'12px'}
-                    ></Box>
-                    <Text>{c?.name}</Text>
-                  </HStack>
-                </MenuItem>
-              );
-            })}
-          </MenuList>
-        </Menu>
-      </VStack>
-    );
+  const addItemsAttribute = {
+    title: 'Adding',
+    icon: <AddOutlinedIcon />,
+    purpose: 'ADD',
+    items: [
+      { key: 'code', name: 'Code', type: 'string' },
+      { key: 'name', name: 'Name', type: 'string' },
+      {
+        key: 'stock',
+        type: 'number',
+        name: 'Stock',
+      },
+      { key: 'price', name: 'Price', type: 'number' },
+      {
+        key: 'category',
+        name: 'Category',
+        type: 'selectString',
+        options: filterItems[0].items,
+      },
+      {
+        key: 'color',
+        name: 'Color',
+        type: 'selectColor',
+        options: filterItems[3].items,
+      },
+    ],
   };
+  const updateItemsAttribute = {
+    title: 'Updating',
+    purpose: 'UPDATE',
+    items: [
+      { key: 'code', name: 'Code', type: 'string' },
+      { key: 'name', name: 'Name', type: 'string' },
+      {
+        key: 'stock',
+        type: 'number',
+        name: 'Stock',
+      },
+      { key: 'price', name: 'Price', type: 'number' },
+      {
+        key: 'category',
+        name: 'Category',
+        type: 'selectString',
+        options: filterItems[0].items,
+      },
+      {
+        key: 'color',
+        name: 'Color',
+        type: 'selectColor',
+        options: filterItems[3].items,
+      },
+    ],
+  };
+  const [splashScreen, setSplashScreen] = useState(true);
 
   // Page Functions
   function handleSelectList(selectedListData) {
@@ -1249,12 +1354,17 @@ function AdminProducts() {
     }
   }
 
-  function handleAddData() {
-    console.log(addData);
+  function handleAddData(addDataFromModal) {
+    console.log(addDataFromModal);
   }
+
+  setTimeout(() => {
+    setSplashScreen(false);
+  }, 1000);
 
   return (
     <HStack id={'appContainer'} spacing={null} h={'100vh'}>
+      {splashScreen ? <SplashScreen /> : null}
       <Nav />
       <VStack spacing={null} w={'100%'} h={'100%'}>
         <TopBar />
@@ -1276,7 +1386,15 @@ function AdminProducts() {
             <PageHeader
               title={'Products'}
               hasAddBtn
-              formAddData={<FormAddData />}
+              addItemsAttribute={addItemsAttribute}
+              initialData={{
+                code: '',
+                name: '',
+                stock: '',
+                price: '',
+                category: '',
+                color: '',
+              }}
               onAddData={handleAddData}
             />
 
@@ -1284,7 +1402,7 @@ function AdminProducts() {
               listData={listData}
               headers={['Code', 'Name', 'Stock', 'Price', 'Action']}
               body={['code', 'name', 'stock', 'price']}
-              filterData={filterData}
+              filterItems={filterItems}
               selectList={handleSelectList}
             />
           </VStack>
@@ -1294,27 +1412,13 @@ function AdminProducts() {
               detailsComponent={
                 <Details
                   detailsData={detailsData}
-                  detailsKeys={[
-                    'code',
-                    'name',
-                    'stock',
-                    'price',
-                    'CreatedAt',
-                    'UpdatedAt',
-                    'user_id',
-                  ]}
-                  detailsNames={[
-                    'Code',
-                    'Name',
-                    'Stock',
-                    'Price',
-                    'Created at',
-                    'Updated at',
-                    'Created by',
-                  ]}
+                  detailsKeys={detailsKeys}
+                  detailsNames={detailsNames}
                   hasImage
                 />
               }
+              itemsAttribute={updateItemsAttribute}
+              initialData={detailsData}
               detailsModalIsOpen={detailsModalIsOpen}
               setDetailsModalIsOpen={setDetailsModalIsOpen}
             />
@@ -1332,36 +1436,23 @@ function AdminProducts() {
 
                 <Details
                   detailsData={detailsData}
-                  detailsKeys={[
-                    'code',
-                    'name',
-                    'stock',
-                    'price',
-                    'CreatedAt',
-                    'UpdatedAt',
-                    'user_id',
-                  ]}
-                  detailsNames={[
-                    'Code',
-                    'Name',
-                    'Stock',
-                    'Price',
-                    'Created at',
-                    'Updated at',
-                    'Created by',
-                  ]}
+                  detailsKeys={detailsKeys}
+                  detailsNames={detailsNames}
                   hasImage
                 />
               </VStack>
 
-              <HStack w={'100%'} h={'50px'} spacing={null}>
-                <Button className={'btn primaryBtn'} h={'100%'} w={'50%'}>
-                  UPDATE
-                </Button>
-                <Button className={'btn primaryDarkBtn'} h={'100%'} w={'50%'}>
-                  DELETE
-                </Button>
-              </HStack>
+              {Object.keys(detailsData).length !== 0 ? (
+                <HStack w={'100%'} h={'50px'} spacing={null}>
+                  <InputModal
+                    initialData={detailsData}
+                    itemsAttribute={updateItemsAttribute}
+                  />
+                  <Button className={'btn primaryDarkBtn'} h={'100%'} w={'50%'}>
+                    DELETE
+                  </Button>
+                </HStack>
+              ) : null}
             </VStack>
           )}
         </HStack>

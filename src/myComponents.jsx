@@ -1,5 +1,5 @@
 // import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
@@ -11,7 +11,7 @@ import MoneyOffCsredOutlinedIcon from '@mui/icons-material/MoneyOffCsredOutlined
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { ColorModeSwitcher } from './ColorModeSwitcher.js';
 import {
@@ -57,6 +57,12 @@ import {
   Tr,
   Th,
   Td,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  InputGroup,
+  InputLeftAddon,
 } from '@chakra-ui/react';
 
 const Nav = () => {
@@ -171,56 +177,6 @@ const TopBar = () => {
   );
 };
 
-const AddBtn = props => {
-  // Utils
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // Data
-  // const [addData, setAddData] = useState({});
-
-  return (
-    <>
-      <Button
-        className={'btn primaryBtn'}
-        onClick={onOpen}
-        h={'100%'}
-        w={'120px'}
-        leftIcon={<AddOutlinedIcon />}
-      >
-        ADD
-      </Button>
-
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay backdropFilter={'blur(0)'} />
-        <ModalContent className={'modalContent'}>
-          <ModalHeader className={'modalHeader'}>
-            <Text fontSize={'20px'}>{'Adding ' + props.title}</Text>
-          </ModalHeader>
-          <ModalBody py={'24px'}>{props.formAddData}</ModalBody>
-          <ModalFooter className={'modalFooter'}>
-            <HStack w={'100%'} h={'50px'} spacing={null}>
-              <Button className={'btn'} onClick={onClose} h={'100%'} w={'50%'}>
-                CANCEL
-              </Button>
-              <Button
-                className={'btn primaryBtn'}
-                onClick={() => {
-                  props.onAddData();
-                  onClose();
-                }}
-                h={'100%'}
-                w={'50%'}
-              >
-                ADD
-              </Button>
-            </HStack>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  );
-};
-
 const PageHeader = props => {
   return (
     <HStack
@@ -238,10 +194,11 @@ const PageHeader = props => {
         {props.title}
       </Heading>
       {props.hasAddBtn ? (
-        <AddBtn
+        <InputModal
           title={props.title}
-          formAddData={props.formAddData}
-          onAddData={props.onAddData}
+          handleClick={props.onAddData}
+          initialData={props?.initialData}
+          itemsAttribute={props.addItemsAttribute}
         />
       ) : null}
     </HStack>
@@ -252,7 +209,7 @@ const List = props => {
   // Utils
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
-  const filterData = props?.filterData;
+  const filterItems = props?.filterItems;
   // const screenWidth = useWidthResizeListener();
 
   // Component
@@ -263,10 +220,10 @@ const List = props => {
       setFilter(filterReset);
     }
 
-    const filterReset = JSON.parse(JSON.stringify(filterData));
+    const filterReset = JSON.parse(JSON.stringify(filterItems));
 
     const [filter, setFilter] = useState(
-      JSON.parse(JSON.stringify(filterData))
+      JSON.parse(JSON.stringify(filterItems))
     );
 
     return (
@@ -304,7 +261,7 @@ const List = props => {
                         </AccordionButton>
                         <AccordionPanel pb={4} className={'acordion'}>
                           <VStack alignItems={'flex-start'}>
-                            {f?.item?.map((i, iIndex) => {
+                            {f?.items?.map((i, iIndex) => {
                               return (
                                 <Checkbox
                                   key={iIndex}
@@ -313,8 +270,8 @@ const List = props => {
                                     const prevState = JSON.parse(
                                       JSON.stringify(filter)
                                     );
-                                    prevState[index].item[iIndex].isChecked =
-                                      !prevState[index].item[iIndex].isChecked;
+                                    prevState[index].items[iIndex].isChecked =
+                                      !prevState[index].items[iIndex].isChecked;
                                     setFilter(prevState);
                                   }}
                                   py={'2px'}
@@ -338,7 +295,7 @@ const List = props => {
                         </AccordionButton>
                         <AccordionPanel pb={4} className={'acordion'}>
                           <SimpleGrid columns={f?.columns}>
-                            {f?.item?.map((i, iIndex) => {
+                            {f?.items?.map((i, iIndex) => {
                               return (
                                 <Input
                                   key={iIndex}
@@ -349,12 +306,12 @@ const List = props => {
                                   }}
                                   onChange={e => {
                                     setFilter(prevState => {
-                                      prevState[index].item[iIndex].value =
+                                      prevState[index].items[iIndex].value =
                                         parseInt(rfn(e.target.value));
                                       return [...prevState];
                                     });
                                   }}
-                                  value={fn(filter[index].item[iIndex].value)}
+                                  value={fn(filter[index].items[iIndex].value)}
                                 />
                               );
                             })}
@@ -378,7 +335,7 @@ const List = props => {
                         </AccordionButton>
                         <AccordionPanel pb={4} className={'acordion'}>
                           <Wrap>
-                            {f?.item?.map((i, iIndex) => {
+                            {f?.items?.map((i, iIndex) => {
                               return (
                                 <WrapItem
                                   key={iIndex}
@@ -394,8 +351,8 @@ const List = props => {
                                     const prevState = JSON.parse(
                                       JSON.stringify(filter)
                                     );
-                                    prevState[index].item[iIndex].isChecked =
-                                      !prevState[index].item[iIndex].isChecked;
+                                    prevState[index].items[iIndex].isChecked =
+                                      !prevState[index].items[iIndex].isChecked;
                                     setFilter(prevState);
                                   }}
                                   bg={
@@ -460,9 +417,9 @@ const List = props => {
   function listHandleClick(e, selectedListData, key) {
     const listBody = document.querySelectorAll('#listBody tr');
     listBody.forEach(l => {
-      l.classList.remove('selectedList');
+      l?.classList.remove('selectedList');
     });
-    e.currentTarget.classList.add('selectedList');
+    e.currentTarget?.classList.add('selectedList');
     props?.selectList(selectedListData);
   }
 
@@ -599,17 +556,17 @@ const Details = props => {
                 {props?.detailsNames[index]}
               </Text>
               <Text w={'calc(100% - 120px)'} wordBreak={'break-all'}>
-                {!props?.detailsData[`${k}`]
+                {!props?.detailsData?.[`${k}`]
                   ? 'No list selected'
                   : k === 'user_id'
-                  ? props?.detailsData[`${k}`]
+                  ? props?.detailsData?.[`${k}`]
                   : k === 'CreatedAt'
                   ? formattedCreatedAt
                   : k === 'UpdatedAt'
                   ? formattedUpdateddAt
-                  : typeof props?.detailsData[`${k}`] === 'number'
-                  ? fn(props?.detailsData[`${k}`])
-                  : props?.detailsData[`${k}`]}
+                  : typeof props?.detailsData?.[`${k}`] === 'number'
+                  ? fn(props?.detailsData?.[`${k}`])
+                  : props?.detailsData?.[`${k}`]}
               </Text>
             </HStack>
           );
@@ -636,14 +593,13 @@ const DetailsModal = props => {
         <ModalHeader className={'modalHeader'}>
           <Text fontSize={'20px'}>Details</Text>
         </ModalHeader>
-        <ModalBody pt={'0 !important'} p={'16px 0'}>
-          {props.detailsComponent}
-        </ModalBody>
+        <ModalBody p={'0 !important'}>{props.detailsComponent}</ModalBody>
         <ModalFooter className={'modalFooter'}>
           <HStack w={'100%'} h={'50px'} spacing={null}>
-            <Button className={'btn primaryBtn'} h={'100%'} w={'50%'}>
-              UPDATE
-            </Button>
+            <InputModal
+              itemsAttribute={props.itemsAttribute}
+              initialData={props?.initialData}
+            />
             <Button className={'btn primaryDarkBtn'} h={'100%'} w={'50%'}>
               DELETE
             </Button>
@@ -654,4 +610,219 @@ const DetailsModal = props => {
   );
 };
 
-export { Nav, TopBar, List, Details, PageHeader, DetailsModal };
+const InputModal = props => {
+  // Utils
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const fn = useFormatNumber;
+  const rfn = useReverseFormatNumber;
+
+  // Datas
+  const [data, setData] = useState({});
+  useEffect(() => {
+    setData(props?.initialData);
+  }, [props?.initialData]);
+  // console.log(props?.initialData);
+  return (
+    <>
+      <Button
+        className={'btn primaryBtn'}
+        onClick={onOpen}
+        w={props?.itemsAttribute?.purpose === 'ADD' ? '120px' : '50%'}
+        h={'100%'}
+        leftIcon={props?.itemsAttribute?.icon}
+      >
+        {props?.itemsAttribute?.purpose}
+      </Button>
+
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        scrollBehavior={'inside'}
+        initialFocusRef={null}
+        isCentered
+      >
+        <ModalOverlay backdropFilter={'blur(5px)'} />
+        <ModalContent className={'modalContent'}>
+          <ModalHeader className={'modalHeader'}>
+            <Text fontSize={'20px'}>{props?.itemsAttribute?.title}</Text>
+          </ModalHeader>
+          <ModalBody p={'24px !important'}>
+            <VStack w={'100%'} spacing={'16px'}>
+              {props?.itemsAttribute?.items?.map((i, index) => {
+                if (i?.type === 'string') {
+                  return (
+                    <Input
+                      key={index}
+                      className={'input'}
+                      onChange={e => {
+                        setData({ ...data, [i?.key]: e.target.value });
+                      }}
+                      placeholder={i?.name}
+                      value={data[i?.key]}
+                    />
+                  );
+                } else if (i?.name === 'Price') {
+                  return (
+                    <InputGroup key={index} className={'input'}>
+                      <InputLeftAddon className={'input'} children="Rp" />
+                      <Input
+                        className={'input'}
+                        onChange={e => {
+                          setData({
+                            ...data,
+                            [i?.key]: parseInt(rfn(e.target.value)),
+                          });
+                        }}
+                        placeholder={i?.name}
+                        value={fn(data[i?.key])}
+                      />{' '}
+                    </InputGroup>
+                  );
+                } else if (i?.type === 'number') {
+                  return (
+                    <Input
+                      key={index}
+                      className={'input'}
+                      onChange={e => {
+                        setData({
+                          ...data,
+                          [i?.key]: parseInt(rfn(e.target.value)),
+                        });
+                      }}
+                      placeholder={i?.name}
+                      value={fn(data[i?.key])}
+                    />
+                  );
+                } else if (i?.type === 'selectString') {
+                  return (
+                    <Menu key={index}>
+                      <MenuButton
+                        className={'selectBtn'}
+                        as={Button}
+                        w={'100%'}
+                      >
+                        <HStack w={'100%'} justifyContent={'space-between'}>
+                          <Text>{data?.[i?.key] || i?.name}</Text>
+                          <Icon as={KeyboardArrowDownIcon} />
+                        </HStack>
+                      </MenuButton>
+                      <MenuList>
+                        {i?.options?.map((c, index) => {
+                          return (
+                            <MenuItem
+                              key={index}
+                              onClick={() => {
+                                setData({ ...data, [i?.key]: c?.name });
+                              }}
+                            >
+                              {c?.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </MenuList>
+                    </Menu>
+                  );
+                } else if (i?.type === 'selectColor') {
+                  return (
+                    <Menu key={index}>
+                      <MenuButton
+                        className={'selectBtn'}
+                        as={Button}
+                        w={'100%'}
+                      >
+                        <HStack w={'100%'} justifyContent={'space-between'}>
+                          <HStack>
+                            {data?.color ? (
+                              <Box
+                                bg={
+                                  data.color === 'Black'
+                                    ? 'black'
+                                    : data.color === 'White'
+                                    ? 'white'
+                                    : data.color === 'Brown'
+                                    ? '#b55e12'
+                                    : `${data.color?.toLowerCase()}.300`
+                                }
+                                border={
+                                  data.color === 'White'
+                                    ? '1px solid var(--divider)'
+                                    : null
+                                }
+                                w={'10px'}
+                                h={'12px'}
+                              ></Box>
+                            ) : null}
+                            <Text>{data?.color || 'Color'}</Text>
+                          </HStack>
+                          <Icon as={KeyboardArrowDownIcon} />
+                        </HStack>
+                      </MenuButton>
+                      <MenuList>
+                        {i?.options?.map((c, index) => {
+                          return (
+                            <MenuItem
+                              key={index}
+                              onClick={() => {
+                                setData({ ...data, color: c?.name });
+                              }}
+                            >
+                              <HStack>
+                                <Box
+                                  bg={
+                                    c?.name === 'Black'
+                                      ? 'black'
+                                      : c?.name === 'Whcte'
+                                      ? 'whcte'
+                                      : c?.name === 'Brown'
+                                      ? '#b55e12'
+                                      : `${c?.name?.toLowerCase()}.300`
+                                  }
+                                  border={
+                                    c?.name === 'White'
+                                      ? '1px solid var(--divider)'
+                                      : null
+                                  }
+                                  w={'10px'}
+                                  h={'12px'}
+                                ></Box>
+                                <Text>{c?.name}</Text>
+                              </HStack>
+                            </MenuItem>
+                          );
+                        })}
+                      </MenuList>
+                    </Menu>
+                  );
+                } else {
+                  return <Text>Invalid input type, check itemsAttribute</Text>;
+                }
+              })}
+            </VStack>
+          </ModalBody>
+          <ModalFooter className={'modalFooter'}>
+            <HStack w={'100%'} h={'50px'} spacing={null}>
+              <Button className={'btn'} onClick={onClose} h={'100%'} w={'50%'}>
+                CANCEL
+              </Button>
+              <Button
+                className={'btn primaryBtn'}
+                onClick={() => {
+                  if (typeof props?.handleClick === 'function') {
+                    props.handleClick(data);
+                  }
+                  onClose();
+                }}
+                h={'100%'}
+                w={'50%'}
+              >
+                {props?.itemsAttribute?.purpose}
+              </Button>
+            </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+export { Nav, TopBar, List, Details, PageHeader, DetailsModal, InputModal };
