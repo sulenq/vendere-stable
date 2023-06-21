@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useReducer, useState, createContext } from 'react';
 
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
@@ -14,6 +14,9 @@ import {
 import { useWidthResizeListener, listReducer } from '../utils.js';
 
 import { VStack, HStack, Button } from '@chakra-ui/react';
+
+// Page Context
+export const HandleRestock = createContext();
 
 function AdminProducts() {
   // Page Utils
@@ -1352,8 +1355,11 @@ function AdminProducts() {
     }
   }
 
-  function handleAddData(addDataFromModal) {
-    console.log(addDataFromModal);
+  function handleAddData(data) {
+    console.log(data);
+  }
+  function handleRestock(data) {
+    console.log(data);
   }
 
   return (
@@ -1380,6 +1386,7 @@ function AdminProducts() {
               title={'Products'}
               hasAddBtn
               addItemsAttribute={addItemsAttribute}
+              btnClassName={'primaryBtn'}
               initialData={{
                 code: '',
                 name: '',
@@ -1401,20 +1408,22 @@ function AdminProducts() {
           </VStack>
 
           {screenWidth < 1200 ? (
-            <DetailsModal
-              detailsComponent={
-                <Details
-                  detailsData={detailsData}
-                  detailsKeys={detailsKeys}
-                  detailsNames={detailsNames}
-                  hasImage
-                />
-              }
-              itemsAttribute={updateItemsAttribute}
-              initialData={detailsData}
-              detailsModalIsOpen={detailsModalIsOpen}
-              setDetailsModalIsOpen={setDetailsModalIsOpen}
-            />
+            <HandleRestock.Provider value={handleRestock}>
+              <DetailsModal
+                detailsComponent={
+                  <Details
+                    detailsData={detailsData}
+                    detailsKeys={detailsKeys}
+                    detailsNames={detailsNames}
+                    hasImage
+                  />
+                }
+                itemsAttribute={updateItemsAttribute}
+                initialData={detailsData}
+                detailsModalIsOpen={detailsModalIsOpen}
+                setDetailsModalIsOpen={setDetailsModalIsOpen}
+              />
+            </HandleRestock.Provider>
           ) : (
             <VStack
               id={'DetailsSection'}
@@ -1436,15 +1445,32 @@ function AdminProducts() {
               </VStack>
 
               {Object.keys(detailsData).length !== 0 ? (
-                <HStack w={'100%'} h={'50px'} spacing={null}>
-                  <InputModal
-                    initialData={detailsData}
-                    itemsAttribute={updateItemsAttribute}
-                  />
-                  <Button className={'btn primaryDarkBtn'} h={'100%'} w={'50%'}>
-                    DELETE
+                <VStack w={'100%'} spacing={null}>
+                  <HStack w={'100%'} h={'50px'} spacing={null}>
+                    <InputModal
+                      initialData={detailsData}
+                      itemsAttribute={updateItemsAttribute}
+                    />
+                    <Button
+                      className={'btn'}
+                      h={'100%'}
+                      w={'50%'}
+                      borderLeft={'1px solid var(--divider)'}
+                    >
+                      DELETE
+                    </Button>
+                  </HStack>
+                  <Button
+                    className={'btn primaryBtn'}
+                    onClick={() => {
+                      handleRestock('titit');
+                    }}
+                    w={'100%'}
+                    h={'50px'}
+                  >
+                    RESTOCK
                   </Button>
-                </HStack>
+                </VStack>
               ) : null}
             </VStack>
           )}

@@ -1,5 +1,5 @@
 // import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
@@ -20,6 +20,7 @@ import {
   useReverseFormatNumber,
   useIdFormatDate,
 } from './utils.js';
+import { HandleRestock } from './Routes/AdminProducts';
 
 import {
   Heading,
@@ -63,6 +64,7 @@ import {
   MenuItem,
   InputGroup,
   InputLeftAddon,
+  InputRightAddon,
 } from '@chakra-ui/react';
 
 const Nav = () => {
@@ -196,6 +198,7 @@ const PageHeader = props => {
       {props.hasAddBtn ? (
         <InputModal
           title={props.title}
+          btnClassName={props?.btnClassName}
           handleClick={props.onAddData}
           initialData={props?.initialData}
           itemsAttribute={props.addItemsAttribute}
@@ -577,6 +580,8 @@ const Details = props => {
 };
 
 const DetailsModal = props => {
+  const handleRestock = useContext(HandleRestock);
+
   return (
     <Modal
       isOpen={props.detailsModalIsOpen}
@@ -595,15 +600,32 @@ const DetailsModal = props => {
         </ModalHeader>
         <ModalBody p={'0 !important'}>{props.detailsComponent}</ModalBody>
         <ModalFooter className={'modalFooter'}>
-          <HStack w={'100%'} h={'50px'} spacing={null}>
-            <InputModal
-              itemsAttribute={props.itemsAttribute}
-              initialData={props?.initialData}
-            />
-            <Button className={'btn primaryDarkBtn'} h={'100%'} w={'50%'}>
-              DELETE
+          <VStack w={'100%'} spacing={null}>
+            <HStack w={'100%'} h={'50px'} spacing={null}>
+              <InputModal
+                itemsAttribute={props.itemsAttribute}
+                initialData={props?.initialData}
+              />
+              <Button
+                className={'btn'}
+                w={'50%'}
+                h={'100%'}
+                borderLeft={'1px solid var(--divider)'}
+              >
+                DELETE
+              </Button>
+            </HStack>
+            <Button
+              className={'btn primaryBtn'}
+              onClick={() => {
+                handleRestock('titit');
+              }}
+              w={'100%'}
+              h={'50px'}
+            >
+              RESTOCK
             </Button>
-          </HStack>
+          </VStack>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -625,7 +647,7 @@ const InputModal = props => {
   return (
     <>
       <Button
-        className={'btn primaryBtn'}
+        className={`btn ${props.btnClassName}`}
         onClick={onOpen}
         w={props?.itemsAttribute?.purpose === 'ADD' ? '120px' : '50%'}
         h={'100%'}
@@ -676,6 +698,23 @@ const InputModal = props => {
                         placeholder={i?.name}
                         value={fn(data[i?.key])}
                       />{' '}
+                    </InputGroup>
+                  );
+                } else if (i?.name === 'Stock') {
+                  return (
+                    <InputGroup key={index} className={'input'}>
+                      <Input
+                        className={'input'}
+                        onChange={e => {
+                          setData({
+                            ...data,
+                            [i?.key]: parseInt(rfn(e.target.value)),
+                          });
+                        }}
+                        placeholder={i?.name}
+                        value={fn(data[i?.key])}
+                      />
+                      <InputRightAddon className={'input'} children="pcs" />
                     </InputGroup>
                   );
                 } else if (i?.type === 'number') {
