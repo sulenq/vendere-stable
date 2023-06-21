@@ -1,6 +1,6 @@
 // import axios from 'axios';
-import { useState, useEffect, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation, Link as ReachLink } from 'react-router-dom';
 
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
@@ -21,7 +21,6 @@ import {
   useReverseFormatNumber,
   useIdFormatDate,
 } from './utils.js';
-import { HandleRestock } from './Routes/AdminProducts';
 
 import {
   Heading,
@@ -66,6 +65,8 @@ import {
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 
 const Nav = () => {
@@ -90,24 +91,29 @@ const Nav = () => {
         justifyContent={'space-between'}
         overflow={'auto'}
       >
-        <HStack
-          className={'navIconContainer'}
-          p={'0'}
-          borderBottom={'1px solid var(--divider)'}
-        >
-          <Link href={'/'} className={'navIconContainer'} w={'100%'}>
-            <Image src={'../logo.png'} w={'28px'} mx={'auto !important'} />
-          </Link>
-        </HStack>
+        <Tooltip label={'Landing Page'} placement={'right'} openDelay={'500'}>
+          <HStack
+            className={'navIconContainer'}
+            borderBottom={'1px solid var(--divider)'}
+          >
+            <Link as={ReachLink} to={'/'} w={'100%'}>
+              <Image src={'../logo.png'} w={'28px'} mx={'auto !important'} />
+            </Link>
+          </HStack>
+        </Tooltip>
         <VStack w={'100%'} spacing={null} overflow={'auto'}>
           <Tooltip label={'Products'} placement={'right'} openDelay={'500'}>
-            <HStack
-              className={'navIconContainer'}
-              spacing={null}
-              bg={activeNav === 'products' ? 'primary' : null}
+            <Link
+              as={ReachLink}
+              to={'/admin/products'}
+              className={
+                activeNav === 'products'
+                  ? 'navIconContainer primaryBtn'
+                  : 'navIconContainer'
+              }
             >
               <Icon as={Inventory2OutlinedIcon} />
-            </HStack>
+            </Link>
           </Tooltip>
           <Tooltip label={'Debts'} placement={'right'} openDelay={'500'}>
             <HStack
@@ -147,7 +153,7 @@ const Nav = () => {
               <Icon as={PersonOutlinedIcon} />
             </HStack>
           </Tooltip>
-          <Tooltip label={'Sing Out'} placement={'right'} openDelay={'500'}>
+          <Tooltip label={'Sign Out'} placement={'right'} openDelay={'500'}>
             <HStack className={'navIconContainer'} spacing={null}>
               <Icon as={LogoutOutlinedIcon} />
             </HStack>
@@ -204,7 +210,7 @@ const PageHeader = props => {
       borderBottom={'1px solid var(--divider)'}
     >
       <Heading
-        w={props.hasAddBtn ? 'calc(100% - 120px)' : '100%'}
+        w={props.hasBtn ? 'calc(100% - 120px)' : '100%'}
         h={'100%'}
         borderTop="1px solid var(--divider)"
         py={'8px'}
@@ -212,11 +218,8 @@ const PageHeader = props => {
       >
         {props.title}
       </Heading>
-      {props.hasAddBtn ? (
+      {props.hasBtn ? (
         <InputModal
-          title={props.title}
-          btnClassName={props?.btnClassName}
-          handleClick={props.onAddData}
           initialData={props?.initialData}
           itemsAttribute={props.addItemsAttribute}
         />
@@ -597,8 +600,6 @@ const Details = props => {
 };
 
 const DetailsModal = props => {
-  const handleRestock = useContext(HandleRestock);
-
   return (
     <Modal
       isOpen={props.detailsModalIsOpen}
@@ -620,28 +621,20 @@ const DetailsModal = props => {
           <VStack w={'100%'} spacing={null}>
             <HStack w={'100%'} h={'50px'} spacing={null}>
               <InputModal
-                itemsAttribute={props.itemsAttribute}
-                initialData={props?.initialData}
+                itemsAttribute={props?.detailsActions[0]?.itemsAttribute}
+                initialData={props?.detailsActions[0]?.initialData}
               />
-              <Button
-                className={'btn'}
-                w={'50%'}
-                h={'100%'}
-                borderLeft={'1px solid var(--divider)'}
-              >
-                DELETE
-              </Button>
+              <InputModal
+                itemsAttribute={props?.detailsActions[1]?.itemsAttribute}
+                initialData={props?.detailsActions[1]?.initialData}
+              />
             </HStack>
-            <Button
-              className={'btn primaryBtn'}
-              onClick={() => {
-                handleRestock('titit');
-              }}
-              w={'100%'}
-              h={'50px'}
-            >
-              RESTOCK
-            </Button>
+            {props?.detailsActions[2] ? (
+              <InputModal
+                itemsAttribute={props?.detailsActions[2]?.itemsAttribute}
+                initialData={props?.detailsActions[2]?.initialData}
+              />
+            ) : null}
           </VStack>
         </ModalFooter>
       </ModalContent>
@@ -660,13 +653,13 @@ const InputModal = props => {
   useEffect(() => {
     setData(props?.initialData);
   }, [props?.initialData]);
-  // console.log(props?.initialData);
+
   return (
     <>
       <Button
-        className={`btn ${props.btnClassName}`}
+        className={`btn ${props?.itemsAttribute?.btnClassName}`}
         onClick={onOpen}
-        w={props?.itemsAttribute?.purpose === 'ADD' ? '120px' : '50%'}
+        w={props?.itemsAttribute?.btnW}
         h={'100%'}
         leftIcon={props?.itemsAttribute?.icon}
       >
@@ -685,10 +678,17 @@ const InputModal = props => {
           <ModalHeader className={'modalHeader'}>
             <Text fontSize={'20px'}>{props?.itemsAttribute?.title}</Text>
           </ModalHeader>
-          <ModalBody p={'24px !important'}>
-            <VStack w={'100%'} spacing={'16px'}>
+          <ModalBody p={'0px !important'}>
+            <VStack w={'100%'} spacing={'16px'} p={'24px !important'}>
               {props?.itemsAttribute?.items?.map((i, index) => {
-                if (i?.type === 'string') {
+                if (i?.readOnly) {
+                  return (
+                    <HStack key={index} w={'100%'} alignItems={'flex-start'}>
+                      <Text w={'120px'}>{i?.name}</Text>
+                      <Text alignSelf={'flex-start'}>{data[i?.key]}</Text>
+                    </HStack>
+                  );
+                } else if (i?.type === 'string') {
                   return (
                     <Input
                       key={index}
@@ -700,7 +700,7 @@ const InputModal = props => {
                       value={data[i?.key]}
                     />
                   );
-                } else if (i?.name === 'Price') {
+                } else if (i?.type === 'price') {
                   return (
                     <InputGroup key={index} className={'input'}>
                       <InputLeftAddon className={'input'} children="Rp" />
@@ -717,7 +717,22 @@ const InputModal = props => {
                       />{' '}
                     </InputGroup>
                   );
-                } else if (i?.name === 'Stock') {
+                } else if (i?.type === 'number') {
+                  return (
+                    <Input
+                      key={index}
+                      className={'input'}
+                      onChange={e => {
+                        setData({
+                          ...data,
+                          [i?.key]: parseInt(rfn(e.target.value)),
+                        });
+                      }}
+                      placeholder={i?.name}
+                      value={fn(data[i?.key])}
+                    />
+                  );
+                } else if (i?.type === 'stock') {
                   return (
                     <InputGroup key={index} className={'input'}>
                       <Input
@@ -733,21 +748,6 @@ const InputModal = props => {
                       />
                       <InputRightAddon className={'input'} children="pcs" />
                     </InputGroup>
-                  );
-                } else if (i?.type === 'number') {
-                  return (
-                    <Input
-                      key={index}
-                      className={'input'}
-                      onChange={e => {
-                        setData({
-                          ...data,
-                          [i?.key]: parseInt(rfn(e.target.value)),
-                        });
-                      }}
-                      placeholder={i?.name}
-                      value={fn(data[i?.key])}
-                    />
                   );
                 } else if (i?.type === 'selectString') {
                   return (
@@ -854,6 +854,19 @@ const InputModal = props => {
                 }
               })}
             </VStack>
+            {props?.itemsAttribute?.alert &&
+            props?.itemsAttribute?.alert?.position === 'bottom' ? (
+              <Alert
+                status={props?.itemsAttribute?.alert?.status}
+                alignItems={'flex-start'}
+                // variant="left-accent"
+              >
+                <AlertIcon />
+                <Text alignSelf={'flex-start'}>
+                  {props?.itemsAttribute?.alert?.text}
+                </Text>
+              </Alert>
+            ) : null}
           </ModalBody>
           <ModalFooter className={'modalFooter'}>
             <HStack w={'100%'} h={'50px'} spacing={null}>
@@ -863,8 +876,10 @@ const InputModal = props => {
               <Button
                 className={'btn primaryBtn'}
                 onClick={() => {
-                  if (typeof props?.handleClick === 'function') {
-                    props.handleClick(data);
+                  if (
+                    typeof props?.itemsAttribute?.handlePurpose === 'function'
+                  ) {
+                    props?.itemsAttribute?.handlePurpose(data);
                   }
                   onClose();
                 }}

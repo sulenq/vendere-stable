@@ -1,4 +1,4 @@
-import { useReducer, useState, createContext } from 'react';
+import { useReducer, useState, useEffect, createContext } from 'react';
 
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
@@ -13,7 +13,7 @@ import {
 } from '../myComponents';
 import { useWidthResizeListener, listReducer } from '../utils.js';
 
-import { VStack, HStack, Button } from '@chakra-ui/react';
+import { VStack, HStack } from '@chakra-ui/react';
 
 // Page Context
 export const HandleRestock = createContext();
@@ -22,7 +22,7 @@ function AdminProducts() {
   // Page Utils
   const screenWidth = useWidthResizeListener();
 
-  // Page Data
+  // Page Datas
   const dummyListData = [
     {
       ID: 20,
@@ -1292,16 +1292,19 @@ function AdminProducts() {
   const addItemsAttribute = {
     title: 'Adding',
     icon: <AddOutlinedIcon />,
+    btnW: '120px',
+    btnClassName: 'primaryBtn',
     purpose: 'ADD',
+    handlePurpose: handleAddData,
     items: [
       { key: 'code', name: 'Code', type: 'string' },
       { key: 'name', name: 'Name', type: 'string' },
       {
         key: 'stock',
-        type: 'number',
+        type: 'stock',
         name: 'Stock',
       },
-      { key: 'price', name: 'Price', type: 'number' },
+      { key: 'price', name: 'Price', type: 'price' },
       {
         key: 'category',
         name: 'Category',
@@ -1319,15 +1322,17 @@ function AdminProducts() {
   const updateItemsAttribute = {
     title: 'Updating',
     purpose: 'UPDATE',
+    handlePurpose: handleUpdateData,
+    btnW: '50%',
     items: [
       { key: 'code', name: 'Code', type: 'string' },
       { key: 'name', name: 'Name', type: 'string' },
       {
         key: 'stock',
-        type: 'number',
+        type: 'stock',
         name: 'Stock',
       },
-      { key: 'price', name: 'Price', type: 'number' },
+      { key: 'price', name: 'Price', type: 'price' },
       {
         key: 'category',
         name: 'Category',
@@ -1339,6 +1344,55 @@ function AdminProducts() {
         name: 'Color',
         type: 'selectColor',
         options: filterItems[3].items,
+      },
+    ],
+  };
+  const deleteItemsAttribute = {
+    title: 'Deleting',
+    purpose: 'DELETE',
+    btnW: '50%',
+    alert: {
+      status: 'warning',
+      position: 'bottom',
+      text: 'Confirm this item will be deleted permanently and you cannot undo this action.',
+    },
+    items: [
+      { key: 'code', name: 'Code', type: 'string', readOnly: true },
+      { key: 'name', name: 'Name', type: 'string', readOnly: true },
+    ],
+  };
+  const [restockData, setRestockData] = useState({
+    code: detailsData?.code,
+    name: detailsData?.name,
+    addStock: 0,
+    reduceStock: 0,
+  });
+  useEffect(() => {
+    setRestockData({
+      code: detailsData.code,
+      name: detailsData.name,
+      addStock: 0,
+      reduceStock: 0,
+    });
+  }, [detailsData]);
+  const restockItemsAttribute = {
+    title: 'Restocking',
+    btnClassName: 'primaryBtn',
+    btnW: '100%',
+    purpose: 'RESTOCK',
+    handlePurpose: handleRestock,
+    items: [
+      { key: 'code', name: 'Code', type: 'string', readOnly: true },
+      { key: 'name', name: 'Name', type: 'string', readOnly: true },
+      {
+        key: 'addStock',
+        type: 'stock',
+        name: 'Add Stock',
+      },
+      {
+        key: 'reduceStock',
+        type: 'stock',
+        name: 'Reduce Stock',
       },
     ],
   };
@@ -1358,8 +1412,16 @@ function AdminProducts() {
   function handleAddData(data) {
     console.log(data);
   }
+  function handleUpdateData(data) {
+    console.log(data);
+  }
   function handleRestock(data) {
     console.log(data);
+    setRestockData({
+      code: detailsData?.code,
+      name: detailsData?.name,
+      addStock: 0,
+    });
   }
 
   return (
@@ -1383,9 +1445,8 @@ function AdminProducts() {
           >
             <PageHeader
               title={'Products'}
-              hasAddBtn
+              hasBtn
               addItemsAttribute={addItemsAttribute}
-              btnClassName={'primaryBtn'}
               initialData={{
                 code: '',
                 name: '',
@@ -1394,7 +1455,6 @@ function AdminProducts() {
                 category: '',
                 color: '',
               }}
-              onAddData={handleAddData}
             />
 
             <List
@@ -1417,8 +1477,23 @@ function AdminProducts() {
                     hasImage
                   />
                 }
-                itemsAttribute={updateItemsAttribute}
-                initialData={detailsData}
+                detailsActions={[
+                  {
+                    name: 'update',
+                    initialData: detailsData,
+                    itemsAttribute: updateItemsAttribute,
+                  },
+                  {
+                    name: 'delete',
+                    initialData: detailsData,
+                    itemsAttribute: deleteItemsAttribute,
+                  },
+                  {
+                    name: 'restock',
+                    initialData: restockData,
+                    itemsAttribute: restockItemsAttribute,
+                  },
+                ]}
                 detailsModalIsOpen={detailsModalIsOpen}
                 setDetailsModalIsOpen={setDetailsModalIsOpen}
               />
@@ -1451,25 +1526,15 @@ function AdminProducts() {
                       initialData={detailsData}
                       itemsAttribute={updateItemsAttribute}
                     />
-                    <Button
-                      className={'btn'}
-                      h={'100%'}
-                      w={'50%'}
-                      borderLeft={'1px solid var(--divider)'}
-                    >
-                      DELETE
-                    </Button>
+                    <InputModal
+                      itemsAttribute={deleteItemsAttribute}
+                      initialData={detailsData}
+                    />
                   </HStack>
-                  <Button
-                    className={'btn primaryBtn'}
-                    onClick={() => {
-                      handleRestock('titit');
-                    }}
-                    w={'100%'}
-                    h={'50px'}
-                  >
-                    RESTOCK
-                  </Button>
+                  <InputModal
+                    initialData={restockData}
+                    itemsAttribute={restockItemsAttribute}
+                  />
                 </VStack>
               ) : null}
             </VStack>
