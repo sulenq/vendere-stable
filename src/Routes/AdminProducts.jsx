@@ -1429,7 +1429,12 @@ function AdminProducts() {
   }
 
   return (
-    <HStack id={'appContainer'} spacing={null} h={'100vh'}>
+    <HStack
+      id={'appContainer'}
+      spacing={null}
+      h={'100vh'}
+      pb={screenWidth < 1200 ? '40px' : null}
+    >
       <Nav />
       <VStack spacing={null} w={'100%'} h={'100%'}>
         <TopBar />

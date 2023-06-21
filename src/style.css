@@ -101,6 +101,7 @@ body,
   width: 100%;
   background: #000000;
   color: white;
+  z-index: 99;
 }
 .navIconContainer {
   justify-content: center;

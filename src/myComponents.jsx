@@ -78,8 +78,54 @@ const Nav = () => {
   if (screenWidth < 1200) {
     // Nav Mobile
     return (
-      <HStack className={'navMobile'}>
-        <Text>Nav Mobile</Text>
+      <HStack className={'navMobile'} spacing={null}>
+        <Tooltip label={'Products'} placement={'right'} openDelay={'500'}>
+          <Link
+            as={ReachLink}
+            to={'/admin/products'}
+            className={
+              activeNav === 'products'
+                ? 'navIconContainer primaryBtn'
+                : 'navIconContainer'
+            }
+          >
+            <HStack justifyContent={'center'}>
+              <Icon as={Inventory2OutlinedIcon} />
+            </HStack>
+          </Link>
+        </Tooltip>
+        <Tooltip label={'Debts'} placement={'right'} openDelay={'500'}>
+          <HStack
+            className={'navIconContainer'}
+            spacing={null}
+            bg={activeNav === 'debts' ? 'primary' : null}
+          >
+            <Icon as={MoneyOffCsredOutlinedIcon} />
+          </HStack>
+        </Tooltip>
+        <Tooltip label={'Expenses'} placement={'right'} openDelay={'500'}>
+          <HStack
+            className={'navIconContainer'}
+            spacing={null}
+            bg={activeNav === 'expenses' ? 'primary' : null}
+          >
+            <Icon as={MonetizationOnOutlinedIcon} />
+          </HStack>
+        </Tooltip>
+        <Tooltip label={'Reports'} placement={'right'} openDelay={'500'}>
+          <HStack
+            className={'navIconContainer'}
+            spacing={null}
+            bg={activeNav === 'reports' ? 'primary' : null}
+          >
+            <Icon as={SummarizeOutlinedIcon} />
+          </HStack>
+        </Tooltip>
+        <Tooltip label={'Profile'} placement={'right'} openDelay={'500'}>
+          <HStack className={'navIconContainer'} spacing={null}>
+            <Icon as={PersonOutlinedIcon} />
+          </HStack>
+        </Tooltip>
       </HStack>
     );
   } else {
