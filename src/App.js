@@ -44,14 +44,15 @@ const NotFound = () => {
       fontWeight={'bold'}
       spacing={null}
       justifyContent={'center'}
+      textAlign={'center'}
       zIndex={99}
     >
-      <Text fontSize={'120px'}>404</Text>
-      <Text fontSize={'120px'}>PAGE NOT FOUND</Text>
+      <Text fontSize={'64px'}>404</Text>
+      <Text fontSize={'64px'}>PAGE NOT FOUND</Text>
       <Link
         as={ReachLink}
         to={'/'}
-        fontSize={'64px'}
+        fontSize={'24px'}
         color={'primary'}
         textDecoration={'underline'}
       >

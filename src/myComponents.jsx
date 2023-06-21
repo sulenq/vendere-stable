@@ -87,75 +87,36 @@ const Nav = () => {
     },
     { name: 'Reports', icon: SummarizeOutlinedIcon, link: '/admin/reports' },
   ];
-
+  // Nav Mobile
   if (screenWidth < 1200) {
-    // Nav Mobile
     return (
       <HStack className={'navMobile'} spacing={null}>
-        <Tooltip label={'Products'} placement={'right'} openDelay={'500'}>
-          <Link
-            as={ReachLink}
-            to={'/admin/products'}
-            className={
-              activeNav === 'products'
-                ? 'navIconContainer primaryBtn'
-                : 'navIconContainer'
-            }
-          >
-            <HStack justifyContent={'center'}>
-              <Icon as={Inventory2OutlinedIcon} />
-            </HStack>
-          </Link>
-        </Tooltip>
-        <Tooltip label={'Debts'} placement={'right'} openDelay={'500'}>
-          <Link
-            as={ReachLink}
-            to={'/admin/debts'}
-            className={
-              activeNav === 'debts'
-                ? 'navIconContainer primaryBtn'
-                : 'navIconContainer'
-            }
-          >
-            <HStack justifyContent={'center'}>
-              <Icon as={MoneyOffCsredOutlinedIcon} />
-            </HStack>
-          </Link>
-        </Tooltip>
-        <Tooltip label={'Expenses'} placement={'right'} openDelay={'500'}>
-          <Link
-            as={ReachLink}
-            to={'/admin/products'}
-            className={
-              activeNav === 'expenses'
-                ? 'navIconContainer primaryBtn'
-                : 'navIconContainer'
-            }
-          >
-            <HStack justifyContent={'center'}>
-              <Icon as={MonetizationOnOutlinedIcon} />
-            </HStack>
-          </Link>
-        </Tooltip>
-        <Tooltip label={'Reports'} placement={'right'} openDelay={'500'}>
-          <Link
-            as={ReachLink}
-            to={'/admin/products'}
-            className={
-              activeNav === 'reports'
-                ? 'navIconContainer primaryBtn'
-                : 'navIconContainer'
-            }
-          >
-            <HStack justifyContent={'center'}>
-              <Icon as={SummarizeOutlinedIcon} />
-            </HStack>
-          </Link>
-        </Tooltip>
-        <Tooltip label={'Profile'} placement={'right'} openDelay={'500'}>
-          <Link
-            as={ReachLink}
-            to={'/admin/products'}
+        {navItems?.map((n, index) => {
+          return (
+            <Tooltip
+              key={index}
+              label={n?.name}
+              placement={'top'}
+              openDelay={'500'}
+            >
+              <Link
+                as={ReachLink}
+                to={n?.link}
+                className={
+                  activeNav === n?.name?.toLowerCase()
+                    ? 'navIconContainer primaryBtn'
+                    : 'navIconContainer'
+                }
+              >
+                <HStack justifyContent={'center'}>
+                  <Icon as={n?.icon} />
+                </HStack>
+              </Link>
+            </Tooltip>
+          );
+        })}
+        <Tooltip label={'Profile'} placement={'top'} openDelay={'500'}>
+          <Box
             className={
               activeNav === 'profile'
                 ? 'navIconContainer primaryBtn'
@@ -165,12 +126,12 @@ const Nav = () => {
             <HStack justifyContent={'center'}>
               <Icon as={PersonOutlinedIcon} />
             </HStack>
-          </Link>
+          </Box>
         </Tooltip>
       </HStack>
     );
-  } else {
     // Nav
+  } else {
     return (
       <VStack
         id={'nav'}
@@ -192,7 +153,12 @@ const Nav = () => {
         <VStack w={'100%'} spacing={null} overflow={'auto'}>
           {navItems?.map((n, index) => {
             return (
-              <Tooltip label={n?.name} placement={'right'} openDelay={'500'}>
+              <Tooltip
+                key={index}
+                label={n?.name}
+                placement={'right'}
+                openDelay={'500'}
+              >
                 <Link
                   as={ReachLink}
                   to={n?.link}
@@ -207,46 +173,6 @@ const Nav = () => {
               </Tooltip>
             );
           })}
-          {/* <Tooltip label={'Products'} placement={'right'} openDelay={'500'}>
-            <Link
-              as={ReachLink}
-              to={'/admin/products'}
-              className={
-                activeNav === 'products'
-                  ? 'navIconContainer primaryBtn'
-                  : 'navIconContainer'
-              }
-            >
-              <Icon as={Inventory2OutlinedIcon} />
-            </Link>
-          </Tooltip>
-          <Tooltip label={'Debts'} placement={'right'} openDelay={'500'}>
-            <HStack
-              className={'navIconContainer'}
-              spacing={null}
-              bg={activeNav === 'debts' ? 'primary' : null}
-            >
-              <Icon as={MoneyOffCsredOutlinedIcon} />
-            </HStack>
-          </Tooltip>
-          <Tooltip label={'Expenses'} placement={'right'} openDelay={'500'}>
-            <HStack
-              className={'navIconContainer'}
-              spacing={null}
-              bg={activeNav === 'expenses' ? 'primary' : null}
-            >
-              <Icon as={MonetizationOnOutlinedIcon} />
-            </HStack>
-          </Tooltip>
-          <Tooltip label={'Reports'} placement={'right'} openDelay={'500'}>
-            <HStack
-              className={'navIconContainer'}
-              spacing={null}
-              bg={activeNav === 'reports' ? 'primary' : null}
-            >
-              <Icon as={SummarizeOutlinedIcon} />
-            </HStack>
-          </Tooltip> */}
         </VStack>
         <VStack
           spacing={null}
@@ -322,7 +248,7 @@ const PageHeader = props => {
     <HStack
       spacing={null}
       w={'100%'}
-      // h={'50px'}
+      h={'64px'}
       justifyContent={'space-between'}
       borderBottom={'1px solid var(--divider)'}
     >
@@ -350,21 +276,22 @@ const List = props => {
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
   const filterItems = props?.filterItems;
-  // const screenWidth = useWidthResizeListener();
 
   // Component
   const ListFilter = () => {
+    // Utils
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    function resetFilter() {
-      setFilter(filterReset);
-    }
-
+    // Datas
     const filterReset = JSON.parse(JSON.stringify(filterItems));
-
     const [filter, setFilter] = useState(
       JSON.parse(JSON.stringify(filterItems))
     );
+
+    // Functions
+    function resetFilter() {
+      setFilter(filterReset);
+    }
 
     return (
       <>
@@ -382,7 +309,7 @@ const List = props => {
               <VStack alignItems={'flex-start'} spacing={null}>
                 <Text fontSize={'20px'}>List Filter</Text>
                 <Text fontWeight={'normal'} fontSize={'sm'}>
-                  Click "APPLY" to apply filter to the list
+                  Click "APPLY" to apply filter to the list and close
                 </Text>
               </VStack>
             </ModalHeader>
@@ -390,12 +317,12 @@ const List = props => {
             <ModalBody p={'0'}>
               <Accordion defaultIndex={[]} allowMultiple>
                 {filter?.map((f, index) => {
-                  if (f.type === 'checkbox') {
+                  if (f?.type === 'checkbox') {
                     return (
                       <AccordionItem key={index}>
                         <AccordionButton className={'acordion'}>
                           <Box as="span" flex="1" textAlign="left">
-                            {f.name}
+                            {f?.name}
                           </Box>
                           <AccordionIcon />
                         </AccordionButton>
@@ -424,12 +351,12 @@ const List = props => {
                         </AccordionPanel>
                       </AccordionItem>
                     );
-                  } else if (f.type === 'input') {
+                  } else if (f?.type === 'input') {
                     return (
                       <AccordionItem key={index}>
                         <AccordionButton className={'acordion'}>
                           <Box as="span" flex="1" textAlign="left">
-                            {f.name}
+                            {f?.name}
                           </Box>
                           <AccordionIcon />
                         </AccordionButton>
@@ -464,7 +391,7 @@ const List = props => {
                         </AccordionPanel>
                       </AccordionItem>
                     );
-                  } else if (f.type === 'color') {
+                  } else if (f?.type === 'color') {
                     return (
                       <AccordionItem key={index}>
                         <AccordionButton className={'acordion'}>
@@ -523,7 +450,7 @@ const List = props => {
                       </AccordionItem>
                     );
                   } else {
-                    return <Text>{`Filter Data '${f.name}' Invalid`}</Text>;
+                    return <Text>{`Filter Data '${f?.name}' Invalid`}</Text>;
                   }
                 })}
               </Accordion>
@@ -564,7 +491,7 @@ const List = props => {
   }
 
   return (
-    <VStack w={'100%'} spacing={null} overflow={'auto'}>
+    <VStack w={'100%'} h={'calc(100% - 50px)'} spacing={null} overflow={'auto'}>
       <HStack id={'listSearch'} w={'100%'} spacing={null}>
         <Input
           className={'input'}
@@ -737,7 +664,23 @@ const DetailsModal = props => {
         <ModalFooter className={'modalFooter'}>
           <VStack w={'100%'} spacing={null}>
             <HStack w={'100%'} h={'50px'} spacing={null}>
-              <InputModal
+              {props?.detailsActions?.map((i, index) => {
+                if (index < 2) {
+                  return (
+                    <InputModal
+                      key={index}
+                      borderLeft={
+                        index === 1 ? '1px solid var(--divider)' : null
+                      }
+                      itemsAttribute={i?.itemsAttribute}
+                      initialData={i?.initialData}
+                    />
+                  );
+                } else {
+                  return null;
+                }
+              })}
+              {/* <InputModal
                 itemsAttribute={props?.detailsActions[0]?.itemsAttribute}
                 initialData={props?.detailsActions[0]?.initialData}
               />
@@ -745,7 +688,7 @@ const DetailsModal = props => {
                 borderLeft={'1px solid var(--divider)'}
                 itemsAttribute={props?.detailsActions[1]?.itemsAttribute}
                 initialData={props?.detailsActions[1]?.initialData}
-              />
+              /> */}
             </HStack>
             {props?.detailsActions[2] ? (
               <InputModal

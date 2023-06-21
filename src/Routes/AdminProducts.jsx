@@ -1,4 +1,4 @@
-import { useReducer, useState, useEffect, createContext } from 'react';
+import { useReducer, useState, useEffect } from 'react';
 
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
@@ -1426,28 +1426,14 @@ function AdminProducts() {
   }
 
   return (
-    <HStack
-      id={'appContainer'}
-      spacing={null}
-      h={'100vh'}
-      pb={screenWidth < 1200 ? '40px' : null}
-    >
+    <HStack id={'appContainer'} pb={screenWidth < 1200 ? '40px' : null}>
       <Nav />
-      <VStack spacing={null} w={'100%'} h={'100%'}>
+      <VStack id={'contentContainer'}>
         <TopBar />
-        <HStack
-          spacing={null}
-          h={'100%'}
-          w={'100%'}
-          alignItems={'flex-start'}
-          overflow={'auto'}
-        >
+        <HStack id={'mainContent'}>
           <VStack
-            id={'ListSection'}
+            id={'listSection'}
             w={screenWidth < 1200 ? '100%' : 'calc(100% - 400px)'}
-            h={'100%'}
-            spacing={null}
-            overflow={'auto'}
           >
             <PageHeader
               title={'Products'}
