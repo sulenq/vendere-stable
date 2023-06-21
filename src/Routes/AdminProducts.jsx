@@ -1350,6 +1350,7 @@ function AdminProducts() {
   const deleteItemsAttribute = {
     title: 'Deleting',
     purpose: 'DELETE',
+    handlePurpose: handleDeleteData,
     btnW: '50%',
     alert: {
       status: 'warning',
@@ -1413,6 +1414,9 @@ function AdminProducts() {
     console.log(data);
   }
   function handleUpdateData(data) {
+    console.log(data);
+  }
+  function handleDeleteData(data) {
     console.log(data);
   }
   function handleRestock(data) {
@@ -1485,7 +1489,10 @@ function AdminProducts() {
                   },
                   {
                     name: 'delete',
-                    initialData: detailsData,
+                    initialData: {
+                      code: detailsData?.code,
+                      name: detailsData?.name,
+                    },
                     itemsAttribute: deleteItemsAttribute,
                   },
                   {
@@ -1527,8 +1534,11 @@ function AdminProducts() {
                       itemsAttribute={updateItemsAttribute}
                     />
                     <InputModal
+                      initialData={{
+                        code: detailsData?.code,
+                        name: detailsData?.name,
+                      }}
                       itemsAttribute={deleteItemsAttribute}
-                      initialData={detailsData}
                     />
                   </HStack>
                   <InputModal
