@@ -15,9 +15,6 @@ import { useWidthResizeListener, listReducer } from '../utils.js';
 
 import { VStack, HStack } from '@chakra-ui/react';
 
-// Page Context
-export const HandleRestock = createContext();
-
 function AdminProducts() {
   // Page Utils
   const screenWidth = useWidthResizeListener();
@@ -1476,40 +1473,38 @@ function AdminProducts() {
           </VStack>
 
           {screenWidth < 1200 ? (
-            <HandleRestock.Provider value={handleRestock}>
-              <DetailsModal
-                detailsComponent={
-                  <Details
-                    detailsData={detailsData}
-                    detailsKeys={detailsKeys}
-                    detailsNames={detailsNames}
-                    hasImage
-                  />
-                }
-                detailsActions={[
-                  {
-                    name: 'update',
-                    initialData: detailsData,
-                    itemsAttribute: updateItemsAttribute,
+            <DetailsModal
+              detailsComponent={
+                <Details
+                  detailsData={detailsData}
+                  detailsKeys={detailsKeys}
+                  detailsNames={detailsNames}
+                  hasImage
+                />
+              }
+              detailsActions={[
+                {
+                  name: 'update',
+                  initialData: detailsData,
+                  itemsAttribute: updateItemsAttribute,
+                },
+                {
+                  name: 'delete',
+                  initialData: {
+                    code: detailsData?.code,
+                    name: detailsData?.name,
                   },
-                  {
-                    name: 'delete',
-                    initialData: {
-                      code: detailsData?.code,
-                      name: detailsData?.name,
-                    },
-                    itemsAttribute: deleteItemsAttribute,
-                  },
-                  {
-                    name: 'restock',
-                    initialData: restockData,
-                    itemsAttribute: restockItemsAttribute,
-                  },
-                ]}
-                detailsModalIsOpen={detailsModalIsOpen}
-                setDetailsModalIsOpen={setDetailsModalIsOpen}
-              />
-            </HandleRestock.Provider>
+                  itemsAttribute: deleteItemsAttribute,
+                },
+                {
+                  name: 'restock',
+                  initialData: restockData,
+                  itemsAttribute: restockItemsAttribute,
+                },
+              ]}
+              detailsModalIsOpen={detailsModalIsOpen}
+              setDetailsModalIsOpen={setDetailsModalIsOpen}
+            />
           ) : (
             <VStack
               id={'DetailsSection'}

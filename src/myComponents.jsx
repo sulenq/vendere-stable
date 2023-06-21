@@ -254,7 +254,7 @@ const TopBar = () => {
       {screenWidth < 1200 ? (
         <Box p={'8px 16px'}>
           <Link as={ReachLink} to={'/'}>
-            <Image src={'../logo.png'} w={'28px'} mx={'auto !important'} />
+            <Image src={'../logo.png'} w={'16px'} mx={'auto !important'} />
           </Link>
         </Box>
       ) : (
