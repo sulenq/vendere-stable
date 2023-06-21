@@ -1533,12 +1533,13 @@ function AdminProducts() {
 
               {Object.keys(detailsData).length !== 0 ? (
                 <VStack w={'100%'} spacing={null}>
-                  <HStack w={'100%'} h={'50px'} spacing={null}>
+                  <HStack w={'100%'} spacing={null}>
                     <InputModal
                       initialData={detailsData}
                       itemsAttribute={updateItemsAttribute}
                     />
                     <InputModal
+                      borderLeft={'1px solid var(--divider)'}
                       initialData={{
                         code: detailsData?.code,
                         name: detailsData?.name,

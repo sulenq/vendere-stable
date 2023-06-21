@@ -19,7 +19,7 @@ body,
   --primary-hover: #739df3;
   --primary-active: #5483e1;
   --light-gray: #c7c7c7;
-  --divider: #a6a6a653;
+  --divider: #93939332;
 }
 ::selection {
   background-color: #5a8cf0;
@@ -149,6 +149,10 @@ th {
 }
 td {
   padding: 16px !important;
+}
+th,
+td {
+  border-color: var(--divider) !important;
 }
 .selectedList {
   background: var(--primary-light);

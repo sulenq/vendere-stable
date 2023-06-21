@@ -1,5 +1,5 @@
 // import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, Link as ReachLink } from 'react-router-dom';
 
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
@@ -95,36 +95,64 @@ const Nav = () => {
           </Link>
         </Tooltip>
         <Tooltip label={'Debts'} placement={'right'} openDelay={'500'}>
-          <HStack
-            className={'navIconContainer'}
-            spacing={null}
-            bg={activeNav === 'debts' ? 'primary' : null}
+          <Link
+            as={ReachLink}
+            to={'/admin/products'}
+            className={
+              activeNav === 'debts'
+                ? 'navIconContainer primaryBtn'
+                : 'navIconContainer'
+            }
           >
-            <Icon as={MoneyOffCsredOutlinedIcon} />
-          </HStack>
+            <HStack justifyContent={'center'}>
+              <Icon as={MoneyOffCsredOutlinedIcon} />
+            </HStack>
+          </Link>
         </Tooltip>
         <Tooltip label={'Expenses'} placement={'right'} openDelay={'500'}>
-          <HStack
-            className={'navIconContainer'}
-            spacing={null}
-            bg={activeNav === 'expenses' ? 'primary' : null}
+          <Link
+            as={ReachLink}
+            to={'/admin/products'}
+            className={
+              activeNav === 'expenses'
+                ? 'navIconContainer primaryBtn'
+                : 'navIconContainer'
+            }
           >
-            <Icon as={MonetizationOnOutlinedIcon} />
-          </HStack>
+            <HStack justifyContent={'center'}>
+              <Icon as={MonetizationOnOutlinedIcon} />
+            </HStack>
+          </Link>
         </Tooltip>
         <Tooltip label={'Reports'} placement={'right'} openDelay={'500'}>
-          <HStack
-            className={'navIconContainer'}
-            spacing={null}
-            bg={activeNav === 'reports' ? 'primary' : null}
+          <Link
+            as={ReachLink}
+            to={'/admin/products'}
+            className={
+              activeNav === 'reports'
+                ? 'navIconContainer primaryBtn'
+                : 'navIconContainer'
+            }
           >
-            <Icon as={SummarizeOutlinedIcon} />
-          </HStack>
+            <HStack justifyContent={'center'}>
+              <Icon as={SummarizeOutlinedIcon} />
+            </HStack>
+          </Link>
         </Tooltip>
         <Tooltip label={'Profile'} placement={'right'} openDelay={'500'}>
-          <HStack className={'navIconContainer'} spacing={null}>
-            <Icon as={PersonOutlinedIcon} />
-          </HStack>
+          <Link
+            as={ReachLink}
+            to={'/admin/products'}
+            className={
+              activeNav === 'profile'
+                ? 'navIconContainer primaryBtn'
+                : 'navIconContainer'
+            }
+          >
+            <HStack justifyContent={'center'}>
+              <Icon as={PersonOutlinedIcon} />
+            </HStack>
+          </Link>
         </Tooltip>
       </HStack>
     );
@@ -134,13 +162,14 @@ const Nav = () => {
       <VStack
         id={'nav'}
         className={'nav'}
+        spacing={null}
         justifyContent={'space-between'}
         overflow={'auto'}
       >
         <Tooltip label={'Landing Page'} placement={'right'} openDelay={'500'}>
           <HStack
             className={'navIconContainer'}
-            borderBottom={'1px solid var(--divider)'}
+            // borderBottom={'1px solid var(--divider)'}
           >
             <Link as={ReachLink} to={'/'} w={'100%'}>
               <Image src={'../logo.png'} w={'28px'} mx={'auto !important'} />
@@ -192,7 +221,7 @@ const Nav = () => {
         <VStack
           spacing={null}
           w={'100%'}
-          borderTop={'1px solid var(--divider)'}
+          // borderTop={'1px solid var(--divider)'}
         >
           <Tooltip label={'Profile'} placement={'right'} openDelay={'500'}>
             <HStack className={'navIconContainer'} spacing={null}>
@@ -211,6 +240,9 @@ const Nav = () => {
 };
 
 const TopBar = () => {
+  // Utils
+  const screenWidth = useWidthResizeListener();
+
   // Data
   const date = new Date();
   const options = useIdFormatDate();
@@ -219,6 +251,15 @@ const TopBar = () => {
 
   return (
     <HStack w={'100%'} justifyContent={'space-between'}>
+      {screenWidth < 1200 ? (
+        <Box p={'8px 16px'}>
+          <Link as={ReachLink} to={'/'}>
+            <Image src={'../logo.png'} w={'28px'} mx={'auto !important'} />
+          </Link>
+        </Box>
+      ) : (
+        ''
+      )}
       <Text px={'16px'}>{formattedDate}</Text>
       <HStack spacing={null}>
         <ColorModeSwitcher px={'16px !Important'} ml={'0 !important'} />
@@ -671,6 +712,7 @@ const DetailsModal = props => {
                 initialData={props?.detailsActions[0]?.initialData}
               />
               <InputModal
+                borderLeft={'1px solid var(--divider)'}
                 itemsAttribute={props?.detailsActions[1]?.itemsAttribute}
                 initialData={props?.detailsActions[1]?.initialData}
               />
@@ -699,6 +741,7 @@ const InputModal = props => {
   useEffect(() => {
     setData(props?.initialData);
   }, [props?.initialData]);
+  const modalContentRef = useRef();
 
   return (
     <>
@@ -708,6 +751,7 @@ const InputModal = props => {
         w={props?.itemsAttribute?.btnW}
         h={'100%'}
         leftIcon={props?.itemsAttribute?.icon}
+        borderLeft={props?.borderLeft}
       >
         {props?.itemsAttribute?.purpose}
       </Button>
@@ -716,11 +760,11 @@ const InputModal = props => {
         isOpen={isOpen}
         onClose={onClose}
         scrollBehavior={'inside'}
-        initialFocusRef={null}
+        initialFocusRef={modalContentRef}
         isCentered
       >
         <ModalOverlay backdropFilter={'blur(5px)'} />
-        <ModalContent className={'modalContent'}>
+        <ModalContent className={'modalContent'} ref={modalContentRef}>
           <ModalHeader className={'modalHeader'}>
             <Text fontSize={'20px'}>{props?.itemsAttribute?.title}</Text>
           </ModalHeader>
@@ -873,8 +917,8 @@ const InputModal = props => {
                                   bg={
                                     c?.name === 'Black'
                                       ? 'black'
-                                      : c?.name === 'Whcte'
-                                      ? 'whcte'
+                                      : c?.name === 'White'
+                                      ? 'white'
                                       : c?.name === 'Brown'
                                       ? '#b55e12'
                                       : `${c?.name?.toLowerCase()}.300`
