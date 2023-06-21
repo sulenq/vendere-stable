@@ -27,7 +27,9 @@ export default function AdminDebts() {
           w={'100%'}
           alignItems={'flex-start'}
           overflow={'auto'}
-        ></HStack>
+        >
+          <p>DEBTS PAGE</p>
+        </HStack>
       </VStack>
     </HStack>
   );

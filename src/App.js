@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, VStack, Text, Link } from '@chakra-ui/react';
 import { myTheme } from './Theme/myTheme.js';
 
 import './style.css';
 import LandingPage from './Routes/LandingPage';
 import AdminProducts from './Routes/AdminProducts.jsx';
+import AdminDebts from './Routes/AdminDebts';
 
 import {
   BrowserRouter,
@@ -12,6 +13,7 @@ import {
   Route,
   useNavigate,
   useLocation,
+  Link as ReachLink,
 } from 'react-router-dom';
 
 const AdminEndPoint = () => {
@@ -34,6 +36,31 @@ const CashierEndPoint = () => {
   }, [navigate, location]);
 };
 
+const NotFound = () => {
+  return (
+    <VStack
+      w={'100%'}
+      h={'100vh'}
+      fontWeight={'bold'}
+      spacing={null}
+      justifyContent={'center'}
+      zIndex={99}
+    >
+      <Text fontSize={'120px'}>404</Text>
+      <Text fontSize={'120px'}>PAGE NOT FOUND</Text>
+      <Link
+        as={ReachLink}
+        to={'/'}
+        fontSize={'64px'}
+        color={'primary'}
+        textDecoration={'underline'}
+      >
+        Back to Landing Page
+      </Link>
+    </VStack>
+  );
+};
+
 function App() {
   return (
     <BrowserRouter>
@@ -42,7 +69,9 @@ function App() {
           <Route path={'/'} element={<LandingPage />} />
           <Route path={'/admin'} element={<AdminEndPoint />} />
           <Route path={'/admin/products'} element={<AdminProducts />} />
+          <Route path={'/admin/debts'} element={<AdminDebts />} />
           <Route path={'/cashier'} element={<CashierEndPoint />} />
+          <Route path={'*'} element={<NotFound />} />
         </Routes>
       </ChakraProvider>
     </BrowserRouter>

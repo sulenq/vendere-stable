@@ -70,10 +70,23 @@ import {
 } from '@chakra-ui/react';
 
 const Nav = () => {
+  // Utils
   const screenWidth = useWidthResizeListener();
   const currentUrl = useLocation();
   const currentUrlSplitted = currentUrl.pathname.split('/');
   const activeNav = currentUrlSplitted[currentUrlSplitted.length - 1];
+
+  // Datas
+  const navItems = [
+    { name: 'Products', icon: Inventory2OutlinedIcon, link: '/admin/products' },
+    { name: 'Debts', icon: MoneyOffCsredOutlinedIcon, link: '/admin/debts' },
+    {
+      name: 'Expenses',
+      icon: MonetizationOnOutlinedIcon,
+      link: '/admin/expenses',
+    },
+    { name: 'Reports', icon: SummarizeOutlinedIcon, link: '/admin/reports' },
+  ];
 
   if (screenWidth < 1200) {
     // Nav Mobile
@@ -97,7 +110,7 @@ const Nav = () => {
         <Tooltip label={'Debts'} placement={'right'} openDelay={'500'}>
           <Link
             as={ReachLink}
-            to={'/admin/products'}
+            to={'/admin/debts'}
             className={
               activeNav === 'debts'
                 ? 'navIconContainer primaryBtn'
@@ -177,7 +190,24 @@ const Nav = () => {
           </HStack>
         </Tooltip>
         <VStack w={'100%'} spacing={null} overflow={'auto'}>
-          <Tooltip label={'Products'} placement={'right'} openDelay={'500'}>
+          {navItems?.map((n, index) => {
+            return (
+              <Tooltip label={n?.name} placement={'right'} openDelay={'500'}>
+                <Link
+                  as={ReachLink}
+                  to={n?.link}
+                  className={
+                    activeNav === n?.name?.toLowerCase()
+                      ? 'navIconContainer primaryBtn'
+                      : 'navIconContainer'
+                  }
+                >
+                  <Icon as={n?.icon} />
+                </Link>
+              </Tooltip>
+            );
+          })}
+          {/* <Tooltip label={'Products'} placement={'right'} openDelay={'500'}>
             <Link
               as={ReachLink}
               to={'/admin/products'}
@@ -216,7 +246,7 @@ const Nav = () => {
             >
               <Icon as={SummarizeOutlinedIcon} />
             </HStack>
-          </Tooltip>
+          </Tooltip> */}
         </VStack>
         <VStack
           spacing={null}
