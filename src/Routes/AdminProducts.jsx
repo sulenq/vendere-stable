@@ -1378,7 +1378,6 @@ function AdminProducts() {
             id={'ListSection'}
             w={screenWidth < 1200 ? '100%' : 'calc(100% - 400px)'}
             h={'100%'}
-            borderRight={'1px solid var(--divider)'}
             spacing={null}
             overflow={'auto'}
           >
@@ -1429,6 +1428,7 @@ function AdminProducts() {
               id={'DetailsSection'}
               w={'400px'}
               h={'100%'}
+              borderLeft={'1px solid var(--divider)'}
               spacing={null}
               justifyContent={'space-between'}
               overflow={'auto'}

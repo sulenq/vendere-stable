@@ -12,6 +12,7 @@ import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ViewInArOutlinedIcon from '@mui/icons-material/ViewInArOutlined';
 
 import { ColorModeSwitcher } from './ColorModeSwitcher.js';
 import {
@@ -158,14 +159,17 @@ const Nav = () => {
 };
 
 const TopBar = () => {
+  // Data
   const date = new Date();
   const options = useIdFormatDate();
   const formattedDate = date.toLocaleDateString('id-ID', options);
+  const [isScannerOn, setIsScannerOn] = useState(false);
 
   return (
     <HStack w={'100%'} justifyContent={'space-between'}>
       <Text px={'16px'}>{formattedDate}</Text>
       <HStack spacing={null}>
+        <ColorModeSwitcher px={'16px !Important'} ml={'0 !important'} />
         <Button
           variant={'ghost'}
           borderRadius={'0 !important'}
@@ -173,7 +177,18 @@ const TopBar = () => {
         >
           <Icon as={RefreshOutlinedIcon} />
         </Button>
-        <ColorModeSwitcher px={'16px !Important'} ml={'0 !important'} />
+        <Button
+          onClick={() => {
+            setIsScannerOn(!isScannerOn);
+          }}
+          className={isScannerOn ? 'primaryBtn' : null}
+          variant={'ghost'}
+          borderBottom={isScannerOn ? '1px solid var(--primary-hover)' : null}
+          borderRadius={'0 !important'}
+          px={'16px !Important'}
+        >
+          <Icon as={ViewInArOutlinedIcon} />
+        </Button>
       </HStack>
     </HStack>
   );
@@ -184,14 +199,16 @@ const PageHeader = props => {
     <HStack
       spacing={null}
       w={'100%'}
+      // h={'50px'}
       justifyContent={'space-between'}
       borderBottom={'1px solid var(--divider)'}
     >
       <Heading
         w={props.hasAddBtn ? 'calc(100% - 120px)' : '100%'}
+        h={'100%'}
+        borderTop="1px solid var(--divider)"
         py={'8px'}
         px={'16px'}
-        borderTop="1px solid var(--divider)"
       >
         {props.title}
       </Heading>
