@@ -39,10 +39,10 @@ function useFormatNumber(num) {
 }
 
 function listReducer(prevDetailsData, action) {
-  switch (action.type) {
+  switch (action?.type) {
     case 'select': {
       // console.log(action.selectedListData);
-      return action.selectedListData;
+      return action?.selectedListData;
     }
     default: {
       throw Error('Unknown action: ' + action.type);

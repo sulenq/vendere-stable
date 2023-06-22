@@ -1212,7 +1212,26 @@ function AdminProducts() {
       color: 'Purple',
     },
   ];
-  const listData = dummyListData;
+  const listItems = {
+    attributes: [
+      { isNumeric: false, name: 'Code', key: 'code', type: 'string' },
+      { isNumeric: false, name: 'Name', key: 'name', type: 'string' },
+      {
+        isNumeric: true,
+        name: 'Stock',
+        key: 'stock',
+        type: 'number',
+      },
+      {
+        isNumeric: true,
+        name: 'Price',
+        key: 'price',
+        type: 'number',
+      },
+    ],
+    listAction: { isNumeric: true, name: 'Action', action: 'details' },
+    data: dummyListData,
+  };
   const detailsKeys = [
     'code',
     'name',
@@ -1450,9 +1469,9 @@ function AdminProducts() {
             />
 
             <List
-              listData={listData}
-              headers={['Code', 'Name', 'Stock', 'Price', 'Action']}
-              body={['code', 'name', 'stock', 'price']}
+              listItems={listItems}
+              // keys={['code', 'name', 'stock', 'price', 'action']}
+              searchPlaceholder={`Search by product's name or code`}
               filterItems={filterItems}
               selectList={handleSelectList}
             />

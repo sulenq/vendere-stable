@@ -67,6 +67,7 @@ import {
   InputRightAddon,
   Alert,
   AlertIcon,
+  Badge,
 } from '@chakra-ui/react';
 
 const Nav = () => {
@@ -276,6 +277,7 @@ const List = props => {
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
   const filterItems = props?.filterItems;
+  const formatDate = useIdFormatDate();
 
   // Component
   const ListFilter = () => {
@@ -283,9 +285,11 @@ const List = props => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     // Datas
-    const filterReset = JSON.parse(JSON.stringify(filterItems));
+    const filterReset = filterItems
+      ? JSON.parse(JSON.stringify(filterItems))
+      : {};
     const [filter, setFilter] = useState(
-      JSON.parse(JSON.stringify(filterItems))
+      filterItems ? JSON.parse(JSON.stringify(filterItems)) : {}
     );
 
     // Functions
@@ -379,6 +383,44 @@ const List = props => {
                                     });
                                   }}
                                   value={fn(filter[index].items[iIndex].value)}
+                                />
+                              );
+                            })}
+                          </SimpleGrid>
+                          {f?.hint ? (
+                            <Text fontSize={'sm'} ml={'4px'} opacity={'0.5'}>
+                              {f?.hint}
+                            </Text>
+                          ) : null}
+                        </AccordionPanel>
+                      </AccordionItem>
+                    );
+                  } else if (f?.type === 'date') {
+                    return (
+                      <AccordionItem key={index}>
+                        <AccordionButton className={'acordion'}>
+                          <Box as="span" flex="1" textAlign="left">
+                            {f?.name}
+                          </Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel pb={4} className={'acordion'}>
+                          <SimpleGrid columns={f?.columns}>
+                            {f?.items?.map((i, iIndex) => {
+                              return (
+                                <Input
+                                  key={iIndex}
+                                  className={'input'}
+                                  placeholder={i?.name}
+                                  type="datetime-local"
+                                  // onChange={e => {
+                                  //   setFilter(prevState => {
+                                  //     prevState[index].items[iIndex].value =
+                                  //       parseInt(rfn(e.target.value));
+                                  //     return [...prevState];
+                                  //   });
+                                  // }}
+                                  // value={fn(filter[index].items[iIndex].value)}
                                 />
                               );
                             })}
@@ -495,7 +537,7 @@ const List = props => {
       <HStack id={'listSearch'} w={'100%'} spacing={null}>
         <Input
           className={'input'}
-          placeholder={'Search'}
+          placeholder={props?.searchPlaceholder}
           px={'16px'}
           border={'none'}
           borderBottom={'1px solid var(--divider)'}
@@ -518,54 +560,78 @@ const List = props => {
         <Table variant="simple" overflow={'auto'}>
           <Thead>
             <Tr>
-              {props.headers.map((h, index) => {
-                switch (h) {
-                  default:
-                    return (
-                      <Th key={index} px={'16px !important'}>
-                        {h}
-                      </Th>
-                    );
-                  case 'Price':
-                  case 'Stock':
-                  case 'Action':
-                    return (
-                      <Th key={index} px={'16px !important'} isNumeric>
-                        {h}
-                      </Th>
-                    );
-                }
+              {props?.listItems?.attributes?.map((a, index) => {
+                return (
+                  <Th
+                    key={index}
+                    px={'16px !important'}
+                    isNumeric={a?.isNumeric}
+                  >
+                    {a?.name}
+                  </Th>
+                );
               })}
+              <Th px={'16px !important'} isNumeric>
+                {props?.listItems?.listAction?.name}
+              </Th>
             </Tr>
           </Thead>
           <Tbody id={'listBody'}>
-            {props?.listData?.map((data, index) => {
+            {props?.listItems?.data?.map((d, index) => {
               return (
                 <Tr
                   key={index}
                   className={'listItem'}
                   onClick={e => {
-                    listHandleClick(e, data);
+                    listHandleClick(e, d);
                   }}
                 >
-                  {props.body.map((bodyData, bIndex) => {
-                    return (
-                      <Td
-                        key={bIndex}
-                        px={'16px !important'}
-                        isNumeric={
-                          typeof data[bodyData] === 'number' ? true : null
+                  {props?.listItems?.attributes?.map((a, bIndex) => {
+                    let dataValue;
+                    switch (a?.type) {
+                      case 'badge':
+                        dataValue = d?.status;
+                        return (
+                          <Td
+                            key={bIndex}
+                            px={'16px !important'}
+                            isNumeric={a?.isNumeric}
+                          >
+                            <Badge colorScheme={a?.colorOptions[d?.status]}>
+                              {dataValue}
+                            </Badge>
+                          </Td>
+                        );
+                      default:
+                        switch (a?.type) {
+                          case 'number':
+                            dataValue = fn(d[a?.key]);
+                            break;
+                          case 'date':
+                            const date = new Date(d[a?.key]);
+                            dataValue = date?.toLocaleDateString(
+                              'id-ID',
+                              formatDate
+                            );
+                            break;
+                          default:
+                            dataValue = d[a?.key];
+                            break;
                         }
-                      >
-                        {typeof data[bodyData] === 'number'
-                          ? fn(data[bodyData])
-                          : data[bodyData]}
-                      </Td>
-                    );
+                        return (
+                          <Td
+                            key={bIndex}
+                            px={'16px !important'}
+                            isNumeric={a?.isNumeric}
+                          >
+                            {dataValue}
+                          </Td>
+                        );
+                    }
                   })}
 
                   <Td isNumeric className={'detailsBtn'}>
-                    details
+                    {props?.listItems?.listAction?.action}
                   </Td>
                 </Tr>
               );
