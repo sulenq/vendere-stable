@@ -209,14 +209,14 @@ td {
 #listSection {
   height: 100%;
   overflow: auto;
+  border-right: 1px solid var(--divider);
   gap: 0 !important;
 }
 #detailsSection {
   width: 400px;
   height: 100%;
-  border-left: 1px solid var(--divider);
   border-right: 1px solid var(--divider);
-  gap: none;
+  gap: 0 !important;
   overflow: auto;
   justify-content: space-between;
 }

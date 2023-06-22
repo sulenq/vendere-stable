@@ -214,9 +214,7 @@ const TopBar = () => {
             <Image src={'../logo.png'} w={'16px'} mx={'auto !important'} />
           </Link>
         </Box>
-      ) : (
-        ''
-      )}
+      ) : null}
       <Text px={'16px'}>{formattedDate}</Text>
       <HStack spacing={null}>
         <ColorModeSwitcher px={'16px !Important'} ml={'0 !important'} />
@@ -635,17 +633,19 @@ const Details = props => {
       <VStack w={'100%'} spacing={null}>
         {props?.detailsItems?.attributes?.map((a, index) => {
           return (
-            <HStack
+            <Box
               key={index}
               w={'100%'}
-              borderBottom={'1px solid var(--divider)'}
+              borderBottom={
+                index !== props?.detailsItems?.attributes?.length - 1
+                  ? '1px solid var(--divider)'
+                  : ''
+              }
               px={'16px'}
               py={'12px'}
               alignItems={'flex-start'}
             >
-              <Text w={'120px'} opacity={0.5}>
-                {a?.name}
-              </Text>
+              <Text opacity={0.5}>{a?.name}</Text>
               {Object.keys(props?.detailsItems?.data).length !== 0 ? (
                 <ReadOnlyData
                   item={{
@@ -659,7 +659,7 @@ const Details = props => {
               ) : (
                 <Text opacity={0.5}>Select list first</Text>
               )}
-            </HStack>
+            </Box>
           );
         })}
       </VStack>
@@ -671,7 +671,7 @@ const DetailsModal = props => {
   return (
     <Modal
       isOpen={props.detailsModalIsOpen}
-      size={'xl'}
+      // size={'xl'}
       onClose={() => {
         props.setDetailsModalIsOpen(false);
       }}
@@ -1052,7 +1052,35 @@ const ReadOnlyData = props => {
       const date = new Date(data);
       return <Text>{date?.toLocaleDateString('id-ID', dateFormat)}</Text>;
     case 'badge':
-      return <Badge colorScheme={item?.colorScheme}>{data}</Badge>;
+      return (
+        <Badge alignSelf={'center'} colorScheme={item?.colorScheme}>
+          {data}
+        </Badge>
+      );
+    case 'cartList':
+      return (
+        <VStack w={'100%'} alignItems={'flex-start'}>
+          {data?.map((d, index) => {
+            return (
+              <VStack
+                key={index}
+                w={'100%'}
+                spacing={null}
+                pb={'8px'}
+                // borderBottom={'1px solid var(--divider)'}
+              >
+                <HStack w={'100%'} justifyContent={'space-between'}>
+                  <Text>{`${d?.name}`}</Text>
+                  <Text>{fn(d?.totalPrice)}</Text>
+                </HStack>
+                <HStack w={'100%'} justifyContent={'space-between'}>
+                  <Text>{`@${fn(d?.price)} [×${d?.qty}]`}</Text>
+                </HStack>
+              </VStack>
+            );
+          })}
+        </VStack>
+      );
     default:
       return <Text>{data}</Text>;
   }

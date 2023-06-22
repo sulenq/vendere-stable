@@ -21,28 +21,104 @@ export default function AdminDebts() {
   const dummyListData = [
     {
       debitur: 'Bambang Sueb',
-      total: 382500,
+      total: 25500,
       lastTransaction: '2023-02-25T13:55:16.024772+07:00',
       status: 'utang',
-      cartList: [{ name: 'Sedap Laksa', qty: 15, total: 45000 }],
+      cartList: [
+        {
+          id: 27,
+          name: 'Gula Pasir 1kg',
+          code: 'pasir1',
+          price: 14500,
+          qty: 1,
+          totalPrice: 14500,
+          modal: 1000,
+        },
+        {
+          id: 20,
+          name: 'Sedap Ayam Bawang',
+          code: '8998866200318',
+          price: 3500,
+          qty: 2,
+          totalPrice: 7000,
+          modal: 1000,
+        },
+        {
+          id: 124,
+          name: 'Rinso Cair + Molto Royal Gold 38ml',
+          code: '8999999526894',
+          price: 1000,
+          qty: 2,
+          totalPrice: 2000,
+          modal: 0,
+        },
+        {
+          id: 141,
+          name: 'Energen 32g vanilla',
+          code: '8996001440124',
+          price: 2000,
+          qty: 1,
+          totalPrice: 2000,
+          modal: 0,
+        },
+      ],
     },
     {
       debitur: 'Rudi Tabuti',
-      total: 150300,
+      total: 172500,
       lastTransaction: '2023-05-25T13:55:16.024772+07:00',
       status: 'utang',
+      cartList: [
+        {
+          id: 27,
+          name: 'Gula Pasir 1kg',
+          code: 'pasir1',
+          price: 14500,
+          qty: 6,
+          totalPrice: 87000,
+          modal: 1000,
+        },
+        {
+          id: 24,
+          name: 'Telur 1kg',
+          code: 'ndog1',
+          price: 27500,
+          qty: 3,
+          totalPrice: 82500,
+          modal: 1000,
+        },
+        {
+          id: 22,
+          name: 'Aqua 600ml (tanggung)',
+          code: '8886008101053',
+          price: 3000,
+          qty: 1,
+          totalPrice: 3000,
+          modal: 1000,
+        },
+      ],
     },
     {
       debitur: 'Sutar Kalem',
-      total: 4500,
+      total: 55000,
       lastTransaction: '2023-03-25T13:55:16.024772+07:00',
       status: 'utang',
+      cartList: [
+        {
+          id: 24,
+          name: 'Telur 1kg',
+          code: 'ndog1',
+          price: 27500,
+          qty: 2,
+          totalPrice: 55000,
+          modal: 1000,
+        },
+      ],
     },
   ];
   const listItems = {
     attributes: [
       { isNumeric: false, name: 'Debitur', key: 'debitur', type: 'string' },
-
       {
         isNumeric: false,
         name: 'Last Transaction',
@@ -63,7 +139,10 @@ export default function AdminDebts() {
   };
   const [detailsData, dispatch] = useReducer(detailsReducer, {});
   const detailsItems = {
-    attributes: [...listItems?.attributes],
+    attributes: [
+      ...listItems?.attributes,
+      { name: 'Cart List', key: 'cartList', type: 'cartList' },
+    ],
     data: detailsData,
   };
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
@@ -162,7 +241,6 @@ export default function AdminDebts() {
               selectList={handleSelectList}
             />
           </VStack>
-
           {screenWidth < 1200 ? (
             <DetailsModal
               detailsComponent={<Details detailsItems={detailsItems} />}
