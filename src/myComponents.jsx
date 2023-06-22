@@ -19,7 +19,7 @@ import {
   useWidthResizeListener,
   useFormatNumber,
   useReverseFormatNumber,
-  useIdFormatDate,
+  useIdDateFormat,
 } from './utils.js';
 
 import {
@@ -202,7 +202,7 @@ const TopBar = () => {
 
   // Data
   const date = new Date();
-  const options = useIdFormatDate();
+  const options = useIdDateFormat();
   const formattedDate = date.toLocaleDateString('id-ID', options);
   const [isScannerOn, setIsScannerOn] = useState(false);
 
@@ -277,7 +277,7 @@ const List = props => {
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
   const filterItems = props?.filterItems;
-  const dateFormat = useIdFormatDate();
+  const dateFormat = useIdDateFormat();
 
   // Component
   const ListFilter = () => {
@@ -586,48 +586,20 @@ const List = props => {
                     listHandleClick(e, d);
                   }}
                 >
-                  {props?.listItems?.attributes?.map((a, bIndex) => {
-                    let dataValue;
-                    switch (a?.type) {
-                      case 'badge':
-                        dataValue = d?.status;
-                        return (
-                          <Td
-                            key={bIndex}
-                            px={'16px !important'}
-                            isNumeric={a?.isNumeric}
-                          >
-                            <Badge colorScheme={a?.colorOptions[d?.status]}>
-                              {dataValue}
-                            </Badge>
-                          </Td>
-                        );
-                      default:
-                        switch (a?.type) {
-                          case 'number':
-                            dataValue = fn(d[a?.key]);
-                            break;
-                          case 'date':
-                            const date = new Date(d[a?.key]);
-                            dataValue = date?.toLocaleDateString(
-                              'id-ID',
-                              dateFormat
-                            );
-                            break;
-                          default:
-                            dataValue = d[a?.key];
-                            break;
-                        }
-                        return (
-                          <Td
-                            key={bIndex}
-                            px={'16px !important'}
-                            isNumeric={a?.isNumeric}
-                          >
-                            {dataValue}
-                          </Td>
-                        );
-                    }
+                  {props?.listItems?.attributes?.map((a, aIndex) => {
+                    return (
+                      <Td key={aIndex} isNumeric={a?.isNumeric}>
+                        <ReadOnlyData
+                          item={{
+                            dataType: a?.type,
+                            data: d[a?.key],
+                            colorScheme: a?.colorOptions
+                              ? a?.colorOptions[d?.status]
+                              : '',
+                          }}
+                        />
+                      </Td>
+                    );
                   })}
 
                   <Td isNumeric className={'detailsBtn'}>
@@ -644,7 +616,7 @@ const List = props => {
 };
 
 const Details = props => {
-  const options = useIdFormatDate();
+  const options = useIdDateFormat();
   const fn = useFormatNumber;
 
   return (
@@ -666,16 +638,6 @@ const Details = props => {
       </VStack>
       <VStack w={'100%'} spacing={null}>
         {props?.detailsKeys?.map((k, index) => {
-          const createdAt = new Date(props?.detailsData?.CreatedAt);
-          const updatedAt = new Date(props?.detailsData?.UpdatedAt);
-          const formattedCreatedAt = createdAt?.toLocaleDateString(
-            'id-ID',
-            options
-          );
-          const formattedUpdateddAt = updatedAt?.toLocaleDateString(
-            'id-ID',
-            options
-          );
           return (
             <HStack
               key={index}
@@ -688,21 +650,46 @@ const Details = props => {
               <Text w={'120px'} opacity={'0.5'}>
                 {props?.detailsNames[index]}
               </Text>
-              <Text w={'calc(100% - 120px)'} wordBreak={'break-all'}>
-                {!props?.detailsData?.[`${k}`]
-                  ? 'No list selected'
-                  : k === 'user_id'
-                  ? props?.detailsData?.[`${k}`]
-                  : k === 'CreatedAt'
-                  ? formattedCreatedAt
-                  : k === 'UpdatedAt'
-                  ? formattedUpdateddAt
-                  : typeof props?.detailsData?.[`${k}`] === 'number'
-                  ? fn(props?.detailsData?.[`${k}`])
-                  : props?.detailsData?.[`${k}`]}
-              </Text>
+              <ReadOnlyData item={{ dataType: '', data: '' }} />
             </HStack>
           );
+          // const createdAt = new Date(props?.detailsData?.CreatedAt);
+          // const updatedAt = new Date(props?.detailsData?.UpdatedAt);
+          // const formattedCreatedAt = createdAt?.toLocaleDateString(
+          //   'id-ID',
+          //   options
+          // );
+          // const formattedUpdateddAt = updatedAt?.toLocaleDateString(
+          //   'id-ID',
+          //   options
+          // );
+          // return (
+          //   <HStack
+          //     key={index}
+          //     w={'100%'}
+          //     borderBottom={'1px solid var(--divider)'}
+          //     px={'16px'}
+          //     py={'12px'}
+          //     alignItems={'flex-start'}
+          //   >
+          //     <Text w={'120px'} opacity={'0.5'}>
+          //       {props?.detailsNames[index]}
+          //     </Text>
+          //     <Text w={'calc(100% - 120px)'} wordBreak={'break-all'}>
+          //       {!props?.detailsData?.[`${k}`]
+          //         ? 'No list selected'
+          //         : k === 'user_id'
+          //         ? props?.detailsData?.[`${k}`]
+          //         : k === 'CreatedAt'
+          //         ? formattedCreatedAt
+          //         : k === 'UpdatedAt'
+          //         ? formattedUpdateddAt
+          //         : typeof props?.detailsData?.[`${k}`] === 'number'
+          //         ? fn(props?.detailsData?.[`${k}`])
+          //         : props?.detailsData?.[`${k}`]}
+          //     </Text>
+          //   </HStack>
+          // );
         })}
       </VStack>
     </VStack>
@@ -774,7 +761,7 @@ const InputModal = props => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
-  const dateFormat = useIdFormatDate();
+  const dateFormat = useIdDateFormat();
 
   // Datas
   const [data, setData] = useState({});
@@ -1074,6 +1061,29 @@ const InputModal = props => {
       </Modal>
     </>
   );
+};
+
+const ReadOnlyData = props => {
+  // Utils
+  const fn = useFormatNumber;
+  const dateFormat = useIdDateFormat();
+
+  // Datas
+  const item = props?.item;
+  const dataType = item?.dataType;
+  const data = item?.data;
+
+  switch (dataType) {
+    case 'number':
+      return <Text>{fn(data)}</Text>;
+    case 'date':
+      const date = new Date(data);
+      return <Text>{date?.toLocaleDateString('id-ID', dateFormat)}</Text>;
+    case 'badge':
+      return <Badge colorScheme={item?.colorScheme}>{data}</Badge>;
+    default:
+      return <Text>{data}</Text>;
+  }
 };
 
 export { Nav, TopBar, List, Details, PageHeader, DetailsModal, InputModal };

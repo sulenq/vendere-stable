@@ -4,7 +4,7 @@ import { myTheme } from './Theme/myTheme.js';
 
 import './style.css';
 import LandingPage from './Routes/LandingPage';
-import AdminProducts from './Routes/AdminProducts.jsx';
+import AdminProducts from './Routes/AdminProducts';
 import AdminDebts from './Routes/AdminDebts';
 
 import {

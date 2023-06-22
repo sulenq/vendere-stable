@@ -9,7 +9,7 @@ import {
   DetailsModal,
   InputModal,
 } from '../myComponents';
-import { useWidthResizeListener, listReducer } from '../utils.js';
+import { useWidthResizeListener, detailsReducer } from '../utils.js';
 
 import { VStack, HStack } from '@chakra-ui/react';
 
@@ -63,7 +63,7 @@ export default function AdminDebts() {
   };
   const detailsKeys = ['debitur', 'lastTransaction', 'total', 'status'];
   const detailsNames = ['Debitur', 'Last Transaction', 'Total (Rp)', 'Status'];
-  const [detailsData, dispatch] = useReducer(listReducer, {});
+  const [detailsData, dispatch] = useReducer(detailsReducer, {});
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const filterItems = [
     {

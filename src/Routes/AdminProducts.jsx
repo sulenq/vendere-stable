@@ -11,7 +11,7 @@ import {
   DetailsModal,
   InputModal,
 } from '../myComponents';
-import { useWidthResizeListener, listReducer } from '../utils.js';
+import { useWidthResizeListener, detailsReducer } from '../utils.js';
 
 import { VStack, HStack } from '@chakra-ui/react';
 
@@ -1254,7 +1254,7 @@ function AdminProducts() {
     'Updated at',
     'Created by',
   ];
-  const [detailsData, dispatch] = useReducer(listReducer, {});
+  const [detailsData, dispatch] = useReducer(detailsReducer, {});
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const filterItems = [
     {

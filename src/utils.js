@@ -9,7 +9,7 @@ function useWidthResizeListener() {
   return screenWidth;
 }
 
-function useIdFormatDate() {
+function useIdDateFormat() {
   return { day: 'numeric', month: 'long', year: 'numeric' };
 }
 
@@ -38,7 +38,7 @@ function useFormatNumber(num) {
   return formattedNum;
 }
 
-function listReducer(prevDetailsData, action) {
+function detailsReducer(prevDetailsData, action) {
   switch (action?.type) {
     case 'select': {
       // console.log(action.selectedListData);
@@ -54,6 +54,6 @@ export {
   useWidthResizeListener,
   useFormatNumber,
   useReverseFormatNumber,
-  useIdFormatDate,
-  listReducer,
+  useIdDateFormat,
+  detailsReducer,
 };
