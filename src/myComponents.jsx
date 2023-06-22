@@ -277,7 +277,6 @@ const List = props => {
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
   const filterItems = props?.filterItems;
-  const dateFormat = useIdDateFormat();
 
   // Component
   const ListFilter = () => {
@@ -672,6 +671,7 @@ const DetailsModal = props => {
   return (
     <Modal
       isOpen={props.detailsModalIsOpen}
+      size={'xl'}
       onClose={() => {
         props.setDetailsModalIsOpen(false);
       }}
