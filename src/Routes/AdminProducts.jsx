@@ -1232,29 +1232,18 @@ function AdminProducts() {
     listAction: { isNumeric: true, name: 'Action', action: 'details' },
     data: dummyListData,
   };
-  const detailsKeys = [
-    'code',
-    'name',
-    'stock',
-    'price',
-    'category',
-    'color',
-    'CreatedAt',
-    'UpdatedAt',
-    'user_id',
-  ];
-  const detailsNames = [
-    'Code',
-    'Name',
-    'Stock',
-    'Price (Rp)',
-    'Category',
-    'Color',
-    'Created at',
-    'Updated at',
-    'Created by',
-  ];
   const [detailsData, dispatch] = useReducer(detailsReducer, {});
+  const detailsItems = {
+    attributes: [
+      ...listItems?.attributes,
+      { isNumeric: false, name: 'Category', key: 'category', type: 'string' },
+      { isNumeric: false, name: 'Color', key: 'color', type: 'string' },
+      { isNumeric: false, name: 'Created At', key: 'CreatedAt', type: 'date' },
+      { isNumeric: false, name: 'Updated At', key: 'UpdatedAt', type: 'date' },
+      { isNumeric: false, name: 'Created By', key: 'user_id', type: 'string' },
+    ],
+    data: detailsData,
+  };
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const filterItems = [
     {
@@ -1452,7 +1441,13 @@ function AdminProducts() {
         <HStack id={'mainContent'}>
           <VStack
             id={'listSection'}
-            w={screenWidth < 1200 ? '100%' : 'calc(100% - 400px)'}
+            w={
+              Object.keys(detailsData).length !== 0
+                ? screenWidth < 1200
+                  ? '100%'
+                  : 'calc(100% - 400px)'
+                : '100%'
+            }
           >
             <PageHeader
               title={'Products'}
@@ -1470,7 +1465,6 @@ function AdminProducts() {
 
             <List
               listItems={listItems}
-              // keys={['code', 'name', 'stock', 'price', 'action']}
               searchPlaceholder={`Search by product's name or code`}
               filterItems={filterItems}
               selectList={handleSelectList}
@@ -1480,12 +1474,7 @@ function AdminProducts() {
           {screenWidth < 1200 ? (
             <DetailsModal
               detailsComponent={
-                <Details
-                  detailsData={detailsData}
-                  detailsKeys={detailsKeys}
-                  detailsNames={detailsNames}
-                  hasImage
-                />
+                <Details detailsItems={detailsItems} hasImage />
               }
               detailsActions={[
                 {
@@ -1510,51 +1499,34 @@ function AdminProducts() {
               detailsModalIsOpen={detailsModalIsOpen}
               setDetailsModalIsOpen={setDetailsModalIsOpen}
             />
-          ) : (
-            <VStack
-              id={'DetailsSection'}
-              w={'400px'}
-              h={'100%'}
-              borderLeft={'1px solid var(--divider)'}
-              spacing={null}
-              justifyContent={'space-between'}
-              overflow={'auto'}
-            >
+          ) : Object.keys(detailsData).length !== 0 ? (
+            <VStack id={'detailsSection'}>
               <VStack w={'100%'} spacing={null} overflow={'auto'}>
                 <PageHeader title={'Details'} />
-
-                <Details
-                  detailsData={detailsData}
-                  detailsKeys={detailsKeys}
-                  detailsNames={detailsNames}
-                  hasImage
+                <Details detailsItems={detailsItems} hasImage />
+              </VStack>
+              <VStack w={'100%'} spacing={null}>
+                <HStack w={'100%'} spacing={null}>
+                  <InputModal
+                    initialData={detailsData}
+                    itemsAttribute={updateItemsAttribute}
+                  />
+                  <InputModal
+                    borderLeft={'1px solid var(--divider)'}
+                    initialData={{
+                      code: detailsData?.code,
+                      name: detailsData?.name,
+                    }}
+                    itemsAttribute={deleteItemsAttribute}
+                  />
+                </HStack>
+                <InputModal
+                  initialData={restockData}
+                  itemsAttribute={restockItemsAttribute}
                 />
               </VStack>
-
-              {Object.keys(detailsData).length !== 0 ? (
-                <VStack w={'100%'} spacing={null}>
-                  <HStack w={'100%'} spacing={null}>
-                    <InputModal
-                      initialData={detailsData}
-                      itemsAttribute={updateItemsAttribute}
-                    />
-                    <InputModal
-                      borderLeft={'1px solid var(--divider)'}
-                      initialData={{
-                        code: detailsData?.code,
-                        name: detailsData?.name,
-                      }}
-                      itemsAttribute={deleteItemsAttribute}
-                    />
-                  </HStack>
-                  <InputModal
-                    initialData={restockData}
-                    itemsAttribute={restockItemsAttribute}
-                  />
-                </VStack>
-              ) : null}
             </VStack>
-          )}
+          ) : null}
         </HStack>
       </VStack>
     </HStack>

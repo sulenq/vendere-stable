@@ -18,13 +18,13 @@ export default function AdminDebts() {
   const screenWidth = useWidthResizeListener();
 
   // Page Datas
-  // Page Datas
   const dummyListData = [
     {
       debitur: 'Bambang Sueb',
       total: 382500,
       lastTransaction: '2023-02-25T13:55:16.024772+07:00',
       status: 'utang',
+      cartList: [{ name: 'Sedap Laksa', qty: 15, total: 45000 }],
     },
     {
       debitur: 'Rudi Tabuti',
@@ -49,7 +49,7 @@ export default function AdminDebts() {
         key: 'lastTransaction',
         type: 'date',
       },
-      { isNumeric: true, name: 'Total', key: 'total', type: 'number' },
+      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
       {
         isNumeric: true,
         name: 'Status',
@@ -61,9 +61,11 @@ export default function AdminDebts() {
     listAction: { isNumeric: true, name: 'Action', action: 'details' },
     data: dummyListData,
   };
-  const detailsKeys = ['debitur', 'lastTransaction', 'total', 'status'];
-  const detailsNames = ['Debitur', 'Last Transaction', 'Total (Rp)', 'Status'];
   const [detailsData, dispatch] = useReducer(detailsReducer, {});
+  const detailsItems = {
+    attributes: [...listItems?.attributes],
+    data: detailsData,
+  };
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const filterItems = [
     {
@@ -143,10 +145,16 @@ export default function AdminDebts() {
         <HStack id={'mainContent'}>
           <VStack
             id={'listSection'}
-            w={screenWidth < 1200 ? '100%' : 'calc(100% - 400px)'}
+            w={
+              Object.keys(detailsData).length !== 0
+                ? screenWidth < 1200
+                  ? '100%'
+                  : 'calc(100% - 400px)'
+                : '100%'
+            }
+            // w={'100%'}
           >
             <PageHeader title={'Debts'} />
-
             <List
               listItems={listItems}
               searchPlaceholder={`Search by debitur's name`}
@@ -157,14 +165,7 @@ export default function AdminDebts() {
 
           {screenWidth < 1200 ? (
             <DetailsModal
-              detailsComponent={
-                <Details
-                  detailsData={detailsData}
-                  detailsKeys={detailsKeys}
-                  detailsNames={detailsNames}
-                  hasImage
-                />
-              }
+              detailsComponent={<Details detailsItems={detailsItems} />}
               detailsActions={[
                 {
                   name: 'update',
@@ -175,39 +176,22 @@ export default function AdminDebts() {
               detailsModalIsOpen={detailsModalIsOpen}
               setDetailsModalIsOpen={setDetailsModalIsOpen}
             />
-          ) : (
-            <VStack
-              id={'DetailsSection'}
-              w={'400px'}
-              h={'100%'}
-              borderLeft={'1px solid var(--divider)'}
-              spacing={null}
-              justifyContent={'space-between'}
-              overflow={'auto'}
-            >
+          ) : Object.keys(detailsData).length !== 0 ? (
+            <VStack id={'detailsSection'}>
               <VStack w={'100%'} spacing={null} overflow={'auto'}>
                 <PageHeader title={'Details'} />
-
-                <Details
-                  detailsData={detailsData}
-                  detailsKeys={detailsKeys}
-                  detailsNames={detailsNames}
-                  hasImage
-                />
+                <Details detailsItems={detailsItems} />
               </VStack>
-
-              {Object.keys(detailsData).length !== 0 ? (
-                <VStack w={'100%'} spacing={null}>
-                  <HStack w={'100%'} spacing={null}>
-                    <InputModal
-                      initialData={{ ...detailsData, payDebt: 0 }}
-                      itemsAttribute={updateItemsAttribute}
-                    />
-                  </HStack>
-                </VStack>
-              ) : null}
+              <VStack w={'100%'} spacing={null}>
+                <HStack w={'100%'} spacing={null}>
+                  <InputModal
+                    initialData={{ ...detailsData, payDebt: 0 }}
+                    itemsAttribute={updateItemsAttribute}
+                  />
+                </HStack>
+              </VStack>
             </VStack>
-          )}
+          ) : null}
         </HStack>
       </VStack>
     </HStack>

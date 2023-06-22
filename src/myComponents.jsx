@@ -523,7 +523,7 @@ const List = props => {
   };
 
   // Functions
-  function listHandleClick(e, selectedListData, key) {
+  function listHandleClick(e, selectedListData) {
     const listBody = document.querySelectorAll('#listBody tr');
     listBody.forEach(l => {
       l?.classList.remove('selectedList');
@@ -616,9 +616,6 @@ const List = props => {
 };
 
 const Details = props => {
-  const options = useIdDateFormat();
-  const fn = useFormatNumber;
-
   return (
     <VStack
       w={'100%'}
@@ -637,7 +634,7 @@ const Details = props => {
         ) : null}
       </VStack>
       <VStack w={'100%'} spacing={null}>
-        {props?.detailsKeys?.map((k, index) => {
+        {props?.detailsItems?.attributes?.map((a, index) => {
           return (
             <HStack
               key={index}
@@ -647,49 +644,24 @@ const Details = props => {
               py={'12px'}
               alignItems={'flex-start'}
             >
-              <Text w={'120px'} opacity={'0.5'}>
-                {props?.detailsNames[index]}
+              <Text w={'120px'} opacity={0.5}>
+                {a?.name}
               </Text>
-              <ReadOnlyData item={{ dataType: '', data: '' }} />
+              {Object.keys(props?.detailsItems?.data).length !== 0 ? (
+                <ReadOnlyData
+                  item={{
+                    dataType: a?.type,
+                    data: props?.detailsItems?.data[a?.key],
+                    colorScheme: a?.colorOptions
+                      ? a?.colorOptions[props?.detailsItems?.data[a?.key]]
+                      : '',
+                  }}
+                />
+              ) : (
+                <Text opacity={0.5}>Select list first</Text>
+              )}
             </HStack>
           );
-          // const createdAt = new Date(props?.detailsData?.CreatedAt);
-          // const updatedAt = new Date(props?.detailsData?.UpdatedAt);
-          // const formattedCreatedAt = createdAt?.toLocaleDateString(
-          //   'id-ID',
-          //   options
-          // );
-          // const formattedUpdateddAt = updatedAt?.toLocaleDateString(
-          //   'id-ID',
-          //   options
-          // );
-          // return (
-          //   <HStack
-          //     key={index}
-          //     w={'100%'}
-          //     borderBottom={'1px solid var(--divider)'}
-          //     px={'16px'}
-          //     py={'12px'}
-          //     alignItems={'flex-start'}
-          //   >
-          //     <Text w={'120px'} opacity={'0.5'}>
-          //       {props?.detailsNames[index]}
-          //     </Text>
-          //     <Text w={'calc(100% - 120px)'} wordBreak={'break-all'}>
-          //       {!props?.detailsData?.[`${k}`]
-          //         ? 'No list selected'
-          //         : k === 'user_id'
-          //         ? props?.detailsData?.[`${k}`]
-          //         : k === 'CreatedAt'
-          //         ? formattedCreatedAt
-          //         : k === 'UpdatedAt'
-          //         ? formattedUpdateddAt
-          //         : typeof props?.detailsData?.[`${k}`] === 'number'
-          //         ? fn(props?.detailsData?.[`${k}`])
-          //         : props?.detailsData?.[`${k}`]}
-          //     </Text>
-          //   </HStack>
-          // );
         })}
       </VStack>
     </VStack>

@@ -184,7 +184,13 @@ td {
   font-weight: normal !important;
   border-radius: 0 !important;
 }
+
+#root {
+  align-items: center;
+}
 #appContainer {
+  max-width: 1920px;
+  width: 100%;
   height: 100vh;
   gap: 0 !important;
 }
@@ -205,7 +211,15 @@ td {
   overflow: auto;
   gap: 0 !important;
 }
-
+#detailsSection {
+  width: 400px;
+  height: 100%;
+  border-left: 1px solid var(--divider);
+  border-right: 1px solid var(--divider);
+  gap: none;
+  overflow: auto;
+  justify-content: space-between;
+}
 @media screen and (max-width: 1200px) {
   * {
     font-size: 13px;
