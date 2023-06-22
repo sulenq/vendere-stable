@@ -233,6 +233,7 @@ export default function AdminDebts() {
     }
   }
   function handleAddData(data) {
+    console.log(JSON.stringify(addItemsAttribute));
     console.log(data);
   }
   function handleUpdateData(data) {
