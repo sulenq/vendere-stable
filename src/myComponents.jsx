@@ -249,14 +249,14 @@ const PageHeader = props => {
     <HStack
       spacing={null}
       w={'100%'}
-      h={'64px'}
+      h={'54px'}
       justifyContent={'space-between'}
+      borderTop="1px solid var(--divider)"
       borderBottom={'1px solid var(--divider)'}
     >
       <Heading
         w={props.hasBtn ? 'calc(100% - 120px)' : '100%'}
-        h={'100%'}
-        borderTop="1px solid var(--divider)"
+        verticalAlign={'center'}
         py={'8px'}
         px={'16px'}
       >
@@ -277,7 +277,7 @@ const List = props => {
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
   const filterItems = props?.filterItems;
-  const formatDate = useIdFormatDate();
+  const dateFormat = useIdFormatDate();
 
   // Component
   const ListFilter = () => {
@@ -611,7 +611,7 @@ const List = props => {
                             const date = new Date(d[a?.key]);
                             dataValue = date?.toLocaleDateString(
                               'id-ID',
-                              formatDate
+                              dateFormat
                             );
                             break;
                           default:
@@ -774,6 +774,7 @@ const InputModal = props => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
+  const dateFormat = useIdFormatDate();
 
   // Datas
   const [data, setData] = useState({});
@@ -808,13 +809,44 @@ const InputModal = props => {
             <Text fontSize={'20px'}>{props?.itemsAttribute?.title}</Text>
           </ModalHeader>
           <ModalBody p={'0px !important'}>
+            {props?.itemsAttribute?.alert &&
+            props?.itemsAttribute?.alert?.position === 'top' ? (
+              <Alert
+                status={props?.itemsAttribute?.alert?.status}
+                alignItems={'flex-start'}
+                // variant="left-accent"
+              >
+                <AlertIcon />
+                <Text alignSelf={'flex-start'}>
+                  {props?.itemsAttribute?.alert?.text}
+                </Text>
+              </Alert>
+            ) : null}
             <VStack w={'100%'} spacing={'16px'} p={'24px !important'}>
               {props?.itemsAttribute?.items?.map((i, index) => {
                 if (i?.readOnly) {
+                  let dataValue;
+                  if (i?.type === 'date') {
+                    const date = new Date(data[i?.key]);
+                    dataValue = date?.toLocaleDateString('id-ID', dateFormat);
+                  } else if (i?.type === 'number') {
+                    dataValue = fn(data[i?.key]);
+                  } else {
+                    dataValue = data[i?.key];
+                  }
                   return (
                     <HStack key={index} w={'100%'} alignItems={'flex-start'}>
                       <Text w={'120px'}>{i?.name}</Text>
-                      <Text alignSelf={'flex-start'}>{data[i?.key]}</Text>
+                      {i?.type === 'badge' ? (
+                        <Badge
+                          alignSelf={'flex-start'}
+                          colorScheme={i?.colorOptions[data[i?.key]]}
+                        >
+                          {dataValue}
+                        </Badge>
+                      ) : (
+                        <Text alignSelf={'flex-start'}>{dataValue}</Text>
+                      )}
                     </HStack>
                   );
                 } else if (i?.type === 'string') {
@@ -978,6 +1010,25 @@ const InputModal = props => {
                       </MenuList>
                     </Menu>
                   );
+                } else if (i?.type === 'payDebt') {
+                  if (data?.status === 'utang') {
+                    return (
+                      <Input
+                        key={index}
+                        className={'input'}
+                        onChange={e => {
+                          setData({
+                            ...data,
+                            [i?.key]: parseInt(rfn(e.target.value)),
+                          });
+                        }}
+                        placeholder={i?.name}
+                        value={fn(data[i?.key])}
+                      />
+                    );
+                  } else {
+                    return null;
+                  }
                 } else {
                   return <Text>Invalid input type, check itemsAttribute</Text>;
                 }

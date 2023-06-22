@@ -36,7 +36,7 @@ export default function AdminDebts() {
       debitur: 'Sutar Kalem',
       total: 4500,
       lastTransaction: '2023-03-25T13:55:16.024772+07:00',
-      status: 'lunas',
+      status: 'utang',
     },
   ];
   const listItems = {
@@ -61,28 +61,8 @@ export default function AdminDebts() {
     listAction: { isNumeric: true, name: 'Action', action: 'details' },
     data: dummyListData,
   };
-  const detailsKeys = [
-    'code',
-    'name',
-    'stock',
-    'price',
-    'category',
-    'color',
-    'CreatedAt',
-    'UpdatedAt',
-    'user_id',
-  ];
-  const detailsNames = [
-    'Code',
-    'Name',
-    'Stock',
-    'Price (Rp)',
-    'Category',
-    'Color',
-    'Created at',
-    'Updated at',
-    'Created by',
-  ];
+  const detailsKeys = ['debitur', 'lastTransaction', 'total', 'status'];
+  const detailsNames = ['Debitur', 'Last Transaction', 'Total (Rp)', 'Status'];
   const [detailsData, dispatch] = useReducer(listReducer, {});
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const filterItems = [
@@ -106,20 +86,37 @@ export default function AdminDebts() {
     },
   ];
   const updateItemsAttribute = {
-    title: 'Updating',
+    title: 'Paying Debt',
     btnClassName: 'primaryBtn',
-    purpose: 'UPDATE',
+    purpose: 'PAY DEBT',
     handlePurpose: handleUpdateData,
     btnW: '100%',
     items: [
-      { key: 'code', name: 'Code', type: 'string' },
-      { key: 'name', name: 'Name', type: 'string' },
+      { key: 'debitur', name: 'Debitur', type: 'string', readOnly: true },
       {
-        key: 'stock',
-        type: 'stock',
-        name: 'Stock',
+        key: 'lastTransaction',
+        name: 'Last Trans.',
+        type: 'date',
+        readOnly: true,
       },
-      { key: 'price', name: 'Price', type: 'price' },
+      {
+        key: 'total',
+        type: 'number',
+        name: 'Total (Rp)',
+        readOnly: true,
+      },
+      {
+        key: 'status',
+        name: 'Status',
+        type: 'badge',
+        colorOptions: { utang: 'red', lunas: 'green' },
+        readOnly: true,
+      },
+      {
+        key: 'payDebt',
+        type: 'payDebt',
+        name: 'Pay Debt (Rp)',
+      },
     ],
   };
 
@@ -203,7 +200,7 @@ export default function AdminDebts() {
                 <VStack w={'100%'} spacing={null}>
                   <HStack w={'100%'} spacing={null}>
                     <InputModal
-                      initialData={detailsData}
+                      initialData={{ ...detailsData, payDebt: 0 }}
                       itemsAttribute={updateItemsAttribute}
                     />
                   </HStack>
