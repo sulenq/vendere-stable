@@ -1337,7 +1337,7 @@ function AdminProducts() {
         type: 'stock',
         name: 'Stock',
       },
-      { key: 'price', name: 'Price', type: 'price' },
+      { key: 'price', name: 'Price', type: 'price', currency: 'Rp' },
       {
         key: 'category',
         name: 'Category',
@@ -1499,8 +1499,13 @@ function AdminProducts() {
               detailsModalIsOpen={detailsModalIsOpen}
               setDetailsModalIsOpen={setDetailsModalIsOpen}
             />
-          ) : Object.keys(detailsData).length !== 0 ? (
-            <VStack id={'detailsSection'}>
+          ) : (
+            <VStack
+              id={'detailsSection'}
+              w={
+                Object.keys(detailsData).length !== 0 ? '100%' : '0 !Important'
+              }
+            >
               <VStack w={'100%'} spacing={null} overflow={'auto'}>
                 <PageHeader title={'Details'} />
                 <Details detailsItems={detailsItems} hasImage />
@@ -1526,7 +1531,7 @@ function AdminProducts() {
                 />
               </VStack>
             </VStack>
-          ) : null}
+          )}
         </HStack>
       </VStack>
     </HStack>

@@ -211,6 +211,7 @@ td {
   overflow: auto;
   border-right: 1px solid var(--divider);
   gap: 0 !important;
+  transition: 0.4s;
 }
 #detailsSection {
   width: 400px;
@@ -219,6 +220,7 @@ td {
   gap: 0 !important;
   overflow: auto;
   justify-content: space-between;
+  transition: 0.4s;
 }
 @media screen and (max-width: 1200px) {
   * {

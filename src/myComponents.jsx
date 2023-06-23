@@ -591,7 +591,7 @@ const List = props => {
                             dataType: a?.type,
                             data: d[a?.key],
                             colorScheme: a?.colorOptions
-                              ? a?.colorOptions[d?.status]
+                              ? a?.colorOptions[d[a?.key]]
                               : '',
                           }}
                         />
@@ -624,7 +624,8 @@ const Details = props => {
         {props?.hasImage ? (
           <Image
             src={'../img/noImage.jpg'}
-            boxSize={'100%'}
+            w={'100%'}
+            h={'400px !Important'}
             objectFit={'cover'}
             borderBottom={'1px solid var(--divider)'}
           />
@@ -731,9 +732,9 @@ const DetailsModal = props => {
 const InputModal = props => {
   // Utils
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const fn = useFormatNumber;
-  const rfn = useReverseFormatNumber;
-  const dateFormat = useIdDateFormat();
+  // const fn = useFormatNumber;
+  // const rfn = useReverseFormatNumber;
+  // const dateFormat = useIdDateFormat();
 
   // Datas
   const [data, setData] = useState({});
@@ -741,6 +742,11 @@ const InputModal = props => {
     setData(props?.initialData);
   }, [props?.initialData]);
   const modalContentRef = useRef();
+
+  // Functions
+  function handleOnChange(e) {
+    console.log(e.target.value);
+  }
 
   return (
     <>
@@ -781,215 +787,53 @@ const InputModal = props => {
                 </Text>
               </Alert>
             ) : null}
-            <VStack w={'100%'} spacing={'16px'} p={'24px !important'}>
+            <VStack
+              w={'100%'}
+              spacing={'16px'}
+              p={'24px !important'}
+              alignItems={'flex-start'}
+            >
               {props?.itemsAttribute?.items?.map((i, index) => {
-                if (i?.readOnly) {
-                  let dataValue;
-                  if (i?.type === 'date') {
-                    const date = new Date(data[i?.key]);
-                    dataValue = date?.toLocaleDateString('id-ID', dateFormat);
-                  } else if (i?.type === 'number') {
-                    dataValue = fn(data[i?.key]);
-                  } else {
-                    dataValue = data[i?.key];
-                  }
-                  return (
-                    <HStack key={index} w={'100%'} alignItems={'flex-start'}>
-                      <Text w={'120px'}>{i?.name}</Text>
-                      {i?.type === 'badge' ? (
-                        <Badge
-                          alignSelf={'flex-start'}
-                          colorScheme={i?.colorOptions[data[i?.key]]}
-                        >
-                          {dataValue}
-                        </Badge>
-                      ) : (
-                        <Text alignSelf={'flex-start'}>{dataValue}</Text>
-                      )}
-                    </HStack>
-                  );
-                } else if (i?.type === 'string') {
-                  return (
-                    <Input
-                      key={index}
-                      className={'input'}
-                      onChange={e => {
-                        setData({ ...data, [i?.key]: e.target.value });
-                      }}
-                      placeholder={i?.name}
-                      value={data[i?.key]}
-                    />
-                  );
-                } else if (i?.type === 'price') {
-                  return (
-                    <InputGroup key={index} className={'input'}>
-                      <InputLeftAddon className={'input'} children="Rp" />
-                      <Input
-                        className={'input'}
-                        onChange={e => {
-                          setData({
-                            ...data,
-                            [i?.key]: parseInt(rfn(e.target.value)),
-                          });
-                        }}
-                        placeholder={i?.name}
-                        value={fn(data[i?.key])}
-                      />{' '}
-                    </InputGroup>
-                  );
-                } else if (i?.type === 'number') {
-                  return (
-                    <Input
-                      key={index}
-                      className={'input'}
-                      onChange={e => {
-                        setData({
-                          ...data,
-                          [i?.key]: parseInt(rfn(e.target.value)),
-                        });
-                      }}
-                      placeholder={i?.name}
-                      value={fn(data[i?.key])}
-                    />
-                  );
-                } else if (i?.type === 'stock') {
-                  return (
-                    <InputGroup key={index} className={'input'}>
-                      <Input
-                        className={'input'}
-                        onChange={e => {
-                          setData({
-                            ...data,
-                            [i?.key]: parseInt(rfn(e.target.value)),
-                          });
-                        }}
-                        placeholder={i?.name}
-                        value={fn(data[i?.key])}
-                      />
-                      <InputRightAddon className={'input'} children="pcs" />
-                    </InputGroup>
-                  );
-                } else if (i?.type === 'selectString') {
-                  return (
-                    <Menu key={index}>
-                      <MenuButton
-                        className={'selectBtn'}
-                        as={Button}
-                        w={'100%'}
-                      >
-                        <HStack w={'100%'} justifyContent={'space-between'}>
-                          <Text>{data?.[i?.key] || i?.name}</Text>
-                          <Icon as={KeyboardArrowDownIcon} />
-                        </HStack>
-                      </MenuButton>
-                      <MenuList>
-                        {i?.options?.map((c, index) => {
-                          return (
-                            <MenuItem
-                              key={index}
-                              onClick={() => {
-                                setData({ ...data, [i?.key]: c?.name });
-                              }}
-                            >
-                              {c?.name}
-                            </MenuItem>
-                          );
-                        })}
-                      </MenuList>
-                    </Menu>
-                  );
-                } else if (i?.type === 'selectColor') {
-                  return (
-                    <Menu key={index}>
-                      <MenuButton
-                        className={'selectBtn'}
-                        as={Button}
-                        w={'100%'}
-                      >
-                        <HStack w={'100%'} justifyContent={'space-between'}>
-                          <HStack>
-                            {data?.color ? (
-                              <Box
-                                bg={
-                                  data.color === 'Black'
-                                    ? 'black'
-                                    : data.color === 'White'
-                                    ? 'white'
-                                    : data.color === 'Brown'
-                                    ? '#b55e12'
-                                    : `${data.color?.toLowerCase()}.300`
-                                }
-                                border={
-                                  data.color === 'White'
-                                    ? '1px solid var(--divider)'
-                                    : null
-                                }
-                                w={'10px'}
-                                h={'12px'}
-                              ></Box>
-                            ) : null}
-                            <Text>{data?.color || 'Color'}</Text>
-                          </HStack>
-                          <Icon as={KeyboardArrowDownIcon} />
-                        </HStack>
-                      </MenuButton>
-                      <MenuList>
-                        {i?.options?.map((c, index) => {
-                          return (
-                            <MenuItem
-                              key={index}
-                              onClick={() => {
-                                setData({ ...data, color: c?.name });
-                              }}
-                            >
-                              <HStack>
-                                <Box
-                                  bg={
-                                    c?.name === 'Black'
-                                      ? 'black'
-                                      : c?.name === 'White'
-                                      ? 'white'
-                                      : c?.name === 'Brown'
-                                      ? '#b55e12'
-                                      : `${c?.name?.toLowerCase()}.300`
-                                  }
-                                  border={
-                                    c?.name === 'White'
-                                      ? '1px solid var(--divider)'
-                                      : null
-                                  }
-                                  w={'10px'}
-                                  h={'12px'}
-                                ></Box>
-                                <Text>{c?.name}</Text>
-                              </HStack>
-                            </MenuItem>
-                          );
-                        })}
-                      </MenuList>
-                    </Menu>
-                  );
-                } else if (i?.type === 'payDebt') {
-                  if (data?.status === 'utang') {
+                switch (i?.readOnly) {
+                  case true:
                     return (
-                      <Input
+                      <VStack
                         key={index}
-                        className={'input'}
-                        onChange={e => {
-                          setData({
-                            ...data,
-                            [i?.key]: parseInt(rfn(e.target.value)),
-                          });
-                        }}
-                        placeholder={i?.name}
-                        value={fn(data[i?.key])}
-                      />
+                        alignItems={'flex-start'}
+                        spacing={null}
+                      >
+                        <Text opacity={0.5}>{i?.name}</Text>;
+                        <ReadOnlyData
+                          item={{
+                            dataType: i?.type,
+                            data: data[i?.key],
+                            colorScheme: i?.colorOptions
+                              ? i?.colorOptions[data[i?.key]]
+                              : null,
+                          }}
+                        />
+                      </VStack>
                     );
-                  } else {
-                    return null;
-                  }
-                } else {
-                  return <Text>Invalid input type, check itemsAttribute</Text>;
+                  default:
+                    return (
+                      <VStack
+                        key={index}
+                        w={'100%'}
+                        alignItems={'flex-start'}
+                        spacing={null}
+                      >
+                        <Text opacity={0.5}>{i?.name}</Text>;
+                        <InputData
+                          key={index}
+                          item={{
+                            dataType: i?.type,
+                            data: data[i?.key],
+                            placeholder: i?.name,
+                            options: i?.options ? i?.options : null,
+                          }}
+                        />
+                      </VStack>
+                    );
                 }
               })}
             </VStack>
@@ -1042,25 +886,19 @@ const ReadOnlyData = props => {
 
   // Datas
   const item = props?.item;
-  const dataType = item?.dataType;
-  const data = item?.data;
 
-  switch (dataType) {
+  switch (item?.dataType) {
     case 'number':
-      return <Text>{fn(data)}</Text>;
+      return <Text>{fn(item?.data)}</Text>;
     case 'date':
-      const date = new Date(data);
+      const date = new Date(item?.data);
       return <Text>{date?.toLocaleDateString('id-ID', dateFormat)}</Text>;
     case 'badge':
-      return (
-        <Badge alignSelf={'center'} colorScheme={item?.colorScheme}>
-          {data}
-        </Badge>
-      );
+      return <Badge colorScheme={item?.colorScheme}>{item?.data}</Badge>;
     case 'cartList':
       return (
         <VStack w={'100%'} alignItems={'flex-start'}>
-          {data?.map((d, index) => {
+          {item?.data?.map((d, index) => {
             return (
               <VStack
                 key={index}
@@ -1082,7 +920,163 @@ const ReadOnlyData = props => {
         </VStack>
       );
     default:
-      return <Text>{data}</Text>;
+      return <Text>{item?.data}</Text>;
+  }
+};
+
+const InputData = props => {
+  // Utils
+  const fn = useFormatNumber;
+
+  // Datas
+  const item = props?.item;
+  // console.log(item);
+
+  switch (item?.dataType) {
+    case 'number':
+      return (
+        <Input
+          className={'input'}
+          placeholder={item?.placeholder}
+          // onChange={}
+          // value={}
+        />
+      );
+    case 'stock':
+      return (
+        <InputGroup className={'input'}>
+          <Input
+            className={'input'}
+            placeholder={item?.placeholder}
+            // onChange={}
+            // value={}
+          />
+          <InputRightAddon className={'input'} children="pcs" />
+        </InputGroup>
+      );
+    case 'price':
+      return (
+        <InputGroup className={'input'}>
+          <InputLeftAddon className={'input'} children={'Rp'} />
+          <Input
+            className={'input'}
+            placeholder={item?.placeholder}
+            // onChange={}
+            // value={}
+          />
+        </InputGroup>
+      );
+    case 'selectString':
+      return (
+        <Menu>
+          <MenuButton className={'selectBtn'} as={Button} w={'100%'}>
+            <HStack w={'100%'} justifyContent={'space-between'}>
+              <Text>{item?.placeholder}</Text>
+              <Icon as={KeyboardArrowDownIcon} />
+            </HStack>
+          </MenuButton>
+          <MenuList>
+            {item?.options?.map((c, index) => {
+              return (
+                <MenuItem
+                  key={index}
+                  // onClick={() => {
+                  //   setData({ ...data, [i?.key]: c?.name });
+                  // }}
+                >
+                  {c?.name}
+                </MenuItem>
+              );
+            })}
+          </MenuList>
+        </Menu>
+      );
+    case 'selectColor':
+      return (
+        <Menu>
+          <MenuButton className={'selectBtn'} as={Button} w={'100%'}>
+            <HStack w={'100%'} justifyContent={'space-between'}>
+              <HStack>
+                {/* {item?.color ? (
+                  <Box
+                    bg={
+                      item.color === 'Black'
+                        ? 'black'
+                        : item.color === 'White'
+                        ? 'white'
+                        : item.color === 'Brown'
+                        ? '#b55e12'
+                        : `${item.color?.toLowerCase()}.300`
+                    }
+                    border={
+                      item.color === 'White' ? '1px solid var(--divider)' : null
+                    }
+                    w={'10px'}
+                    h={'12px'}
+                  ></Box>
+                ) : null} */}
+                <Text>{item?.color || 'Color'}</Text>
+              </HStack>
+              <Icon as={KeyboardArrowDownIcon} />
+            </HStack>
+          </MenuButton>
+          <MenuList>
+            {item?.options?.map((c, index) => {
+              return (
+                <MenuItem
+                  key={index}
+                  // onClick={() => {
+                  //   setData({ ...data, color: c?.name });
+                  // }}
+                >
+                  <HStack>
+                    <Box
+                      bg={
+                        c?.name === 'Black'
+                          ? 'black'
+                          : c?.name === 'White'
+                          ? 'white'
+                          : c?.name === 'Brown'
+                          ? '#b55e12'
+                          : `${c?.name?.toLowerCase()}.300`
+                      }
+                      border={
+                        c?.name === 'White' ? '1px solid var(--divider)' : null
+                      }
+                      w={'10px'}
+                      h={'12px'}
+                    ></Box>
+                    <Text>{c?.name}</Text>
+                  </HStack>
+                </MenuItem>
+              );
+            })}
+          </MenuList>
+        </Menu>
+      );
+    case 'payDebt':
+      return (
+        <Input
+          className={'input'}
+          placeholder={item?.placeholder}
+          // onChange={e => {
+          //   setData({
+          //     ...data,
+          //     [i?.key]: parseInt(rfn(e.target.value)),
+          //   });
+          // }}
+          // value={fn(data[i?.key])}
+        />
+      );
+    default:
+      return (
+        <Input
+          className={'input'}
+          placeholder={item?.placeholder}
+          // onChange={}
+          // value={}
+        />
+      );
   }
 };
 

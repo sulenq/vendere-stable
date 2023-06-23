@@ -282,8 +282,13 @@ export default function AdminDebts() {
               detailsModalIsOpen={detailsModalIsOpen}
               setDetailsModalIsOpen={setDetailsModalIsOpen}
             />
-          ) : Object.keys(detailsData).length !== 0 ? (
-            <VStack id={'detailsSection'}>
+          ) : (
+            <VStack
+              id={'detailsSection'}
+              w={
+                Object.keys(detailsData).length !== 0 ? '100%' : '0 !important'
+              }
+            >
               <VStack w={'100%'} spacing={null} overflow={'auto'}>
                 <PageHeader title={'Details'} />
                 <Details detailsItems={detailsItems} />
@@ -297,7 +302,7 @@ export default function AdminDebts() {
                 </HStack>
               </VStack>
             </VStack>
-          ) : null}
+          )}
         </HStack>
       </VStack>
     </HStack>
