@@ -744,9 +744,9 @@ const InputModal = props => {
   const modalContentRef = useRef();
 
   // Functions
-  function handleOnChange(e) {
-    console.log(e.target.value);
-  }
+  // function handleOnChange(e) {
+  //   console.log(e.target.value);
+  // }
 
   return (
     <>
@@ -926,7 +926,7 @@ const ReadOnlyData = props => {
 
 const InputData = props => {
   // Utils
-  const fn = useFormatNumber;
+  // const fn = useFormatNumber;
 
   // Datas
   const item = props?.item;
