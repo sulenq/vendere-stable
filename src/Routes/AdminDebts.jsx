@@ -195,7 +195,7 @@ export default function AdminDebts() {
       },
       {
         key: 'payDebt',
-        type: 'payDebt',
+        type: 'number',
         name: 'Pay Debt (Rp)',
       },
     ],

@@ -19,7 +19,7 @@ body,
   --primary-hover: #739df3;
   --primary-active: #5483e1;
   --light-gray: #c7c7c7;
-  --divider: #93939332;
+  --divider: #8b9dba32;
 }
 ::selection {
   background-color: #5a8cf0;
@@ -221,6 +221,9 @@ td {
   overflow: auto;
   justify-content: space-between;
   transition: 0.4s;
+}
+.menuItem:hover {
+  background: var(--primary);
 }
 @media screen and (max-width: 1200px) {
   * {

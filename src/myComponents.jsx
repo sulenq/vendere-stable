@@ -62,9 +62,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
   Alert,
   AlertIcon,
   Badge,
@@ -588,8 +585,8 @@ const List = props => {
                       <Td key={aIndex} isNumeric={a?.isNumeric}>
                         <ReadOnlyData
                           item={{
-                            dataType: a?.type,
-                            data: d[a?.key],
+                            valueType: a?.type,
+                            value: d[a?.key],
                             colorScheme: a?.colorOptions
                               ? a?.colorOptions[d[a?.key]]
                               : '',
@@ -650,8 +647,8 @@ const Details = props => {
               {Object.keys(props?.detailsItems?.data).length !== 0 ? (
                 <ReadOnlyData
                   item={{
-                    dataType: a?.type,
-                    data: props?.detailsItems?.data[a?.key],
+                    valueType: a?.type,
+                    value: props?.detailsItems?.data[a?.key],
                     colorScheme: a?.colorOptions
                       ? a?.colorOptions[props?.detailsItems?.data[a?.key]]
                       : '',
@@ -698,23 +695,14 @@ const DetailsModal = props => {
                       borderLeft={
                         index === 1 ? '1px solid var(--divider)' : null
                       }
-                      itemsAttribute={i?.itemsAttribute}
                       initialData={i?.initialData}
+                      itemsAttribute={i?.itemsAttribute}
                     />
                   );
                 } else {
                   return null;
                 }
               })}
-              {/* <InputModal
-                itemsAttribute={props?.detailsActions[0]?.itemsAttribute}
-                initialData={props?.detailsActions[0]?.initialData}
-              />
-              <InputModal
-                borderLeft={'1px solid var(--divider)'}
-                itemsAttribute={props?.detailsActions[1]?.itemsAttribute}
-                initialData={props?.detailsActions[1]?.initialData}
-              /> */}
             </HStack>
             {props?.detailsActions[2] ? (
               <InputModal
@@ -732,9 +720,6 @@ const DetailsModal = props => {
 const InputModal = props => {
   // Utils
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const fn = useFormatNumber;
-  // const rfn = useReverseFormatNumber;
-  // const dateFormat = useIdDateFormat();
 
   // Datas
   const [data, setData] = useState({});
@@ -742,11 +727,6 @@ const InputModal = props => {
     setData(props?.initialData);
   }, [props?.initialData]);
   const modalContentRef = useRef();
-
-  // Functions
-  // function handleOnChange(e) {
-  //   console.log(e.target.value);
-  // }
 
   return (
     <>
@@ -805,8 +785,8 @@ const InputModal = props => {
                         <Text opacity={0.5}>{i?.name}</Text>;
                         <ReadOnlyData
                           item={{
-                            dataType: i?.type,
-                            data: data[i?.key],
+                            valueType: i?.type,
+                            value: data[i?.key],
                             colorScheme: i?.colorOptions
                               ? i?.colorOptions[data[i?.key]]
                               : null,
@@ -826,9 +806,12 @@ const InputModal = props => {
                         <InputData
                           key={index}
                           item={{
-                            dataType: i?.type,
-                            data: data[i?.key],
+                            initialData: data,
+                            valueType: i?.type,
+                            valueKey: i?.key,
+                            value: data[i?.key],
                             placeholder: i?.name,
+                            onInput: setData,
                             options: i?.options ? i?.options : null,
                           }}
                         />
@@ -887,18 +870,18 @@ const ReadOnlyData = props => {
   // Datas
   const item = props?.item;
 
-  switch (item?.dataType) {
+  switch (item?.valueType) {
     case 'number':
-      return <Text>{fn(item?.data)}</Text>;
+      return <Text>{fn(item?.value)}</Text>;
     case 'date':
-      const date = new Date(item?.data);
+      const date = new Date(item?.value);
       return <Text>{date?.toLocaleDateString('id-ID', dateFormat)}</Text>;
     case 'badge':
-      return <Badge colorScheme={item?.colorScheme}>{item?.data}</Badge>;
+      return <Badge colorScheme={item?.colorScheme}>{item?.value}</Badge>;
     case 'cartList':
       return (
         <VStack w={'100%'} alignItems={'flex-start'}>
-          {item?.data?.map((d, index) => {
+          {item?.value?.map((d, index) => {
             return (
               <VStack
                 key={index}
@@ -920,58 +903,42 @@ const ReadOnlyData = props => {
         </VStack>
       );
     default:
-      return <Text>{item?.data}</Text>;
+      return <Text>{item?.value}</Text>;
   }
 };
 
 const InputData = props => {
   // Utils
-  // const fn = useFormatNumber;
+  const fn = useFormatNumber;
+  const rfn = useReverseFormatNumber;
 
   // Datas
   const item = props?.item;
-  // console.log(item);
 
-  switch (item?.dataType) {
+  switch (item?.valueType) {
     case 'number':
       return (
         <Input
           className={'input'}
           placeholder={item?.placeholder}
-          // onChange={}
-          // value={}
+          onChange={e => {
+            const newData = {
+              ...item?.initialData,
+              [item?.valueKey]: parseInt(rfn(e.target.value)),
+            };
+            item?.onInput(newData);
+          }}
+          value={fn(item?.initialData[item?.valueKey])}
         />
-      );
-    case 'stock':
-      return (
-        <InputGroup className={'input'}>
-          <Input
-            className={'input'}
-            placeholder={item?.placeholder}
-            // onChange={}
-            // value={}
-          />
-          <InputRightAddon className={'input'} children="pcs" />
-        </InputGroup>
-      );
-    case 'price':
-      return (
-        <InputGroup className={'input'}>
-          <InputLeftAddon className={'input'} children={'Rp'} />
-          <Input
-            className={'input'}
-            placeholder={item?.placeholder}
-            // onChange={}
-            // value={}
-          />
-        </InputGroup>
       );
     case 'selectString':
       return (
         <Menu>
           <MenuButton className={'selectBtn'} as={Button} w={'100%'}>
             <HStack w={'100%'} justifyContent={'space-between'}>
-              <Text>{item?.placeholder}</Text>
+              <Text>
+                {item?.initialData[item?.valueKey] || item?.placeholder}
+              </Text>
               <Icon as={KeyboardArrowDownIcon} />
             </HStack>
           </MenuButton>
@@ -980,9 +947,13 @@ const InputData = props => {
               return (
                 <MenuItem
                   key={index}
-                  // onClick={() => {
-                  //   setData({ ...data, [i?.key]: c?.name });
-                  // }}
+                  className={'menuItem'}
+                  onClick={() => {
+                    item?.onInput({
+                      ...item?.initialData,
+                      [item?.valueKey]: c?.name,
+                    });
+                  }}
                 >
                   {c?.name}
                 </MenuItem>
@@ -997,25 +968,27 @@ const InputData = props => {
           <MenuButton className={'selectBtn'} as={Button} w={'100%'}>
             <HStack w={'100%'} justifyContent={'space-between'}>
               <HStack>
-                {/* {item?.color ? (
+                {item?.value ? (
                   <Box
                     bg={
-                      item.color === 'Black'
+                      item?.value === 'Black'
                         ? 'black'
-                        : item.color === 'White'
+                        : item?.value === 'White'
                         ? 'white'
-                        : item.color === 'Brown'
+                        : item?.value === 'Brown'
                         ? '#b55e12'
-                        : `${item.color?.toLowerCase()}.300`
+                        : `${item?.value?.toLowerCase()}.300`
                     }
                     border={
-                      item.color === 'White' ? '1px solid var(--divider)' : null
+                      item?.value === 'White'
+                        ? '1px solid var(--divider)'
+                        : null
                     }
                     w={'10px'}
                     h={'12px'}
                   ></Box>
-                ) : null} */}
-                <Text>{item?.color || 'Color'}</Text>
+                ) : null}
+                <Text>{item?.value || 'Color'}</Text>
               </HStack>
               <Icon as={KeyboardArrowDownIcon} />
             </HStack>
@@ -1025,9 +998,13 @@ const InputData = props => {
               return (
                 <MenuItem
                   key={index}
-                  // onClick={() => {
-                  //   setData({ ...data, color: c?.name });
-                  // }}
+                  className={'menuItem'}
+                  onClick={() => {
+                    item?.onInput({
+                      ...item?.initialData,
+                      [item?.valueKey]: c?.name,
+                    });
+                  }}
                 >
                   <HStack>
                     <Box
@@ -1073,8 +1050,13 @@ const InputData = props => {
         <Input
           className={'input'}
           placeholder={item?.placeholder}
-          // onChange={}
-          // value={}
+          onChange={e => {
+            item?.onInput({
+              ...item?.initialData,
+              [item?.valueKey]: e.target.value,
+            });
+          }}
+          value={item?.initialData[item?.keyValue]}
         />
       );
   }

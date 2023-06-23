@@ -28,5 +28,15 @@ export const myTheme = extendTheme({
         color: 'white',
       }),
     },
+    Menu: {
+      baseStyle: props => ({
+        list: {
+          bg: props.colorMode === 'dark' ? '#121214' : 'white',
+        },
+        item: {
+          bg: props.colorMode === 'dark' ? '#121214' : 'white',
+        },
+      }),
+    },
   },
 });

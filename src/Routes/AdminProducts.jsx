@@ -1224,7 +1224,7 @@ function AdminProducts() {
       },
       {
         isNumeric: true,
-        name: 'Price',
+        name: 'Price (Rp)',
         key: 'price',
         type: 'number',
       },
@@ -1236,11 +1236,11 @@ function AdminProducts() {
   const detailsItems = {
     attributes: [
       ...listItems?.attributes,
-      { isNumeric: false, name: 'Category', key: 'category', type: 'string' },
-      { isNumeric: false, name: 'Color', key: 'color', type: 'string' },
-      { isNumeric: false, name: 'Created At', key: 'CreatedAt', type: 'date' },
-      { isNumeric: false, name: 'Updated At', key: 'UpdatedAt', type: 'date' },
-      { isNumeric: false, name: 'Created By', key: 'user_id', type: 'string' },
+      { name: 'Category', key: 'category', type: 'string' },
+      { name: 'Color', key: 'color', type: 'string' },
+      { name: 'Created At', key: 'CreatedAt', type: 'date' },
+      { name: 'Updated At', key: 'UpdatedAt', type: 'date' },
+      { name: 'Created By', key: 'user_id', type: 'string' },
     ],
     data: detailsData,
   };
@@ -1306,10 +1306,10 @@ function AdminProducts() {
       { key: 'name', name: 'Name', type: 'string' },
       {
         key: 'stock',
-        type: 'stock',
+        type: 'number',
         name: 'Stock',
       },
-      { key: 'price', name: 'Price', type: 'price' },
+      { key: 'price', name: 'Price (Rp)', type: 'number' },
       {
         key: 'category',
         name: 'Category',
@@ -1334,10 +1334,10 @@ function AdminProducts() {
       { key: 'name', name: 'Name', type: 'string' },
       {
         key: 'stock',
-        type: 'stock',
+        type: 'number',
         name: 'Stock',
       },
-      { key: 'price', name: 'Price', type: 'price', currency: 'Rp' },
+      { key: 'price', name: 'Price', type: 'number', currency: 'Rp' },
       {
         key: 'category',
         name: 'Category',
@@ -1392,12 +1392,12 @@ function AdminProducts() {
       { key: 'name', name: 'Name', type: 'string', readOnly: true },
       {
         key: 'addStock',
-        type: 'stock',
+        type: 'number',
         name: 'Add Stock',
       },
       {
         key: 'reduceStock',
-        type: 'stock',
+        type: 'number',
         name: 'Reduce Stock',
       },
     ],
@@ -1414,7 +1414,6 @@ function AdminProducts() {
       setDetailsModalIsOpen(true);
     }
   }
-
   function handleAddData(data) {
     console.log(data);
   }
