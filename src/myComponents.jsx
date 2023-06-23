@@ -257,12 +257,12 @@ const PageHeader = props => {
       >
         {props.title}
       </Heading>
-      {props.hasBtn ? (
+      {props.hasBtn && (
         <InputModal
           initialData={props?.initialData}
           itemsAttribute={props.addItemsAttribute}
         />
-      ) : null}
+      )}
     </HStack>
   );
 };
@@ -687,22 +687,23 @@ const DetailsModal = props => {
         <ModalFooter className={'modalFooter'}>
           <VStack w={'100%'} spacing={null}>
             <HStack w={'100%'} h={'50px'} spacing={null}>
-              {props?.detailsActions?.map((i, index) => {
-                if (index < 2) {
-                  return (
-                    <InputModal
-                      key={index}
-                      borderLeft={
-                        index === 1 ? '1px solid var(--divider)' : null
-                      }
-                      initialData={i?.initialData}
-                      itemsAttribute={i?.itemsAttribute}
-                    />
-                  );
-                } else {
-                  return null;
-                }
-              })}
+              {props?.detailsActions &&
+                props?.detailsActions?.map((i, index) => {
+                  if (index < 2) {
+                    return (
+                      <InputModal
+                        key={index}
+                        borderLeft={
+                          index === 1 ? '1px solid var(--divider)' : null
+                        }
+                        initialData={i?.initialData}
+                        itemsAttribute={i?.itemsAttribute}
+                      />
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
             </HStack>
             {props?.detailsActions[2] ? (
               <InputModal
@@ -812,7 +813,7 @@ const InputModal = props => {
                             value: data[i?.key],
                             placeholder: i?.name,
                             onInput: setData,
-                            options: i?.options ? i?.options : null,
+                            options: i?.options && i?.options,
                           }}
                         />
                       </VStack>
@@ -902,6 +903,22 @@ const ReadOnlyData = props => {
           })}
         </VStack>
       );
+    case 'textArea':
+      const text = item?.value;
+      const lines = text?.split('\n');
+      if (text) {
+        return lines?.map((line, index) => {
+          return (
+            <Text key={index}>
+              {line}
+              {index !== lines.length - 1 && <br />}
+            </Text>
+          );
+        });
+      } else {
+        return <Text>-</Text>;
+      }
+
     default:
       return <Text>{item?.value}</Text>;
   }
@@ -943,7 +960,7 @@ const InputData = props => {
             </HStack>
           </MenuButton>
           <MenuList>
-            {item?.options?.map((c, index) => {
+            {item?.options?.map((o, index) => {
               return (
                 <MenuItem
                   key={index}
@@ -951,11 +968,11 @@ const InputData = props => {
                   onClick={() => {
                     item?.onInput({
                       ...item?.initialData,
-                      [item?.valueKey]: c?.name,
+                      [item?.valueKey]: o?.name,
                     });
                   }}
                 >
-                  {c?.name}
+                  {o?.name}
                 </MenuItem>
               );
             })}
@@ -1031,19 +1048,9 @@ const InputData = props => {
           </MenuList>
         </Menu>
       );
-    case 'payDebt':
+    case 'date':
       return (
-        <Input
-          className={'input'}
-          placeholder={item?.placeholder}
-          // onChange={e => {
-          //   setData({
-          //     ...data,
-          //     [i?.key]: parseInt(rfn(e.target.value)),
-          //   });
-          // }}
-          // value={fn(data[i?.key])}
-        />
+        <Input className={'input'} placeholder={'Date'} type="datetime-local" />
       );
     default:
       return (

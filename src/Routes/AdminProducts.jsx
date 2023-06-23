@@ -1314,13 +1314,13 @@ function AdminProducts() {
         key: 'category',
         name: 'Category',
         type: 'selectString',
-        options: filterItems[0].items,
+        options: filterItems[0]?.items,
       },
       {
         key: 'color',
         name: 'Color',
         type: 'selectColor',
-        options: filterItems[3].items,
+        options: filterItems[3]?.items,
       },
     ],
   };

@@ -224,6 +224,7 @@ td {
 }
 .menuItem:hover {
   background: var(--primary);
+  color: white;
 }
 @media screen and (max-width: 1200px) {
   * {

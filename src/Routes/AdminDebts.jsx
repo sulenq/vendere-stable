@@ -125,7 +125,6 @@ export default function AdminDebts() {
         key: 'lastTransaction',
         type: 'date',
       },
-      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
       {
         isNumeric: true,
         name: 'Status',
@@ -133,6 +132,7 @@ export default function AdminDebts() {
         type: 'badge',
         colorOptions: { utang: 'red', lunas: 'green' },
       },
+      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
     ],
     listAction: { isNumeric: true, name: 'Action', action: 'details' },
     data: dummyListData,

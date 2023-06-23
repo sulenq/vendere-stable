@@ -9,7 +9,6 @@ import {
   Details,
   PageHeader,
   DetailsModal,
-  InputModal,
 } from '../myComponents';
 import { useWidthResizeListener, detailsReducer } from '../utils.js';
 
@@ -22,112 +21,35 @@ export default function AdminDebts() {
   // Page Datas
   const dummyListData = [
     {
-      debitur: 'Bambang Sueb',
+      status: 'lunas',
       total: 25500,
-      lastTransaction: '2023-02-25T13:55:16.024772+07:00',
-      status: 'utang',
-      cartList: [
-        {
-          id: 27,
-          name: 'Gula Pasir 1kg',
-          code: 'pasir1',
-          price: 14500,
-          qty: 1,
-          totalPrice: 14500,
-          modal: 1000,
-        },
-        {
-          id: 20,
-          name: 'Sedap Ayam Bawang',
-          code: '8998866200318',
-          price: 3500,
-          qty: 2,
-          totalPrice: 7000,
-          modal: 1000,
-        },
-        {
-          id: 124,
-          name: 'Rinso Cair + Molto Royal Gold 38ml',
-          code: '8999999526894',
-          price: 1000,
-          qty: 2,
-          totalPrice: 2000,
-          modal: 0,
-        },
-        {
-          id: 141,
-          name: 'Energen 32g vanilla',
-          code: '8996001440124',
-          price: 2000,
-          qty: 1,
-          totalPrice: 2000,
-          modal: 0,
-        },
-      ],
+      date: '2023-02-25T13:55:16.024772+07:00',
+      category: 'Prive',
+      description: 'ngambil gula 1kg, beras jempol 2kg',
     },
     {
-      debitur: 'Rudi Tabuti',
+      status: 'lunas',
       total: 172500,
-      lastTransaction: '2023-05-25T13:55:16.024772+07:00',
-      status: 'utang',
-      cartList: [
-        {
-          id: 27,
-          name: 'Gula Pasir 1kg',
-          code: 'pasir1',
-          price: 14500,
-          qty: 6,
-          totalPrice: 87000,
-          modal: 1000,
-        },
-        {
-          id: 24,
-          name: 'Telur 1kg',
-          code: 'ndog1',
-          price: 27500,
-          qty: 3,
-          totalPrice: 82500,
-          modal: 1000,
-        },
-        {
-          id: 22,
-          name: 'Aqua 600ml (tanggung)',
-          code: '8886008101053',
-          price: 3000,
-          qty: 1,
-          totalPrice: 3000,
-          modal: 1000,
-        },
-      ],
+      date: '2023-05-25T13:55:16.024772+07:00',
+      category: 'Pembelian',
+      description: '-gula pasir 1 sak\n-beras jempol 10 sak\n-gandum 1 sak',
     },
     {
-      debitur: 'Sutar Kalem',
+      status: 'lunas',
       total: 55000,
-      lastTransaction: '2023-03-25T13:55:16.024772+07:00',
-      status: 'utang',
-      cartList: [
-        {
-          id: 24,
-          name: 'Telur 1kg',
-          code: 'ndog1',
-          price: 27500,
-          qty: 2,
-          totalPrice: 55000,
-          modal: 1000,
-        },
-      ],
+      date: '2023-03-25T13:55:16.024772+07:00',
+      category: 'Penyesuaian Persediaan',
     },
   ];
   const listItems = {
     attributes: [
-      { isNumeric: false, name: 'Debitur', key: 'debitur', type: 'string' },
+      { isNumeric: false, name: 'Date', key: 'date', type: 'date' },
       {
         isNumeric: false,
-        name: 'Last Transaction',
-        key: 'lastTransaction',
-        type: 'date',
+        name: 'Category',
+        key: 'category',
+        type: 'string',
       },
-      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
       {
         isNumeric: true,
         name: 'Status',
@@ -135,6 +57,7 @@ export default function AdminDebts() {
         type: 'badge',
         colorOptions: { utang: 'red', lunas: 'green' },
       },
+      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
     ],
     listAction: { isNumeric: true, name: 'Action', action: 'details' },
     data: dummyListData,
@@ -143,12 +66,27 @@ export default function AdminDebts() {
   const detailsItems = {
     attributes: [
       ...listItems?.attributes,
-      { name: 'Cart List', key: 'cartList', type: 'cartList' },
+      { name: 'Description', key: 'description', type: 'textArea' },
     ],
     data: detailsData,
   };
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const filterItems = [
+    {
+      name: 'Category',
+      type: 'checkbox',
+      items: [
+        { name: 'Pembelian', isChecked: false },
+        { name: 'Beban Angkut', isChecked: false },
+        { name: 'Beban Gaji', isChecked: false },
+        { name: 'Beban Listrik', isChecked: false },
+        { name: 'Beban Sewa', isChecked: false },
+        { name: 'Beban Telepon', isChecked: false },
+        { name: 'Penyesuaian Persediaan', isChecked: false },
+        { name: 'Lain-lain', isChecked: false },
+        { name: 'Prive', isChecked: false },
+      ],
+    },
     {
       name: 'Date Range',
       type: 'date',
@@ -159,12 +97,20 @@ export default function AdminDebts() {
       ],
     },
     {
-      name: 'Total Debt Range',
+      name: 'Total Expense Range',
       type: 'input',
       columns: 2,
       items: [
         { name: 'Min', value: 0 },
         { name: 'Max', value: 0 },
+      ],
+    },
+    {
+      name: 'Status',
+      type: 'checkbox',
+      items: [
+        { name: 'Lunas', isChecked: false },
+        { name: 'Utang', isChecked: false },
       ],
     },
   ];
@@ -176,48 +122,20 @@ export default function AdminDebts() {
     purpose: 'ADD',
     handlePurpose: handleAddData,
     items: [
-      { key: 'code', name: 'Code', type: 'string' },
-      { key: 'name', name: 'Name', type: 'string' },
+      { key: 'date', name: 'Date', type: 'date' },
       {
-        key: 'stock',
-        type: 'stock',
-        name: 'Stock',
-      },
-      { key: 'price', name: 'Price', type: 'price' },
-    ],
-  };
-  const updateItemsAttribute = {
-    title: 'Paying Debt',
-    btnClassName: 'primaryBtn',
-    purpose: 'PAY DEBT',
-    handlePurpose: handleUpdateData,
-    btnW: '100%',
-    items: [
-      { key: 'debitur', name: 'Debitur', type: 'string', readOnly: true },
-      {
-        key: 'lastTransaction',
-        name: 'Last Trans.',
-        type: 'date',
-        readOnly: true,
-      },
-      {
-        key: 'total',
-        type: 'number',
-        name: 'Total (Rp)',
-        readOnly: true,
+        key: 'category',
+        name: 'Category',
+        type: 'selectString',
+        options: filterItems[0]?.items,
       },
       {
         key: 'status',
         name: 'Status',
-        type: 'badge',
-        colorOptions: { utang: 'red', lunas: 'green' },
-        readOnly: true,
+        type: 'selectString',
+        options: [{ name: 'Lunas' }, { name: 'Utang' }],
       },
-      {
-        key: 'payDebt',
-        type: 'payDebt',
-        name: 'Pay Debt (Rp)',
-      },
+      { key: 'date', name: 'Date', type: 'date' },
     ],
   };
 
@@ -233,10 +151,6 @@ export default function AdminDebts() {
     }
   }
   function handleAddData(data) {
-    console.log(JSON.stringify(addItemsAttribute));
-    console.log(data);
-  }
-  function handleUpdateData(data) {
     console.log(data);
   }
 
@@ -259,8 +173,15 @@ export default function AdminDebts() {
           >
             <PageHeader
               title={'Expenses'}
-              // hasBtn
-              // addItemsAttribute={addItemsAttribute}
+              hasBtn
+              initialData={{
+                date: '',
+                category: '',
+                status: '',
+                total: 0,
+                description: '',
+              }}
+              addItemsAttribute={addItemsAttribute}
             />
             <List
               listItems={listItems}
@@ -272,13 +193,6 @@ export default function AdminDebts() {
           {screenWidth < 1200 ? (
             <DetailsModal
               detailsComponent={<Details detailsItems={detailsItems} />}
-              detailsActions={[
-                {
-                  name: 'update',
-                  initialData: detailsData,
-                  itemsAttribute: updateItemsAttribute,
-                },
-              ]}
               detailsModalIsOpen={detailsModalIsOpen}
               setDetailsModalIsOpen={setDetailsModalIsOpen}
             />
@@ -292,14 +206,6 @@ export default function AdminDebts() {
               <VStack w={'100%'} spacing={null} overflow={'auto'}>
                 <PageHeader title={'Details'} />
                 <Details detailsItems={detailsItems} />
-              </VStack>
-              <VStack w={'100%'} spacing={null}>
-                <HStack w={'100%'} spacing={null}>
-                  <InputModal
-                    initialData={{ ...detailsData, payDebt: 0 }}
-                    itemsAttribute={updateItemsAttribute}
-                  />
-                </HStack>
               </VStack>
             </VStack>
           )}
