@@ -705,12 +705,12 @@ const DetailsModal = props => {
                   }
                 })}
             </HStack>
-            {props?.detailsActions[2] ? (
+            {props?.detailsActions?.[2] && (
               <InputModal
                 itemsAttribute={props?.detailsActions[2]?.itemsAttribute}
                 initialData={props?.detailsActions[2]?.initialData}
               />
-            ) : null}
+            )}
           </VStack>
         </ModalFooter>
       </ModalContent>
