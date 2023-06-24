@@ -249,6 +249,7 @@ const Body = () => {
           grow your bussiness
         </span>
       </Text>
+      <Text>This is Demo, Click sign in to see the app interfaces</Text>
     </VStack>
   );
 };

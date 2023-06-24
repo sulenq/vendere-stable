@@ -43,13 +43,13 @@ export default function AdminDebts() {
   ];
   const listItems = {
     attributes: [
-      { isNumeric: false, name: 'Date', key: 'date', type: 'date' },
       {
         isNumeric: false,
         name: 'Category',
         key: 'category',
         type: 'string',
       },
+      { isNumeric: false, name: 'Date', key: 'date', type: 'date' },
       {
         isNumeric: true,
         name: 'Status',
@@ -135,7 +135,7 @@ export default function AdminDebts() {
         type: 'selectString',
         options: [{ name: 'Lunas' }, { name: 'Utang' }],
       },
-      { key: 'date', name: 'Date', type: 'date' },
+      { key: 'total', name: 'Total', type: 'number' },
     ],
   };
 

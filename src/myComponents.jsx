@@ -1063,7 +1063,7 @@ const InputData = props => {
               [item?.valueKey]: e.target.value,
             });
           }}
-          value={item?.initialData[item?.keyValue]}
+          value={item?.initialData[item?.valueKey]}
         />
       );
   }
