@@ -272,6 +272,7 @@ const List = props => {
   const fn = useFormatNumber;
   const rfn = useReverseFormatNumber;
   const filterItems = props?.filterItems;
+  const screenWidth = useWidthResizeListener();
 
   // Component
   const ListFilter = () => {
@@ -349,7 +350,7 @@ const List = props => {
                         </AccordionPanel>
                       </AccordionItem>
                     );
-                  } else if (f?.type === 'input') {
+                  } else if (f?.type === 'number') {
                     return (
                       <AccordionItem key={index}>
                         <AccordionButton className={'acordion'}>
@@ -485,6 +486,46 @@ const List = props => {
                         </AccordionPanel>
                       </AccordionItem>
                     );
+                  } else if (f?.type === 'string') {
+                    return (
+                      <AccordionItem key={index}>
+                        <AccordionButton className={'acordion'}>
+                          <Box as="span" flex="1" textAlign="left">
+                            {f?.name}
+                          </Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel pb={4} className={'acordion'}>
+                          <SimpleGrid columns={f?.columns}>
+                            {f?.items?.map((i, iIndex) => {
+                              return (
+                                <Input
+                                  key={iIndex}
+                                  className={'input'}
+                                  placeholder={i?.name}
+                                  onFocus={e => {
+                                    e.target.select();
+                                  }}
+                                  onChange={e => {
+                                    setFilter(prevState => {
+                                      prevState[index].items[iIndex].value =
+                                        e.target.value;
+                                      return [...prevState];
+                                    });
+                                  }}
+                                  value={filter[index].items[iIndex].value}
+                                />
+                              );
+                            })}
+                          </SimpleGrid>
+                          {f?.hint ? (
+                            <Text fontSize={'sm'} ml={'4px'} opacity={'0.5'}>
+                              {f?.hint}
+                            </Text>
+                          ) : null}
+                        </AccordionPanel>
+                      </AccordionItem>
+                    );
                   } else {
                     return <Text>{`Filter Data '${f?.name}' Invalid`}</Text>;
                   }
@@ -555,15 +596,19 @@ const List = props => {
           <Thead>
             <Tr>
               {props?.listItems?.attributes?.map((a, index) => {
-                return (
-                  <Th
-                    key={index}
-                    px={'16px !important'}
-                    isNumeric={a?.isNumeric}
-                  >
-                    {a?.name}
-                  </Th>
-                );
+                if (screenWidth > 1200 || (screenWidth < 1200 && index < 3)) {
+                  return (
+                    <Th
+                      key={index}
+                      px={'16px !important'}
+                      isNumeric={a?.isNumeric}
+                    >
+                      {a?.name}
+                    </Th>
+                  );
+                } else {
+                  return null;
+                }
               })}
               <Th px={'16px !important'} isNumeric>
                 {props?.listItems?.listAction?.name}
@@ -581,19 +626,26 @@ const List = props => {
                   }}
                 >
                   {props?.listItems?.attributes?.map((a, aIndex) => {
-                    return (
-                      <Td key={aIndex} isNumeric={a?.isNumeric}>
-                        <ReadOnlyData
-                          item={{
-                            valueType: a?.type,
-                            value: d[a?.key],
-                            colorScheme: a?.colorOptions
-                              ? a?.colorOptions[d[a?.key]]
-                              : '',
-                          }}
-                        />
-                      </Td>
-                    );
+                    if (
+                      screenWidth > 1200 ||
+                      (screenWidth < 1200 && aIndex < 3)
+                    ) {
+                      return (
+                        <Td key={aIndex} isNumeric={a?.isNumeric}>
+                          <ReadOnlyData
+                            item={{
+                              valueType: a?.type,
+                              value: d[a?.key],
+                              colorScheme: a?.colorOptions
+                                ? a?.colorOptions[d[a?.key]]
+                                : '',
+                            }}
+                          />
+                        </Td>
+                      );
+                    } else {
+                      return null;
+                    }
                   })}
 
                   <Td isNumeric className={'detailsBtn'}>

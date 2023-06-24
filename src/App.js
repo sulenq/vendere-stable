@@ -7,6 +7,7 @@ import LandingPage from './Routes/LandingPage';
 import AdminProducts from './Routes/AdminProducts';
 import AdminDebts from './Routes/AdminDebts';
 import AdminExpenses from './Routes/AdminExpenses.jsx';
+import AdminReports from './Routes/AdminReports.jsx';
 
 import {
   BrowserRouter,
@@ -73,6 +74,7 @@ function App() {
           <Route path={'/admin/products'} element={<AdminProducts />} />
           <Route path={'/admin/debts'} element={<AdminDebts />} />
           <Route path={'/admin/expenses'} element={<AdminExpenses />} />
+          <Route path={'/admin/reports'} element={<AdminReports />} />
           <Route path={'/cashier'} element={<CashierEndPoint />} />
           <Route path={'*'} element={<NotFound />} />
         </Routes>

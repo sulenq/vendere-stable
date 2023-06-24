@@ -1214,7 +1214,6 @@ function AdminProducts() {
   ];
   const listItems = {
     attributes: [
-      { isNumeric: false, name: 'Code', key: 'code', type: 'string' },
       { isNumeric: false, name: 'Name', key: 'name', type: 'string' },
       {
         isNumeric: true,
@@ -1228,6 +1227,7 @@ function AdminProducts() {
         key: 'price',
         type: 'number',
       },
+      { isNumeric: true, name: 'Code', key: 'code', type: 'string' },
     ],
     listAction: { isNumeric: true, name: 'Action', action: 'details' },
     data: dummyListData,
@@ -1262,14 +1262,14 @@ function AdminProducts() {
     },
     {
       name: 'Supply Limit',
-      type: 'input',
+      type: 'number',
       columns: 1,
       items: [{ name: 'Supply', value: 0 }],
       hint: 'Displays the list with lower supply than the value above',
     },
     {
       name: 'Price Range',
-      type: 'input',
+      type: 'number',
       columns: 2,
       items: [
         { name: 'Min', value: 0 },

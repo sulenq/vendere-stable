@@ -14,7 +14,7 @@ import { useWidthResizeListener, detailsReducer } from '../utils.js';
 
 import { VStack, HStack } from '@chakra-ui/react';
 
-export default function AdminDebts() {
+export default function AdminExpenses() {
   // Page Utils
   const screenWidth = useWidthResizeListener();
 
@@ -50,6 +50,7 @@ export default function AdminDebts() {
         type: 'string',
       },
       { isNumeric: false, name: 'Date', key: 'date', type: 'date' },
+      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
       {
         isNumeric: true,
         name: 'Status',
@@ -57,7 +58,6 @@ export default function AdminDebts() {
         type: 'badge',
         colorOptions: { utang: 'red', lunas: 'green' },
       },
-      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
     ],
     listAction: { isNumeric: true, name: 'Action', action: 'details' },
     data: dummyListData,
@@ -98,7 +98,7 @@ export default function AdminDebts() {
     },
     {
       name: 'Total Expense Range',
-      type: 'input',
+      type: 'number',
       columns: 2,
       items: [
         { name: 'Min', value: 0 },
