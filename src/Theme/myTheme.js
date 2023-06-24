@@ -9,7 +9,7 @@ export const myTheme = extendTheme({
   styles: {
     global: props => ({
       body: {
-        bg: props.colorMode === 'dark' ? '#121214' : 'white',
+        bg: props.colorMode === 'dark' ? '#232324' : 'white',
       },
     }),
   },

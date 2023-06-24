@@ -686,7 +686,11 @@ const DetailsModal = props => {
         <ModalBody p={'0 !important'}>{props.detailsComponent}</ModalBody>
         <ModalFooter className={'modalFooter'}>
           <VStack w={'100%'} spacing={null}>
-            <HStack w={'100%'} h={'50px'} spacing={null}>
+            <HStack
+              w={'100%'}
+              h={props?.detailsActions && '50px'}
+              spacing={null}
+            >
               {props?.detailsActions &&
                 props?.detailsActions?.map((i, index) => {
                   if (index < 2) {
