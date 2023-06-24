@@ -4,7 +4,7 @@ import {
   Nav,
   TopBar,
   List,
-  Details,
+  ReportDetails,
   PageHeader,
   DetailsModal,
 } from '../myComponents';
@@ -20,8 +20,25 @@ export default function AdminReports() {
   const dummyListData = [
     {
       status: 'profit',
-      revenue: 3532500,
-      period: '2023-02-25T13:55:16.024772+07:00',
+      period: 'April 2023',
+      revenue: { penjualan: 35325000, grossRevenue: 35155000 },
+      debt: { piutang: 15000, bebanUtang: 0, totalRevenue: 35005000 },
+      cos: {
+        pembelian: 1485800,
+        bebanAngkut: 0,
+        totalCos: 14858000,
+        grossProfit: 20147000,
+      },
+      expenses: {
+        bebanOperasional: {
+          bebanListrik: 0,
+          bebanSewa: 0,
+          bebanTelepon: 0,
+        },
+        bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
+        totalExpenses: 14858000,
+      },
+      totalProfit: 5289000,
     },
   ];
   const listItems = {
@@ -30,7 +47,7 @@ export default function AdminReports() {
         isNumeric: false,
         name: 'Period',
         key: 'period',
-        type: 'date',
+        type: 'string',
       },
       {
         isNumeric: false,
@@ -41,8 +58,8 @@ export default function AdminReports() {
       },
       {
         isNumeric: true,
-        name: 'Revenue',
-        key: 'revenue',
+        name: 'Gross Revenue',
+        key: 'grossRevenue',
         type: 'number',
       },
     ],
@@ -51,7 +68,72 @@ export default function AdminReports() {
   };
   const [detailsData, dispatch] = useReducer(detailsReducer, {});
   const detailsItems = {
-    attributes: [...listItems?.attributes],
+    attributes: [
+      {
+        name: 'Status',
+        type: 'badge',
+        key: 'status',
+        colorOptions: { profit: 'green', loss: 'red' },
+      },
+      { name: 'Period', type: 'string', key: 'period' },
+      {
+        name: 'Revenue',
+        type: 'objectNumber',
+        key: 'revenue',
+        items: [
+          { name: 'Penjualan', key: 'penjualan' },
+          { name: 'Gross Revenue', key: 'grossRevenue' },
+        ],
+      },
+      {
+        name: 'Debt',
+        type: 'objectNumber',
+        key: 'debt',
+        items: [
+          { name: 'Piutang', key: 'piutang' },
+          { name: 'BebanUtang', key: 'bebanUtang' },
+        ],
+      },
+      {
+        name: 'Cost of Sales',
+        type: 'objectNumber',
+        key: 'cos',
+        items: [
+          { name: 'Pembelian', key: 'pembelian' },
+          { name: 'Beban Angkut', key: 'bebanAngkut' },
+          { name: 'Total Cost of Sales', key: 'totalCos' },
+          { name: 'Gross Profit', key: 'grossProfit' },
+        ],
+      },
+      {
+        name: 'Expenses',
+        type: 'objectNumber',
+        key: 'expenses',
+        items: [
+          {
+            name: 'Beban Operasional',
+            type: 'objectNumber',
+            key: 'bebanOperasional',
+            items: [
+              { name: 'Beban Listrik', key: 'bebanListrik' },
+              { name: 'Beban Sewa', key: 'bebanSewa' },
+              { name: 'Beban Telepon', key: 'bebanTelepon' },
+            ],
+          },
+          {
+            name: 'Beban Lain',
+            type: 'objectNumber',
+            key: 'bebanLain',
+            items: [
+              { name: 'Penyesuaian Persediaan', key: 'penyesuaianPersediaan' },
+              { name: 'Lain-lain', key: 'lainLain' },
+            ],
+          },
+          { name: 'Total Expenses', key: 'totalExpenses', type: 'number' },
+        ],
+      },
+      { name: 'Total Profit', key: 'totalProfit', type: 'number' },
+    ],
     data: detailsData,
   };
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
@@ -128,7 +210,7 @@ export default function AdminReports() {
           </VStack>
           {screenWidth < 1200 ? (
             <DetailsModal
-              detailsComponent={<Details detailsItems={detailsItems} />}
+              detailsComponent={<ReportDetails detailsItems={detailsItems} />}
               detailsModalIsOpen={detailsModalIsOpen}
               setDetailsModalIsOpen={setDetailsModalIsOpen}
             />
@@ -141,7 +223,7 @@ export default function AdminReports() {
             >
               <VStack w={'100%'} spacing={null} overflow={'auto'}>
                 <PageHeader title={'Details'} />
-                <Details detailsItems={detailsItems} />
+                <ReportDetails detailsItems={detailsItems} />
               </VStack>
             </VStack>
           )}

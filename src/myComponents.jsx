@@ -717,6 +717,71 @@ const Details = props => {
   );
 };
 
+const ReportDetails = props => {
+  // status: 'profit',
+  // period: 'April 2023',
+  // revenue: { penjualan: 35325000, grossRevenue: 35155000 },
+  // debt: { piutang: 15000, bebanUtang: 0, totalRevenue: 35005000 },
+  // cos: {
+  //   pembelian: 1485800,
+  //   bebanAngkut: 0,
+  //   totalCos: 14858000,
+  //   grossProfit: 20147000,
+  //   expenses: {
+  //     bebanOperasional: {
+  //       bebanListrik: 0,
+  //       bebanSewa: 0,
+  //       bebanTelepon: 0,
+  //     },
+  //   },
+  //   bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
+  //   totalExpenses: 14858000,
+  // },
+  // totalProfit: 5289000,
+  return (
+    <VStack
+      w={'100%'}
+      spacing={null}
+      alignItems={'flex-start'}
+      overflow={'auto'}
+    >
+      <VStack w={'100%'} spacing={null}>
+        {props?.detailsItems?.attributes?.map((a, index) => {
+          return (
+            <Box
+              key={index}
+              w={'100%'}
+              borderBottom={
+                index !== props?.detailsItems?.attributes?.length - 1
+                  ? '1px solid var(--divider)'
+                  : ''
+              }
+              px={'16px'}
+              py={'12px'}
+              alignItems={'flex-start'}
+            >
+              <Text opacity={0.5}>{a?.name}</Text>
+              {Object.keys(props?.detailsItems?.data).length !== 0 ? ( // <ReadOnlyData
+                //   item={{
+                //     valueType: a?.type,
+                //     value: props?.detailsItems?.data[a?.key],
+                //     colorScheme: a?.colorOptions
+                //       ? a?.colorOptions[props?.detailsItems?.data[a?.key]]
+                //       : '',
+                //   }}
+                // />
+                'Anjay'
+              ) : (
+                <Text opacity={0.5}>Select list first</Text>
+              )}
+            </Box>
+          );
+        })}
+      </VStack>
+    </VStack>
+  );
+};
+
 const DetailsModal = props => {
   return (
     <Modal
@@ -1125,4 +1190,13 @@ const InputData = props => {
   }
 };
 
-export { Nav, TopBar, List, Details, PageHeader, DetailsModal, InputModal };
+export {
+  Nav,
+  TopBar,
+  List,
+  Details,
+  PageHeader,
+  DetailsModal,
+  InputModal,
+  ReportDetails,
+};

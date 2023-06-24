@@ -1227,6 +1227,7 @@ function AdminProducts() {
         key: 'price',
         type: 'number',
       },
+      { isNumeric: false, name: 'Category', key: 'category', type: 'string' },
       { isNumeric: true, name: 'Code', key: 'code', type: 'string' },
     ],
     listAction: { isNumeric: true, name: 'Action', action: 'details' },
