@@ -19,7 +19,7 @@ body,
   --primary-hover: #739df3;
   --primary-active: #5483e1;
   --light-gray: #c7c7c7;
-  --divider: #8b9dba32;
+  --divider: #aec1e032;
 }
 ::selection {
   background-color: #5a8cf0;
@@ -242,6 +242,16 @@ td {
   width: 100%;
   justify-content: space-between;
 }
+
+.profileNav{
+}
+.profileNav:hover {
+  background: var(--primary);
+  color: white !important;
+  transition: 0.2s;
+
+}
+
 @media screen and (max-width: 1200px) {
   * {
     font-size: 13px;

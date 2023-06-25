@@ -22,6 +22,7 @@ export default function AdminReports() {
       status: 'profit',
       period: 'April 2023',
       grossRevenue: 35155000,
+      totalExpense: -14858000,
       revenue: { penjualan: 35325000, grossRevenue: 35155000 },
       debt: { piutang: -15000, bebanUtang: 0, totalRevenue: 35005000 },
       cos: {
@@ -45,6 +46,7 @@ export default function AdminReports() {
       status: 'profit',
       period: 'May 2023',
       grossRevenue: 45155000,
+      totalExpense: -15858000,
       revenue: { penjualan: 45325000, grossRevenue: 45155000 },
       debt: { piutang: -25000, bebanUtang: 0, totalRevenue: 45005000 },
       cos: {
@@ -68,6 +70,7 @@ export default function AdminReports() {
       status: 'loss',
       period: 'June 2023',
       grossRevenue: 25155000,
+      totalExpense: -5858000,
       revenue: { penjualan: 25325000, grossRevenue: 25155000 },
       debt: { piutang: -5000, bebanUtang: -10000, totalRevenue: 25005000 },
       cos: {
@@ -107,6 +110,12 @@ export default function AdminReports() {
         isNumeric: true,
         name: 'Gross Revenue',
         key: 'grossRevenue',
+        type: 'number',
+      },
+      {
+        isNumeric: true,
+        name: 'Total Expense',
+        key: 'totalExpense',
         type: 'number',
       },
     ],

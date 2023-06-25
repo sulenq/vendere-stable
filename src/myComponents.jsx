@@ -65,6 +65,7 @@ import {
   Alert,
   AlertIcon,
   Badge,
+  Avatar,
 } from '@chakra-ui/react';
 
 const Nav = () => {
@@ -85,6 +86,7 @@ const Nav = () => {
     },
     { name: 'Reports', icon: SummarizeOutlinedIcon, link: '/admin/reports' },
   ];
+
   // Nav Mobile
   if (screenWidth < 1200) {
     return (
@@ -177,16 +179,8 @@ const Nav = () => {
           w={'100%'}
           // borderTop={'1px solid var(--divider)'}
         >
-          <Tooltip label={'Profile'} placement={'right'} openDelay={'500'}>
-            <HStack className={'navIconContainer'} spacing={null}>
-              <Icon as={PersonOutlinedIcon} />
-            </HStack>
-          </Tooltip>
-          <Tooltip label={'Sign Out'} placement={'right'} openDelay={'500'}>
-            <HStack className={'navIconContainer'} spacing={null}>
-              <Icon as={LogoutOutlinedIcon} />
-            </HStack>
-          </Tooltip>
+          <ProfileNav navItems={navItems} />
+          <SignOutNav />
         </VStack>
       </VStack>
     );
@@ -1238,6 +1232,177 @@ const InputData = props => {
         />
       );
   }
+};
+
+const SignOutNav = props => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  function signOut() {
+    console.log('signed out');
+    onClose();
+  }
+
+  return (
+    <>
+      <Tooltip label={'Sign Out'} placement={'right'} openDelay={'500'}>
+        <HStack className={'navIconContainer'} onClick={onOpen} spacing={null}>
+          <Icon as={LogoutOutlinedIcon} />
+        </HStack>
+      </Tooltip>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay backdropFilter={'blur(5px)'} />
+        <ModalContent>
+          <ModalHeader>Signing Out</ModalHeader>
+          <ModalBody pb={'24px'}>Finish working? let's take a break</ModalBody>
+          <ModalFooter className={'modalFooter'}>
+            <HStack w={'100%'} h={'50px'} spacing={null}>
+              <Button className={'btn'} onClick={onClose} w={'50%'} h={'100%'}>
+                Close
+              </Button>
+              <Button
+                className={'btn primaryBtn'}
+                onClick={signOut}
+                w={'50%'}
+                h={'100%'}
+              >
+                Sign Out
+              </Button>
+            </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+const ProfileNav = props => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Tooltip label={'Profile'} placement={'right'} openDelay={'500'}>
+        <HStack className={'navIconContainer'} onClick={onOpen} spacing={null}>
+          <Icon as={PersonOutlinedIcon} />
+        </HStack>
+      </Tooltip>
+      <Modal
+        size={'lg'}
+        isOpen={isOpen}
+        onClose={onClose}
+        scrollBehavior={'inside'}
+        isCentered
+      >
+        <ModalOverlay backdropFilter={'blur(5px)'} />
+        <ModalContent
+          className={'modalContent'}
+          maxH={'100vh !important'}
+          mx={'0 !important'}
+        >
+          <ModalCloseButton className={'modalCloseBtn'} />
+          <ModalHeader>Profile</ModalHeader>
+          <ModalBody pb={'24px'}>
+            <VStack maxW={'480px'} mx={'auto'}>
+              <Avatar name="Kios Melati" bg={'primary'} size={'2xl'} />
+              <Text fontSize={'24px'} fontWeight={'bold'}>
+                Kios Melati
+              </Text>
+              <Text>examplemail@email.com</Text>
+              <Badge colorScheme={'purple'}>admin</Badge>
+              <VStack
+                w={'100%'}
+                // bg={'var(--divider)'}
+                alignItems={'flex-start'}
+                spacing={null}
+                mt={'8px'}
+                // border={'1px solid var(--divider)'}
+              >
+                <Text p={'8px 16px'} opacity={'0.5'}>
+                  Main Navigation
+                </Text>
+                {props?.navItems?.map((n, index) => {
+                  return (
+                    <Link
+                      key={index}
+                      as={ReachLink}
+                      textDecoration={'none !important'}
+                      to={n?.link}
+                      w={'100%'}
+                    >
+                      <HStack
+                        w={'100%'}
+                        p={'12px 24px'}
+                        justifyContent={'space-between'}
+                        className={'profileNav'}
+                      >
+                        <Text fontSize={'20px'}>{n?.name}</Text>
+                        <Icon as={n?.icon} />
+                      </HStack>
+                    </Link>
+                  );
+                })}
+              </VStack>
+              {/* <VStack
+                w={'100%'}
+                // bg={'var(--divider)'}
+                alignItems={'flex-start'}
+                spacing={null}
+                mt={'8px'}
+                // border={'1px solid var(--divider)'}
+              >
+                <Text p={'8px 16px'} opacity={'0.5'}>
+                  Other Navigation
+                </Text>
+                {props?.navItems?.map((n, index) => {
+                  return (
+                    <Link
+                      key={index}
+                      as={ReachLink}
+                      textDecoration={'none !important'}
+                      to={n?.link}
+                      w={'100%'}
+                    >
+                      <HStack
+                        w={'100%'}
+                        p={'12px 24px'}
+                        justifyContent={'space-between'}
+                        className={'profileNav'}
+                      >
+                        <Text fontSize={'20px'}>{n?.name}</Text>
+                        <Icon as={n?.icon} />
+                      </HStack>
+                    </Link>
+                  );
+                })}
+              </VStack> */}
+              <VStack w={'100%'}>
+                <Button className={'btn'} w={'100%'} h={'50px'}>
+                  CHANGE PASSWORD
+                </Button>
+                <Button className={'btn'} w={'100%'} h={'50px'}>
+                  SIGN OUT
+                </Button>
+              </VStack>
+            </VStack>
+          </ModalBody>
+          {/* <ModalFooter className={'modalFooter'}>
+            <HStack w={'100%'} h={'50px'} spacing={null}>
+              <Button
+                className={'btn primaryBtn'}
+                onClick={onClose}
+                w={'100%'}
+                h={'100%'}
+              >
+                CLOSE
+              </Button>
+              <Button className={'btn primaryBtn'} w={'50%'} h={'100%'}>
+                Save
+              </Button>
+            </HStack>
+          </ModalFooter> */}
+        </ModalContent>
+      </Modal>
+    </>
+  );
 };
 
 export {
