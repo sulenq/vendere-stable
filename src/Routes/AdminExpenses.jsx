@@ -154,7 +154,7 @@ export default function AdminExpenses() {
   }
 
   return (
-    <HStack id={'appContainer'} pb={screenWidth < 1200 ? '40px' : null}>
+    <HStack id={'appContainer'} pb={screenWidth < 1200 ? '56px' : null}>
       <Nav />
       <VStack id={'contentContainer'}>
         <TopBar />
