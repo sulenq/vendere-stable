@@ -1223,7 +1223,7 @@ function AdminProducts() {
       },
       {
         isNumeric: true,
-        name: 'Price (Rp)',
+        name: 'Price(Rp)',
         key: 'price',
         type: 'number',
       },

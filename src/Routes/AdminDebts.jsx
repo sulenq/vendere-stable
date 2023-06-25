@@ -125,7 +125,7 @@ export default function AdminDebts() {
         key: 'lastTransaction',
         type: 'date',
       },
-      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
+      { isNumeric: true, name: 'Total(Rp)', key: 'total', type: 'number' },
       {
         isNumeric: true,
         name: 'Status',

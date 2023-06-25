@@ -50,7 +50,7 @@ export default function AdminExpenses() {
         type: 'string',
       },
       { isNumeric: false, name: 'Date', key: 'date', type: 'date' },
-      { isNumeric: true, name: 'Total (Rp)', key: 'total', type: 'number' },
+      { isNumeric: true, name: 'Total(Rp)', key: 'total', type: 'number' },
       {
         isNumeric: true,
         name: 'Status',

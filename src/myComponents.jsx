@@ -633,13 +633,9 @@ const List = props => {
                       return (
                         <Td key={aIndex} isNumeric={a?.isNumeric}>
                           <ReadOnlyData
-                            item={{
-                              valueType: a?.type,
-                              value: d[a?.key],
-                              colorScheme: a?.colorOptions
-                                ? a?.colorOptions[d[a?.key]]
-                                : '',
-                            }}
+                            attribute={a}
+                            data={d}
+                            valueKey={a?.key}
                           />
                         </Td>
                       );
@@ -696,19 +692,11 @@ const Details = props => {
               alignItems={'flex-start'}
             >
               <Text opacity={0.5}>{a?.name}</Text>
-              {Object.keys(props?.detailsItems?.data).length !== 0 ? (
-                <ReadOnlyData
-                  item={{
-                    valueType: a?.type,
-                    value: props?.detailsItems?.data[a?.key],
-                    colorScheme: a?.colorOptions
-                      ? a?.colorOptions[props?.detailsItems?.data[a?.key]]
-                      : '',
-                  }}
-                />
-              ) : (
-                <Text opacity={0.5}>Select list first</Text>
-              )}
+              <ReadOnlyData
+                attribute={a}
+                data={props?.detailsItems?.data}
+                valueKey={a?.key}
+              />
             </Box>
           );
         })}
@@ -761,16 +749,8 @@ const ReportDetails = props => {
               alignItems={'flex-start'}
             >
               <Text opacity={0.5}>{a?.name}</Text>
-              {Object.keys(props?.detailsItems?.data).length !== 0 ? ( // <ReadOnlyData
-                //   item={{
-                //     valueType: a?.type,
-                //     value: props?.detailsItems?.data[a?.key],
-                //     colorScheme: a?.colorOptions
-                //       ? a?.colorOptions[props?.detailsItems?.data[a?.key]]
-                //       : '',
-                //   }}
-                // />
-                'Anjay'
+              {Object.keys(props?.detailsItems?.data).length !== 0 ? (
+                <ReadOnlyData item={a} />
               ) : (
                 <Text opacity={0.5}>Select list first</Text>
               )}
@@ -895,8 +875,8 @@ const InputModal = props => {
               p={'24px !important'}
               alignItems={'flex-start'}
             >
-              {props?.itemsAttribute?.items?.map((i, index) => {
-                switch (i?.readOnly) {
+              {props?.itemsAttribute?.items?.map((a, index) => {
+                switch (a?.readOnly) {
                   case true:
                     return (
                       <VStack
@@ -904,15 +884,11 @@ const InputModal = props => {
                         alignItems={'flex-start'}
                         spacing={null}
                       >
-                        <Text opacity={0.5}>{i?.name}</Text>;
+                        <Text opacity={0.5}>{a?.name}</Text>;
                         <ReadOnlyData
-                          item={{
-                            valueType: i?.type,
-                            value: data[i?.key],
-                            colorScheme: i?.colorOptions
-                              ? i?.colorOptions[data[i?.key]]
-                              : null,
-                          }}
+                          attribute={a}
+                          data={props?.initialData}
+                          valueKey={a?.key}
                         />
                       </VStack>
                     );
@@ -924,17 +900,20 @@ const InputModal = props => {
                         alignItems={'flex-start'}
                         spacing={null}
                       >
-                        <Text opacity={0.5}>{i?.name}</Text>;
+                        <Text opacity={0.5}>{a?.name}</Text>;
                         <InputData
                           key={index}
+                          // attribute={a}
+                          // initialData={props?.initialData}
+                          // valueKey={a?.key}
                           item={{
                             initialData: data,
-                            valueType: i?.type,
-                            valueKey: i?.key,
-                            value: data[i?.key],
-                            placeholder: i?.name,
+                            valueType: a?.type,
+                            valueKey: a?.key,
+                            value: data[a?.key],
+                            placeholder: a?.name,
                             onInput: setData,
-                            options: i?.options && i?.options,
+                            options: a?.options && a?.options,
                           }}
                         />
                       </VStack>
@@ -990,20 +969,27 @@ const ReadOnlyData = props => {
   const dateFormat = useIdDateFormat();
 
   // Datas
-  const item = props?.item;
+  const attribute = props?.attribute;
+  const data = props?.data;
+  const key = props?.valueKey;
+  // console.log(data);
 
-  switch (item?.valueType) {
+  switch (attribute?.type) {
     case 'number':
-      return <Text>{fn(item?.value)}</Text>;
+      return <Text>{fn(data?.[key])}</Text>;
     case 'date':
-      const date = new Date(item?.value);
+      const date = new Date(data?.[key]);
       return <Text>{date?.toLocaleDateString('id-ID', dateFormat)}</Text>;
     case 'badge':
-      return <Badge colorScheme={item?.colorScheme}>{item?.value}</Badge>;
+      return (
+        <Badge colorScheme={attribute?.colorOptions?.[data?.[key]]}>
+          {data?.[key]}
+        </Badge>
+      );
     case 'cartList':
       return (
         <VStack w={'100%'} alignItems={'flex-start'}>
-          {item?.value?.map((d, index) => {
+          {data?.[key]?.map((d, index) => {
             return (
               <VStack
                 key={index}
@@ -1025,7 +1011,7 @@ const ReadOnlyData = props => {
         </VStack>
       );
     case 'textArea':
-      const text = item?.value;
+      const text = data?.[key];
       const lines = text?.split('\n');
       if (text) {
         return lines?.map((line, index) => {
@@ -1039,9 +1025,11 @@ const ReadOnlyData = props => {
       } else {
         return <Text>-</Text>;
       }
-
+    case 'objectNumber':
+      // console.log(item);
+      return null;
     default:
-      return <Text>{item?.value}</Text>;
+      return <Text>{data?.[key]}</Text>;
   }
 };
 
