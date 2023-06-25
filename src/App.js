@@ -71,11 +71,12 @@ function App() {
         <Routes>
           <Route path={'/'} element={<LandingPage />} />
           <Route path={'/admin'} element={<AdminEndPoint />} />
-          <Route path={'/admin/products'} element={<AdminProducts />} />
-          <Route path={'/admin/debts'} element={<AdminDebts />} />
-          <Route path={'/admin/expenses'} element={<AdminExpenses />} />
-          <Route path={'/admin/reports'} element={<AdminReports />} />
-          <Route path={'/cashier'} element={<CashierEndPoint />} />
+          <Route path={'/admin/products/'} element={<AdminProducts />} />
+          <Route path={'/admin/debts/'} element={<AdminDebts />} />
+          <Route path={'/admin/expenses/'} element={<AdminExpenses />} />
+          <Route path={'/admin/reports/'} element={<AdminReports />} />
+          <Route path={'/cashier/'} element={<CashierEndPoint />} />
+          <Route path={'/cashier/cashiering/'} element={<CashierEndPoint />} />
           <Route path={'*'} element={<NotFound />} />
         </Routes>
       </ChakraProvider>
