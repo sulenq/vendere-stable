@@ -232,6 +232,16 @@ td {
   background: var(--primary);
   color: white;
 }
+.reportDetailsItem {
+  width: 100%;
+  border-bottom: 1px solid var(--divider);
+  padding: 12px 16px;
+  align-items: flex-start;
+}
+.reportDetailsItemValue {
+  width: 100%;
+  justify-content: space-between;
+}
 @media screen and (max-width: 1200px) {
   * {
     font-size: 13px;

@@ -21,12 +21,13 @@ export default function AdminReports() {
     {
       status: 'profit',
       period: 'April 2023',
+      grossRevenue: 35155000,
       revenue: { penjualan: 35325000, grossRevenue: 35155000 },
-      debt: { piutang: 15000, bebanUtang: 0, totalRevenue: 35005000 },
+      debt: { piutang: -15000, bebanUtang: 0, totalRevenue: 35005000 },
       cos: {
-        pembelian: 1485800,
+        pembelian: -1485800,
         bebanAngkut: 0,
-        totalCos: 14858000,
+        totalCos: -14858000,
         grossProfit: 20147000,
       },
       expenses: {
@@ -36,9 +37,55 @@ export default function AdminReports() {
           bebanTelepon: 0,
         },
         bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
-        totalExpenses: 14858000,
+        totalExpenses: -14858000,
       },
       totalProfit: 5289000,
+    },
+    {
+      status: 'profit',
+      period: 'May 2023',
+      grossRevenue: 45155000,
+      revenue: { penjualan: 45325000, grossRevenue: 45155000 },
+      debt: { piutang: -25000, bebanUtang: 0, totalRevenue: 45005000 },
+      cos: {
+        pembelian: -1585800,
+        bebanAngkut: 0,
+        totalCos: -15858000,
+        grossProfit: 29147000,
+      },
+      expenses: {
+        bebanOperasional: {
+          bebanListrik: 0,
+          bebanSewa: 0,
+          bebanTelepon: 0,
+        },
+        bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
+        totalExpenses: -15858000,
+      },
+      totalProfit: 13289000,
+    },
+    {
+      status: 'loss',
+      period: 'June 2023',
+      grossRevenue: 25155000,
+      revenue: { penjualan: 25325000, grossRevenue: 25155000 },
+      debt: { piutang: -5000, bebanUtang: -10000, totalRevenue: 25005000 },
+      cos: {
+        pembelian: -1385800,
+        bebanAngkut: -100000,
+        totalCos: -4858000,
+        grossProfit: 3147000,
+      },
+      expenses: {
+        bebanOperasional: {
+          bebanListrik: -100000,
+          bebanSewa: -200000,
+          bebanTelepon: -300000,
+        },
+        bebanLain: { penyesuaianPersediaan: -400000, lainLain: -500000 },
+        totalExpenses: -5858000,
+      },
+      totalProfit: -2005000,
     },
   ];
   const listItems = {
@@ -138,37 +185,31 @@ export default function AdminReports() {
   };
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const filterItems = [
-    // {
-    //   name: 'Profit/Loss',
-    //   type: 'selectString',
-    //   columns: 1,
-    //   options: ['Profit', 'Loss'],
-    // },
     {
       name: 'Year',
       type: 'string',
       columns: 1,
       items: [{ name: 'Year', value: '' }],
     },
-    // {
-    //   name: 'Month',
-    //   type: 'selectString',
-    //   columns: 1,
-    //   options: [
-    //     'Januari',
-    //     'Februari',
-    //     'Maret',
-    //     'April',
-    //     'Mei',
-    //     'Juni',
-    //     'Juli',
-    //     'Agustus',
-    //     'September',
-    //     'Oktober',
-    //     'November',
-    //     'Desember',
-    //   ],
-    // },
+    {
+      name: 'Month',
+      type: 'checkbox',
+      items: [
+        { name: 'Januari', isChecked: false },
+        { name: 'Februari', isChecked: false },
+        { name: 'Maret', isChecked: false },
+        { name: 'April', isChecked: false },
+        { name: 'Mei', isChecked: false },
+        { name: 'Juni', isChecked: false },
+        { name: 'Juli', isChecked: false },
+        { name: 'Agustus', isChecked: false },
+        { name: 'September', isChecked: false },
+        { name: 'Agustus', isChecked: false },
+        { name: 'Oktober', isChecked: false },
+        { name: 'November', isChecked: false },
+        { name: 'Desember', isChecked: false },
+      ],
+    },
   ];
 
   // Page Functions

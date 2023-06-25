@@ -22,21 +22,21 @@ export default function AdminExpenses() {
   const dummyListData = [
     {
       status: 'lunas',
-      total: 25500,
+      total: -25500,
       date: '2023-02-25T13:55:16.024772+07:00',
-      category: 'Prive',
+      category: 'Lain-Lain',
       description: 'ngambil gula 1kg, beras jempol 2kg',
     },
     {
       status: 'lunas',
-      total: 172500,
+      total: -172500,
       date: '2023-05-25T13:55:16.024772+07:00',
       category: 'Pembelian',
       description: '-gula pasir 1 sak\n-beras jempol 10 sak\n-gandum 1 sak',
     },
     {
       status: 'lunas',
-      total: 55000,
+      total: -55000,
       date: '2023-03-25T13:55:16.024772+07:00',
       category: 'Penyesuaian Persediaan',
     },
@@ -122,7 +122,6 @@ export default function AdminExpenses() {
     purpose: 'ADD',
     handlePurpose: handleAddData,
     items: [
-      { key: 'date', name: 'Date', type: 'date' },
       {
         key: 'category',
         name: 'Category',

@@ -706,26 +706,12 @@ const Details = props => {
 };
 
 const ReportDetails = props => {
-  // status: 'profit',
-  // period: 'April 2023',
-  // revenue: { penjualan: 35325000, grossRevenue: 35155000 },
-  // debt: { piutang: 15000, bebanUtang: 0, totalRevenue: 35005000 },
-  // cos: {
-  //   pembelian: 1485800,
-  //   bebanAngkut: 0,
-  //   totalCos: 14858000,
-  //   grossProfit: 20147000,
-  //   expenses: {
-  //     bebanOperasional: {
-  //       bebanListrik: 0,
-  //       bebanSewa: 0,
-  //       bebanTelepon: 0,
-  //     },
-  //   },
-  //   bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
-  //   totalExpenses: 14858000,
-  // },
-  // totalProfit: 5289000,
+  // Utils
+  const fn = useFormatNumber;
+
+  // Datas
+  const data = props?.detailsItems?.data;
+
   return (
     <VStack
       w={'100%'}
@@ -734,35 +720,115 @@ const ReportDetails = props => {
       overflow={'auto'}
     >
       <VStack w={'100%'} spacing={null}>
-        {props?.detailsItems?.attributes?.map((a, index) => {
-          return (
-            <Box
-              key={index}
-              w={'100%'}
-              borderBottom={
-                index !== props?.detailsItems?.attributes?.length - 1
-                  ? '1px solid var(--divider)'
-                  : ''
-              }
-              px={'16px'}
-              py={'12px'}
-              alignItems={'flex-start'}
-            >
-              <Text opacity={0.5}>{a?.name}</Text>
-              {Object.keys(props?.detailsItems?.data).length !== 0 ? (
-                <ReadOnlyData item={a} />
-              ) : (
-                <Text opacity={0.5}>Select list first</Text>
-              )}
-            </Box>
-          );
-        })}
+        <Box className={'reportDetailsItem'}>
+          <Text opacity={0.5}>Status</Text>
+          <Badge colorScheme={data?.status === 'profit' ? 'green' : 'red'}>
+            {data?.status}
+          </Badge>
+        </Box>
+        <Box className={'reportDetailsItem'}>
+          <Text opacity={0.5}>Period</Text>
+          <Text>{data?.period}</Text>
+        </Box>
+        <Box className={'reportDetailsItem'}>
+          <Text opacity={0.5}>Revenue</Text>
+          <HStack w={'100%'} justifyContent={'space-between'}>
+            <Text>Penjualan</Text>
+            <Text>{fn(data?.revenue?.penjualan) || 0}</Text>
+          </HStack>
+          <HStack w={'100%'} justifyContent={'space-between'}>
+            <Text>Gross Revenue</Text>
+            <Text>{fn(data?.revenue?.grossRevenue) || 0}</Text>
+          </HStack>
+        </Box>
+        <Box className={'reportDetailsItem'}>
+          <Text opacity={0.5}>Debt</Text>
+          <HStack w={'100%'} justifyContent={'space-between'}>
+            <Text>Piutang</Text>
+            <Text>{fn(data?.debt?.piutang) || 0}</Text>
+          </HStack>
+          <HStack w={'100%'} justifyContent={'space-between'}>
+            <Text>Beban Utang</Text>
+            <Text>{fn(data?.debt?.bebanUtang) || 0}</Text>
+          </HStack>
+        </Box>
+        <Box className={'reportDetailsItem'}>
+          <Text opacity={0.5}>Cost of Sales</Text>
+          <HStack className={'reportDetailsItemValue'}>
+            <Text>Pembelian</Text>
+            <Text>{fn(data?.cos?.pembelian) || 0}</Text>
+          </HStack>
+          <HStack className={'reportDetailsItemValue'}>
+            <Text>Beban Angkut</Text>
+            <Text>{fn(data?.cos?.bebanAngkut) || 0}</Text>
+          </HStack>
+          <HStack className={'reportDetailsItemValue'}>
+            <Text>Total Cost of Sales</Text>
+            <Text>{fn(data?.cos?.totalCos) || 0}</Text>
+          </HStack>
+          <HStack className={'reportDetailsItemValue'}>
+            <Text>Gross Profit</Text>
+            <Text>{fn(data?.cos?.grossProfit) || 0}</Text>
+          </HStack>
+        </Box>
+        <Box className={'reportDetailsItem'}>
+          <Text opacity={0.5}>Expenditure</Text>
+          <Box>
+            <Text>Beban Operasional</Text>
+            <HStack className={'reportDetailsItemValue'} pl={'16px'}>
+              <Text>Beban Listrik</Text>
+              <Text>
+                {fn(data?.expenses?.bebanOperasional?.bebanListrik) || 0}
+              </Text>
+            </HStack>
+            <HStack className={'reportDetailsItemValue'} pl={'16px'}>
+              <Text>Beban Sewa</Text>
+              <Text>
+                {fn(data?.expenses?.bebanOperasional?.bebanSewa) || 0}
+              </Text>
+            </HStack>
+            <HStack className={'reportDetailsItemValue'} pl={'16px'}>
+              <Text>Beban Telepon</Text>
+              <Text>
+                {fn(data?.expenses?.bebanOperasional?.bebanTelepon) || 0}
+              </Text>
+            </HStack>
+          </Box>
+          <Box>
+            <Text>Beban Lain</Text>
+            <HStack className={'reportDetailsItemValue'} pl={'16px'}>
+              <Text>Penyesuaian Persediaan</Text>
+              <Text>
+                {fn(data?.expenses?.bebanLain?.penyesuaianPersediaan) || 0}
+              </Text>
+            </HStack>
+          </Box>
+          <HStack className={'reportDetailsItemValue'}>
+            <Text>Total Expenses</Text>
+            <Text>{fn(data?.expenses?.totalExpenses) || 0}</Text>
+          </HStack>
+        </Box>
+        <Box className={'reportDetailsItem'} borderBottom={'none'} pb={'16px'}>
+          <Text opacity={0.5}>Total Profit</Text>
+          <Badge
+            w={'100%'}
+            fontSize={'md'}
+            colorScheme={data?.status === 'profit' ? 'green' : 'red'}
+          >
+            <HStack className={'reportDetailsItemValue'}>
+              <Text>Profit/Loss</Text>
+              <Text>{fn(data?.totalProfit) || 0}</Text>
+            </HStack>
+          </Badge>
+        </Box>
       </VStack>
     </VStack>
   );
 };
 
 const DetailsModal = props => {
+  const modalContent = useRef();
+
   return (
     <Modal
       isOpen={props.detailsModalIsOpen}
@@ -771,11 +837,11 @@ const DetailsModal = props => {
         props.setDetailsModalIsOpen(false);
       }}
       scrollBehavior={'inside'}
-      initialFocusRef={null}
+      initialFocusRef={modalContent}
       isCentered
     >
       <ModalOverlay backdropFilter={'blur(5px)'} />
-      <ModalContent className={'modalContent'}>
+      <ModalContent ref={modalContent} className={'modalContent'}>
         <ModalCloseButton className={'modalCloseBtn'} />
         <ModalHeader className={'modalHeader'}>
           <Text fontSize={'20px'}>Details</Text>
@@ -972,7 +1038,6 @@ const ReadOnlyData = props => {
   const attribute = props?.attribute;
   const data = props?.data;
   const key = props?.valueKey;
-  // console.log(data);
 
   switch (attribute?.type) {
     case 'number':
@@ -1025,9 +1090,6 @@ const ReadOnlyData = props => {
       } else {
         return <Text>-</Text>;
       }
-    case 'objectNumber':
-      // console.log(item);
-      return null;
     default:
       return <Text>{data?.[key]}</Text>;
   }
@@ -1159,7 +1221,7 @@ const InputData = props => {
       );
     case 'date':
       return (
-        <Input className={'input'} placeholder={'Date'} type="datetime-local" />
+        <Input className={'input'} placeholder={'Date'} type="date-local" />
       );
     default:
       return (

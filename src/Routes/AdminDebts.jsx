@@ -21,7 +21,7 @@ export default function AdminDebts() {
   const dummyListData = [
     {
       debitur: 'Bambang Sueb',
-      total: 25500,
+      total: -25500,
       lastTransaction: '2023-02-25T13:55:16.024772+07:00',
       status: 'utang',
       cartList: [
@@ -65,7 +65,7 @@ export default function AdminDebts() {
     },
     {
       debitur: 'Rudi Tabuti',
-      total: 172500,
+      total: -172500,
       lastTransaction: '2023-05-25T13:55:16.024772+07:00',
       status: 'utang',
       cartList: [
@@ -100,7 +100,7 @@ export default function AdminDebts() {
     },
     {
       debitur: 'Sutar Kalem',
-      total: 55000,
+      total: -55000,
       lastTransaction: '2023-03-25T13:55:16.024772+07:00',
       status: 'utang',
       cartList: [
