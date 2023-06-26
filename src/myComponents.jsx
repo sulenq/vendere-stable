@@ -12,7 +12,7 @@ import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ViewInArOutlinedIcon from '@mui/icons-material/ViewInArOutlined';
+// import ViewInArOutlinedIcon from '@mui/icons-material/ViewInArOutlined';
 
 import { ColorModeSwitcher } from './ColorModeSwitcher.js';
 import {
@@ -88,7 +88,7 @@ const Nav = () => {
   ];
 
   // Nav Mobile
-  if (screenWidth < 1200) {
+  if (screenWidth < 1000) {
     return (
       <HStack className={'navMobile'} spacing={null}>
         {navItems?.map((n, index) => {
@@ -115,19 +115,7 @@ const Nav = () => {
             </Tooltip>
           );
         })}
-        <Tooltip label={'Profile'} placement={'top'} openDelay={'500'}>
-          <Box
-            className={
-              activeNav === 'profile'
-                ? 'navIconContainer primaryBtn'
-                : 'navIconContainer'
-            }
-          >
-            <HStack justifyContent={'center'}>
-              <Icon as={PersonOutlinedIcon} />
-            </HStack>
-          </Box>
-        </Tooltip>
+        <Profile navItems={navItems} />
       </HStack>
     );
     // Nav
@@ -179,7 +167,7 @@ const Nav = () => {
           w={'100%'}
           // borderTop={'1px solid var(--divider)'}
         >
-          <ProfileNav navItems={navItems} />
+          <Profile navItems={navItems} at={'nav'} />
           <SignOutNav />
         </VStack>
       </VStack>
@@ -195,11 +183,11 @@ const TopBar = () => {
   const date = new Date();
   const options = useIdDateFormat();
   const formattedDate = date.toLocaleDateString('id-ID', options);
-  const [isScannerOn, setIsScannerOn] = useState(false);
+  // const [isScannerOn, setIsScannerOn] = useState(false);
 
   return (
     <HStack w={'100%'} justifyContent={'space-between'}>
-      {screenWidth < 1200 ? (
+      {screenWidth < 1000 ? (
         <Box p={'8px 16px'}>
           <Link as={ReachLink} to={'/'}>
             <Image src={'../logo.png'} w={'16px'} mx={'auto !important'} />
@@ -216,7 +204,7 @@ const TopBar = () => {
         >
           <Icon as={RefreshOutlinedIcon} />
         </Button>
-        <Button
+        {/* <Button
           onClick={() => {
             setIsScannerOn(!isScannerOn);
           }}
@@ -227,7 +215,7 @@ const TopBar = () => {
           px={'16px !Important'}
         >
           <Icon as={ViewInArOutlinedIcon} />
-        </Button>
+        </Button> */}
       </HStack>
     </HStack>
   );
@@ -590,7 +578,7 @@ const List = props => {
           <Thead>
             <Tr>
               {props?.listItems?.attributes?.map((a, index) => {
-                if (screenWidth > 1200 || (screenWidth < 1200 && index < 3)) {
+                if (screenWidth > 1000 || (screenWidth < 1000 && index < 3)) {
                   return (
                     <Th
                       key={index}
@@ -621,8 +609,8 @@ const List = props => {
                 >
                   {props?.listItems?.attributes?.map((a, aIndex) => {
                     if (
-                      screenWidth > 1200 ||
-                      (screenWidth < 1200 && aIndex < 3)
+                      screenWidth > 1000 ||
+                      (screenWidth < 1000 && aIndex < 3)
                     ) {
                       return (
                         <Td key={aIndex} isNumeric={a?.isNumeric}>
@@ -664,7 +652,7 @@ const Details = props => {
           <Image
             src={'../img/noImage.jpg'}
             w={'100%'}
-            h={'400px !Important'}
+            h={'320px !Important'}
             objectFit={'cover'}
             borderBottom={'1px solid var(--divider)'}
           />
@@ -1251,8 +1239,8 @@ const SignOutNav = props => {
       </Tooltip>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay backdropFilter={'blur(5px)'} />
-        <ModalContent>
-          <ModalHeader>Signing Out</ModalHeader>
+        <ModalContent className={'modalContent'}>
+          <ModalHeader className={'modalHeader'}>Signing Out</ModalHeader>{' '}
           <ModalBody pb={'24px'}>Finish working? let's take a break</ModalBody>
           <ModalFooter className={'modalFooter'}>
             <HStack w={'100%'} h={'50px'} spacing={null}>
@@ -1275,7 +1263,54 @@ const SignOutNav = props => {
   );
 };
 
-const ProfileNav = props => {
+const SignOutProfile = props => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  function signOut() {
+    console.log('signed out');
+    onClose();
+  }
+
+  return (
+    <>
+      <Tooltip label={'Sign Out'} placement={'right'} openDelay={'500'}>
+        <Button
+          className={'btn'}
+          leftIcon={<LogoutOutlinedIcon />}
+          onClick={onOpen}
+          w={'100%'}
+          h={'50px'}
+        >
+          SIGN OUT
+        </Button>
+      </Tooltip>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay backdropFilter={'blur(5px)'} />
+        <ModalContent className={'modalContent'}>
+          <ModalHeader className={'modalHeader'}>Signing Out</ModalHeader>
+          <ModalBody pb={'24px'}>Finish working? let's take a break</ModalBody>
+          <ModalFooter className={'modalFooter'}>
+            <HStack w={'100%'} h={'50px'} spacing={null}>
+              <Button className={'btn'} onClick={onClose} w={'50%'} h={'100%'}>
+                Close
+              </Button>
+              <Button
+                className={'btn primaryBtn'}
+                onClick={signOut}
+                w={'50%'}
+                h={'100%'}
+              >
+                Sign Out
+              </Button>
+            </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+const Profile = props => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -1296,10 +1331,10 @@ const ProfileNav = props => {
         <ModalContent
           className={'modalContent'}
           maxH={'100vh !important'}
-          mx={'0 !important'}
+          m={'0 !important'}
         >
           <ModalCloseButton className={'modalCloseBtn'} />
-          <ModalHeader>Profile</ModalHeader>
+          <ModalHeader className={'modalHeader'}>Profile</ModalHeader>
           <ModalBody pb={'24px'}>
             <VStack maxW={'480px'} mx={'auto'}>
               <Avatar name="Kios Melati" bg={'primary'} size={'2xl'} />
@@ -1330,75 +1365,25 @@ const ProfileNav = props => {
                     >
                       <HStack
                         w={'100%'}
-                        p={'12px 24px'}
+                        p={'12px 16px'}
                         justifyContent={'space-between'}
                         className={'profileNav'}
                       >
-                        <Text fontSize={'20px'}>{n?.name}</Text>
+                        <Text fontSize={'18px'}>{n?.name}</Text>
                         <Icon as={n?.icon} />
                       </HStack>
                     </Link>
                   );
                 })}
               </VStack>
-              {/* <VStack
-                w={'100%'}
-                // bg={'var(--divider)'}
-                alignItems={'flex-start'}
-                spacing={null}
-                mt={'8px'}
-                // border={'1px solid var(--divider)'}
-              >
-                <Text p={'8px 16px'} opacity={'0.5'}>
-                  Other Navigation
-                </Text>
-                {props?.navItems?.map((n, index) => {
-                  return (
-                    <Link
-                      key={index}
-                      as={ReachLink}
-                      textDecoration={'none !important'}
-                      to={n?.link}
-                      w={'100%'}
-                    >
-                      <HStack
-                        w={'100%'}
-                        p={'12px 24px'}
-                        justifyContent={'space-between'}
-                        className={'profileNav'}
-                      >
-                        <Text fontSize={'20px'}>{n?.name}</Text>
-                        <Icon as={n?.icon} />
-                      </HStack>
-                    </Link>
-                  );
-                })}
-              </VStack> */}
               <VStack w={'100%'}>
                 <Button className={'btn'} w={'100%'} h={'50px'}>
                   CHANGE PASSWORD
                 </Button>
-                <Button className={'btn'} w={'100%'} h={'50px'}>
-                  SIGN OUT
-                </Button>
+                <SignOutProfile />
               </VStack>
             </VStack>
           </ModalBody>
-          {/* <ModalFooter className={'modalFooter'}>
-            <HStack w={'100%'} h={'50px'} spacing={null}>
-              <Button
-                className={'btn primaryBtn'}
-                onClick={onClose}
-                w={'100%'}
-                h={'100%'}
-              >
-                CLOSE
-              </Button>
-              <Button className={'btn primaryBtn'} w={'50%'} h={'100%'}>
-                Save
-              </Button>
-            </HStack>
-          </ModalFooter> */}
         </ModalContent>
       </Modal>
     </>

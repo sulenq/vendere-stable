@@ -193,7 +193,7 @@ const Header = () => {
     <HStack className={'wrapper'}>
       <HStack className={'container'}>
         <HStack spacing={null} w={'100%'} justifyContent={'space-between'}>
-          {screenWidth < 1200 ? (
+          {screenWidth < 1000 ? (
             <VStack
               spacing={null}
               alignItems={'flex-start'}

@@ -227,14 +227,14 @@ export default function AdminReports() {
       type: 'select',
       selectedListData: selectedListData,
     });
-    if (screenWidth < 1200) {
+    if (screenWidth < 1000) {
       // console.log('open Details Modal');
       setDetailsModalIsOpen(true);
     }
   }
 
   return (
-    <HStack id={'appContainer'} pb={screenWidth < 1200 ? '56px' : null}>
+    <HStack id={'appContainer'} pb={screenWidth < 1000 ? '56px' : null}>
       <Nav />
       <VStack id={'contentContainer'}>
         <TopBar />
@@ -243,9 +243,9 @@ export default function AdminReports() {
             id={'listSection'}
             w={
               Object.keys(detailsData).length !== 0
-                ? screenWidth < 1200
+                ? screenWidth < 1000
                   ? '100%'
-                  : 'calc(100% - 400px)'
+                  : 'calc(100% - 320px)'
                 : '100%'
             }
             // w={'100%'}
@@ -258,7 +258,7 @@ export default function AdminReports() {
               selectList={handleSelectList}
             />
           </VStack>
-          {screenWidth < 1200 ? (
+          {screenWidth < 1000 ? (
             <DetailsModal
               detailsComponent={<ReportDetails detailsItems={detailsItems} />}
               detailsModalIsOpen={detailsModalIsOpen}

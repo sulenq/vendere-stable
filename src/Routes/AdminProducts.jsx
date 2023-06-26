@@ -1410,7 +1410,7 @@ function AdminProducts() {
       type: 'select',
       selectedListData: selectedListData,
     });
-    if (screenWidth < 1200) {
+    if (screenWidth < 1000) {
       // console.log('open Details Modal');
       setDetailsModalIsOpen(true);
     }
@@ -1434,7 +1434,7 @@ function AdminProducts() {
   }
 
   return (
-    <HStack id={'appContainer'} pb={screenWidth < 1200 ? '56px' : null}>
+    <HStack id={'appContainer'} pb={screenWidth < 1000 ? '56px' : null}>
       <Nav />
       <VStack id={'contentContainer'}>
         <TopBar />
@@ -1443,9 +1443,9 @@ function AdminProducts() {
             id={'listSection'}
             w={
               Object.keys(detailsData).length !== 0
-                ? screenWidth < 1200
+                ? screenWidth < 1000
                   ? '100%'
-                  : 'calc(100% - 400px)'
+                  : 'calc(100% - 320px)'
                 : '100%'
             }
           >
@@ -1471,7 +1471,7 @@ function AdminProducts() {
             />
           </VStack>
 
-          {screenWidth < 1200 ? (
+          {screenWidth < 1000 ? (
             <DetailsModal
               detailsComponent={
                 <Details detailsItems={detailsItems} hasImage />
