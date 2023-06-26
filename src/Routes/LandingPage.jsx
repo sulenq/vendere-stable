@@ -174,7 +174,17 @@ const SignIn = () => {
               h={'inherit'}
               className={'btn primaryBtn'}
               onClick={() => {
-                navigate('/admin');
+                switch (signInData?.role) {
+                  case 'admin':
+                    navigate('/admin');
+                    break;
+                  case 'cashier':
+                    navigate('/cashier');
+                    break;
+                  default:
+                    console.log('invalid sign in role');
+                    break;
+                }
               }}
             >
               SIGN IN

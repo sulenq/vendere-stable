@@ -1,7 +1,7 @@
 import { useReducer, useState } from 'react';
 
 import {
-  Nav,
+  AdminNav,
   TopBar,
   List,
   Details,
@@ -218,7 +218,7 @@ export default function AdminDebts() {
 
   return (
     <HStack id={'appContainer'} pb={screenWidth < 1000 ? '56px' : null}>
-      <Nav />
+      <AdminNav />
       <VStack id={'contentContainer'}>
         <TopBar />
         <HStack id={'mainContent'}>

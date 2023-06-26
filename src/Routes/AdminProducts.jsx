@@ -3,7 +3,7 @@ import { useReducer, useState, useEffect } from 'react';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 import {
-  Nav,
+  AdminNav,
   TopBar,
   List,
   Details,
@@ -1435,7 +1435,7 @@ function AdminProducts() {
 
   return (
     <HStack id={'appContainer'} pb={screenWidth < 1000 ? '56px' : null}>
-      <Nav />
+      <AdminNav />
       <VStack id={'contentContainer'}>
         <TopBar />
         <HStack id={'mainContent'}>

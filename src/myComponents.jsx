@@ -68,7 +68,7 @@ import {
   Avatar,
 } from '@chakra-ui/react';
 
-const Nav = () => {
+const AdminNav = () => {
   // Utils
   const screenWidth = useWidthResizeListener();
   const currentUrl = useLocation();
@@ -87,7 +87,7 @@ const Nav = () => {
     { name: 'Reports', icon: SummarizeOutlinedIcon, link: '/admin/reports' },
   ];
 
-  // Nav Mobile
+  // AdminNav Mobile
   if (screenWidth < 1000) {
     return (
       <HStack className={'navMobile'} spacing={null}>
@@ -118,7 +118,114 @@ const Nav = () => {
         <Profile navItems={navItems} />
       </HStack>
     );
-    // Nav
+    // AdminNav
+  } else {
+    return (
+      <VStack
+        id={'nav'}
+        className={'nav'}
+        spacing={null}
+        justifyContent={'space-between'}
+        overflow={'auto'}
+      >
+        <Tooltip label={'Landing Page'} placement={'right'} openDelay={'500'}>
+          <HStack
+            className={'navIconContainer'}
+            // borderBottom={'1px solid var(--divider)'}
+          >
+            <Link as={ReachLink} to={'/'} w={'100%'}>
+              <Image src={'../logo.png'} w={'28px'} mx={'auto !important'} />
+            </Link>
+          </HStack>
+        </Tooltip>
+        <VStack w={'100%'} spacing={null} overflow={'auto'}>
+          {navItems?.map((n, index) => {
+            return (
+              <Tooltip
+                key={index}
+                label={n?.name}
+                placement={'right'}
+                openDelay={'500'}
+              >
+                <Link
+                  as={ReachLink}
+                  to={n?.link}
+                  className={
+                    activeNav === n?.name?.toLowerCase()
+                      ? 'navIconContainer primaryBtn'
+                      : 'navIconContainer'
+                  }
+                >
+                  <Icon as={n?.icon} />
+                </Link>
+              </Tooltip>
+            );
+          })}
+        </VStack>
+        <VStack
+          spacing={null}
+          w={'100%'}
+          // borderTop={'1px solid var(--divider)'}
+        >
+          <Profile navItems={navItems} at={'nav'} />
+          <SignOutNav />
+        </VStack>
+      </VStack>
+    );
+  }
+};
+
+const CashierNav = () => {
+  // Utils
+  const screenWidth = useWidthResizeListener();
+  const currentUrl = useLocation();
+  const currentUrlSplitted = currentUrl.pathname.split('/');
+  const activeNav = currentUrlSplitted[currentUrlSplitted.length - 1];
+
+  // Datas
+  const navItems = [
+    { name: 'Products', icon: Inventory2OutlinedIcon, link: '/admin/products' },
+    { name: 'Debts', icon: MoneyOffCsredOutlinedIcon, link: '/admin/debts' },
+    {
+      name: 'Expenses',
+      icon: MonetizationOnOutlinedIcon,
+      link: '/admin/expenses',
+    },
+    { name: 'Reports', icon: SummarizeOutlinedIcon, link: '/admin/reports' },
+  ];
+
+  // CashierNav Mobile
+  if (screenWidth < 1000) {
+    return (
+      <HStack className={'navMobile'} spacing={null}>
+        {navItems?.map((n, index) => {
+          return (
+            <Tooltip
+              key={index}
+              label={n?.name}
+              placement={'top'}
+              openDelay={'500'}
+            >
+              <Link
+                as={ReachLink}
+                to={n?.link}
+                className={
+                  activeNav === n?.name?.toLowerCase()
+                    ? 'navIconContainer primaryBtn'
+                    : 'navIconContainer'
+                }
+              >
+                <HStack justifyContent={'center'}>
+                  <Icon as={n?.icon} />
+                </HStack>
+              </Link>
+            </Tooltip>
+          );
+        })}
+        <Profile navItems={navItems} />
+      </HStack>
+    );
+    // CashierNav
   } else {
     return (
       <VStack
@@ -1391,7 +1498,7 @@ const Profile = props => {
 };
 
 export {
-  Nav,
+  AdminNav,
   TopBar,
   List,
   Details,
@@ -1399,4 +1506,5 @@ export {
   DetailsModal,
   InputModal,
   ReportDetails,
+  CashierNav,
 };

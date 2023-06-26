@@ -1,7 +1,7 @@
 import { useReducer, useState } from 'react';
 
 import {
-  Nav,
+  AdminNav,
   TopBar,
   List,
   ReportDetails,
@@ -235,7 +235,7 @@ export default function AdminReports() {
 
   return (
     <HStack id={'appContainer'} pb={screenWidth < 1000 ? '56px' : null}>
-      <Nav />
+      <AdminNav />
       <VStack id={'contentContainer'}>
         <TopBar />
         <HStack id={'mainContent'}>
