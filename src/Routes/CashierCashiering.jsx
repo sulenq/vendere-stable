@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import ShoppingCartCheckoutOutlinedIcon from '@mui/icons-material/ShoppingCartCheckoutOutlined';
@@ -32,139 +32,139 @@ export default function CashierCashiering() {
   const fn = useFormatNumber;
 
   // Page Datas
-  const dummyListData = [
-    {
-      status: 'profit',
-      period: 'April 2023',
-      grossRevenue: 35155000,
-      totalExpense: -14858000,
-      revenue: { penjualan: 35325000, grossRevenue: 35155000 },
-      debt: { piutang: -15000, bebanUtang: 0, totalRevenue: 35005000 },
-      cos: {
-        pembelian: -1485800,
-        bebanAngkut: 0,
-        totalCos: -14858000,
-        grossProfit: 20147000,
-      },
-      expenses: {
-        bebanOperasional: {
-          bebanListrik: 0,
-          bebanSewa: 0,
-          bebanTelepon: 0,
-        },
-        bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
-        totalExpenses: -14858000,
-      },
-      totalProfit: 5289000,
-    },
-    {
-      status: 'profit',
-      period: 'May 2023',
-      grossRevenue: 45155000,
-      totalExpense: -15858000,
-      revenue: { penjualan: 45325000, grossRevenue: 45155000 },
-      debt: { piutang: -25000, bebanUtang: 0, totalRevenue: 45005000 },
-      cos: {
-        pembelian: -1585800,
-        bebanAngkut: 0,
-        totalCos: -15858000,
-        grossProfit: 29147000,
-      },
-      expenses: {
-        bebanOperasional: {
-          bebanListrik: 0,
-          bebanSewa: 0,
-          bebanTelepon: 0,
-        },
-        bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
-        totalExpenses: -15858000,
-      },
-      totalProfit: 13289000,
-    },
-    {
-      status: 'loss',
-      period: 'June 2023',
-      grossRevenue: 25155000,
-      totalExpense: -5858000,
-      revenue: { penjualan: 25325000, grossRevenue: 25155000 },
-      debt: { piutang: -5000, bebanUtang: -10000, totalRevenue: 25005000 },
-      cos: {
-        pembelian: -1385800,
-        bebanAngkut: -100000,
-        totalCos: -4858000,
-        grossProfit: 3147000,
-      },
-      expenses: {
-        bebanOperasional: {
-          bebanListrik: -100000,
-          bebanSewa: -200000,
-          bebanTelepon: -300000,
-        },
-        bebanLain: { penyesuaianPersediaan: -400000, lainLain: -500000 },
-        totalExpenses: -5858000,
-      },
-      totalProfit: -2005000,
-    },
-  ];
-  const listItems = {
-    attributes: [
-      {
-        isNumeric: false,
-        name: 'Period',
-        key: 'period',
-        type: 'string',
-      },
-      {
-        isNumeric: false,
-        name: 'Status',
-        key: 'status',
-        type: 'badge',
-        colorOptions: { profit: 'green', loss: 'red' },
-      },
-      {
-        isNumeric: true,
-        name: 'Gross Revenue',
-        key: 'grossRevenue',
-        type: 'number',
-      },
-      {
-        isNumeric: true,
-        name: 'Total Expense',
-        key: 'totalExpense',
-        type: 'number',
-      },
-    ],
-    listAction: { isNumeric: true, name: 'Action', action: 'details' },
-    data: dummyListData,
-  };
-  const filterItems = [
-    {
-      name: 'Year',
-      type: 'string',
-      columns: 1,
-      items: [{ name: 'Year', value: '' }],
-    },
-    {
-      name: 'Month',
-      type: 'checkbox',
-      items: [
-        { name: 'Januari', isChecked: false },
-        { name: 'Februari', isChecked: false },
-        { name: 'Maret', isChecked: false },
-        { name: 'April', isChecked: false },
-        { name: 'Mei', isChecked: false },
-        { name: 'Juni', isChecked: false },
-        { name: 'Juli', isChecked: false },
-        { name: 'Agustus', isChecked: false },
-        { name: 'September', isChecked: false },
-        { name: 'Agustus', isChecked: false },
-        { name: 'Oktober', isChecked: false },
-        { name: 'November', isChecked: false },
-        { name: 'Desember', isChecked: false },
-      ],
-    },
-  ];
-  const cartList = [
+  // const dummyListData = [
+  //   {
+  //     status: 'profit',
+  //     period: 'April 2023',
+  //     grossRevenue: 35155000,
+  //     totalExpense: -14858000,
+  //     revenue: { penjualan: 35325000, grossRevenue: 35155000 },
+  //     debt: { piutang: -15000, bebanUtang: 0, totalRevenue: 35005000 },
+  //     cos: {
+  //       pembelian: -1485800,
+  //       bebanAngkut: 0,
+  //       totalCos: -14858000,
+  //       grossProfit: 20147000,
+  //     },
+  //     expenses: {
+  //       bebanOperasional: {
+  //         bebanListrik: 0,
+  //         bebanSewa: 0,
+  //         bebanTelepon: 0,
+  //       },
+  //       bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
+  //       totalExpenses: -14858000,
+  //     },
+  //     totalProfit: 5289000,
+  //   },
+  //   {
+  //     status: 'profit',
+  //     period: 'May 2023',
+  //     grossRevenue: 45155000,
+  //     totalExpense: -15858000,
+  //     revenue: { penjualan: 45325000, grossRevenue: 45155000 },
+  //     debt: { piutang: -25000, bebanUtang: 0, totalRevenue: 45005000 },
+  //     cos: {
+  //       pembelian: -1585800,
+  //       bebanAngkut: 0,
+  //       totalCos: -15858000,
+  //       grossProfit: 29147000,
+  //     },
+  //     expenses: {
+  //       bebanOperasional: {
+  //         bebanListrik: 0,
+  //         bebanSewa: 0,
+  //         bebanTelepon: 0,
+  //       },
+  //       bebanLain: { penyesuaianPersediaan: 0, lainLain: 0 },
+  //       totalExpenses: -15858000,
+  //     },
+  //     totalProfit: 13289000,
+  //   },
+  //   {
+  //     status: 'loss',
+  //     period: 'June 2023',
+  //     grossRevenue: 25155000,
+  //     totalExpense: -5858000,
+  //     revenue: { penjualan: 25325000, grossRevenue: 25155000 },
+  //     debt: { piutang: -5000, bebanUtang: -10000, totalRevenue: 25005000 },
+  //     cos: {
+  //       pembelian: -1385800,
+  //       bebanAngkut: -100000,
+  //       totalCos: -4858000,
+  //       grossProfit: 3147000,
+  //     },
+  //     expenses: {
+  //       bebanOperasional: {
+  //         bebanListrik: -100000,
+  //         bebanSewa: -200000,
+  //         bebanTelepon: -300000,
+  //       },
+  //       bebanLain: { penyesuaianPersediaan: -400000, lainLain: -500000 },
+  //       totalExpenses: -5858000,
+  //     },
+  //     totalProfit: -2005000,
+  //   },
+  // ];
+  // const listItems = {
+  //   attributes: [
+  //     {
+  //       isNumeric: false,
+  //       name: 'Period',
+  //       key: 'period',
+  //       type: 'string',
+  //     },
+  //     {
+  //       isNumeric: false,
+  //       name: 'Status',
+  //       key: 'status',
+  //       type: 'badge',
+  //       colorOptions: { profit: 'green', loss: 'red' },
+  //     },
+  //     {
+  //       isNumeric: true,
+  //       name: 'Gross Revenue',
+  //       key: 'grossRevenue',
+  //       type: 'number',
+  //     },
+  //     {
+  //       isNumeric: true,
+  //       name: 'Total Expense',
+  //       key: 'totalExpense',
+  //       type: 'number',
+  //     },
+  //   ],
+  //   listAction: { isNumeric: true, name: 'Action', action: 'details' },
+  //   data: dummyListData,
+  // };
+  // const filterItems = [
+  //   {
+  //     name: 'Year',
+  //     type: 'string',
+  //     columns: 1,
+  //     items: [{ name: 'Year', value: '' }],
+  //   },
+  //   {
+  //     name: 'Month',
+  //     type: 'checkbox',
+  //     items: [
+  //       { name: 'Januari', isChecked: false },
+  //       { name: 'Februari', isChecked: false },
+  //       { name: 'Maret', isChecked: false },
+  //       { name: 'April', isChecked: false },
+  //       { name: 'Mei', isChecked: false },
+  //       { name: 'Juni', isChecked: false },
+  //       { name: 'Juli', isChecked: false },
+  //       { name: 'Agustus', isChecked: false },
+  //       { name: 'September', isChecked: false },
+  //       { name: 'Agustus', isChecked: false },
+  //       { name: 'Oktober', isChecked: false },
+  //       { name: 'November', isChecked: false },
+  //       { name: 'Desember', isChecked: false },
+  //     ],
+  //   },
+  // ];
+  const cartListDummyData = [
     {
       id: 27,
       name: 'Gula Pasir 1kg',
@@ -220,6 +220,7 @@ export default function CashierCashiering() {
       modal: 1000,
     },
   ];
+  const [cartList, setCartList] = useState(cartListDummyData);
   const [checkoutData, setCheckoutData] = useState({
     cartList: cartList,
     total: 0,
@@ -227,6 +228,9 @@ export default function CashierCashiering() {
     pay: 0,
     change: 0,
   });
+  useEffect(() => {
+    console.log(checkoutData);
+  }, [checkoutData]);
 
   // Components
   const AddCartModal = props => {
@@ -274,6 +278,20 @@ export default function CashierCashiering() {
     function handlePaymentOnChange(newData) {
       setPaymentData(newData);
     }
+    function handleCheckOut(e) {
+      setCheckoutData(prevState => ({
+        ...prevState,
+        ...paymentData,
+      }));
+      setCartList({});
+      onClose();
+    }
+    // function handleKeyDownOnInputPay(e) {
+    //   const checkoutBtn = document.querySelector('#checkoutBtn');
+    //   if (e.key === 'Enter') {
+    //     checkoutBtn?.click();
+    //   }
+    // }
 
     return (
       <>
@@ -313,7 +331,7 @@ export default function CashierCashiering() {
                   color={'primary'}
                   lineHeight={'48px'}
                 >
-                  {fn(22000)}
+                  {fn(checkoutData?.total) || 0}
                 </Text>
               </VStack>
               <VStack
@@ -330,7 +348,7 @@ export default function CashierCashiering() {
                   fontWeight={'bold'}
                   lineHeight={'48px'}
                 >
-                  {fn(0) || 0}
+                  {fn(checkoutData?.change) || 0}
                 </Text>
               </VStack>
               <HStack
@@ -370,10 +388,7 @@ export default function CashierCashiering() {
                 <Button
                   id={'checkoutBtn'}
                   className={'btn primaryBtn'}
-                  onClick={() => {
-                    handleCheckOut();
-                    onClose();
-                  }}
+                  onClick={handleCheckOut}
                   w={'100%'}
                   h={'50px'}
                 >
@@ -386,17 +401,6 @@ export default function CashierCashiering() {
       </>
     );
   };
-
-  // Functions
-  function handleKeyDownOnInputPay(e) {
-    const checkoutBtn = document.querySelector('#checkoutBtn');
-    if (e.key === 'Enter') {
-      checkoutBtn?.click();
-    }
-  }
-  function handleCheckOut(e) {
-    console.log(checkoutData);
-  }
 
   return (
     <HStack id={'appContainer'} pb={screenWidth < 1000 ? '56px' : null}>
@@ -446,51 +450,53 @@ export default function CashierCashiering() {
               spacing={null}
               overflow={'auto'}
             >
-              {cartList?.map((c, index) => {
-                // console.log(c);
-                return (
-                  <HStack
-                    key={index}
-                    w={'100%'}
-                    p={'8px 16px'}
-                    alignItems={'flex-start'}
-                    justifyContent={'space-between'}
-                    borderBottom={'1px solid var(--divider)'}
-                  >
-                    <VStack alignItems={'flex-start'}>
-                      <Text>{c?.name}</Text>
-                      <Text opacity={0.5}>{c?.code}</Text>
-                      <Text opacity={0.5}>{`@ ${fn(c?.price)}`}</Text>
-                    </VStack>
-                    <VStack alignItems={'flex-end'}>
-                      <Text fontSize={'16px'} fontWeight={'bold'}>
-                        {fn(c?.totalPrice)}
-                      </Text>
-                      <HStack w={'100px'} spacing={null}>
-                        <Button className={'counterBtn'}>
-                          <Icon
-                            fontSize={'16px !important'}
-                            as={RemoveOutlinedIcon}
-                          />
-                        </Button>
-                        <Input
-                          className={'input'}
-                          textAlign={'right'}
-                          p={'8px'}
-                          //TODO ubah jadi value dan buat onChange handler nya tod
-                          defaultValue={c?.qty}
-                        />
-                        <Button className={'counterBtn'}>
-                          <Icon
-                            fontSize={'16px !important'}
-                            as={AddOutlinedIcon}
-                          />
-                        </Button>
+              {Object.keys(cartList).length !== 0
+                ? cartList?.map((c, index) => {
+                    // console.log(c);
+                    return (
+                      <HStack
+                        key={index}
+                        w={'100%'}
+                        p={'8px 16px'}
+                        alignItems={'flex-start'}
+                        justifyContent={'space-between'}
+                        borderBottom={'1px solid var(--divider)'}
+                      >
+                        <VStack alignItems={'flex-start'}>
+                          <Text>{c?.name}</Text>
+                          <Text opacity={0.5}>{c?.code}</Text>
+                          <Text opacity={0.5}>{`@ ${fn(c?.price)}`}</Text>
+                        </VStack>
+                        <VStack alignItems={'flex-end'}>
+                          <Text fontSize={'16px'} fontWeight={'bold'}>
+                            {fn(c?.totalPrice)}
+                          </Text>
+                          <HStack w={'100px'} spacing={null}>
+                            <Button className={'counterBtn'}>
+                              <Icon
+                                fontSize={'16px !important'}
+                                as={RemoveOutlinedIcon}
+                              />
+                            </Button>
+                            <Input
+                              className={'input'}
+                              textAlign={'right'}
+                              p={'8px'}
+                              //TODO ubah jadi value dan buat onChange handler nya tod
+                              defaultValue={c?.qty}
+                            />
+                            <Button className={'counterBtn'}>
+                              <Icon
+                                fontSize={'16px !important'}
+                                as={AddOutlinedIcon}
+                              />
+                            </Button>
+                          </HStack>
+                        </VStack>
                       </HStack>
-                    </VStack>
-                  </HStack>
-                );
-              })}
+                    );
+                  })
+                : ''}
             </VStack>
             {/* Footer */}
             <VStack
