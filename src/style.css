@@ -26,6 +26,10 @@ body,
   color: #ffffff;
 }
 
+/* ::-webkit-scrollbar {
+  width: 8px;
+}
+
 ::-webkit-scrollbar-track {
   background-color: transparent;
   border-radius: 0;
@@ -39,7 +43,7 @@ body,
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--primary);
-}
+} */
 
 .wrapper {
   width: 100%;
@@ -93,6 +97,9 @@ body,
   color: white;
   justify-content: space-between;
 }
+.selectedNav {
+  color: var(--primary) !important;
+}
 .navMobile {
   position: fixed;
   bottom: 0;
@@ -129,6 +136,7 @@ body,
 .modalHeader {
   padding: 16px !important;
   font-size: 20px !important;
+  font-weight: bold !important;
   border-radius: 0 !important;
   border-bottom: 1px solid var(--divider);
 }
@@ -209,6 +217,22 @@ td {
   align-items: flex-start;
   overflow: auto;
 }
+#detailsSection {
+  width: 320px;
+  height: 100%;
+  border-right: 1px solid var(--divider);
+  gap: 0 !important;
+  overflow: auto;
+  justify-content: space-between;
+  transition: 0.4s;
+}
+#cartListSection {
+  height: 100%;
+  /* border-right: 1px solid var(--divider); */
+  gap: 0 !important;
+  overflow: auto;
+  /* justify-content: space-between; */
+}
 #listSection {
   height: 100%;
   overflow: auto;
@@ -244,6 +268,9 @@ td {
   background: var(--primary);
   color: white !important;
   transition: 0.1s;
+}
+.counterBtn {
+  border-radius: 0 !important;
 }
 
 @media screen and (max-width: 1200px) {

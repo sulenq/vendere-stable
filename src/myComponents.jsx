@@ -12,8 +12,8 @@ import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-// import ViewInArOutlinedIcon from '@mui/icons-material/ViewInArOutlined';
-
+import PointOfSaleOutlinedIcon from '@mui/icons-material/PointOfSaleOutlined';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import { ColorModeSwitcher } from './ColorModeSwitcher.js';
 import {
   useWidthResizeListener,
@@ -104,7 +104,7 @@ const AdminNav = () => {
                 to={n?.link}
                 className={
                   activeNav === n?.name?.toLowerCase()
-                    ? 'navIconContainer primaryBtn'
+                    ? 'navIconContainer selectedNav'
                     : 'navIconContainer'
                 }
               >
@@ -134,7 +134,7 @@ const AdminNav = () => {
             // borderBottom={'1px solid var(--divider)'}
           >
             <Link as={ReachLink} to={'/'} w={'100%'}>
-              <Image src={'../logo.png'} w={'28px'} mx={'auto !important'} />
+              <Image src={'../logo.png'} w={'20px'} mx={'auto !important'} />
             </Link>
           </HStack>
         </Tooltip>
@@ -152,11 +152,18 @@ const AdminNav = () => {
                   to={n?.link}
                   className={
                     activeNav === n?.name?.toLowerCase()
-                      ? 'navIconContainer primaryBtn'
+                      ? 'navIconContainer selectedNav'
                       : 'navIconContainer'
                   }
                 >
-                  <Icon as={n?.icon} />
+                  <HStack
+                    justifyContent={'center'}
+                    w={'100%'}
+                    h={'100%'}
+                    alignItems={'center'}
+                  >
+                    <Icon as={n?.icon} />
+                  </HStack>
                 </Link>
               </Tooltip>
             );
@@ -184,20 +191,26 @@ const CashierNav = () => {
 
   // Datas
   const navItems = [
-    { name: 'Products', icon: Inventory2OutlinedIcon, link: '/admin/products' },
-    { name: 'Debts', icon: MoneyOffCsredOutlinedIcon, link: '/admin/debts' },
     {
-      name: 'Expenses',
-      icon: MonetizationOnOutlinedIcon,
-      link: '/admin/expenses',
+      name: 'Cashiering',
+      icon: PointOfSaleOutlinedIcon,
+      link: '/cashier/cashiering',
     },
-    { name: 'Reports', icon: SummarizeOutlinedIcon, link: '/admin/reports' },
+    {
+      name: 'Transactions',
+      icon: ReceiptLongOutlinedIcon,
+      link: '/cashier/transactions',
+    },
   ];
 
   // CashierNav Mobile
   if (screenWidth < 1000) {
     return (
-      <HStack className={'navMobile'} spacing={null}>
+      <HStack
+        className={'navMobile'}
+        borderTop={'1px solid var(--primary-hover)'}
+        spacing={null}
+      >
         {navItems?.map((n, index) => {
           return (
             <Tooltip
@@ -211,7 +224,7 @@ const CashierNav = () => {
                 to={n?.link}
                 className={
                   activeNav === n?.name?.toLowerCase()
-                    ? 'navIconContainer primaryBtn'
+                    ? 'navIconContainer selectedNav'
                     : 'navIconContainer'
                 }
               >
@@ -225,6 +238,7 @@ const CashierNav = () => {
         <Profile navItems={navItems} />
       </HStack>
     );
+
     // CashierNav
   } else {
     return (
@@ -241,7 +255,7 @@ const CashierNav = () => {
             // borderBottom={'1px solid var(--divider)'}
           >
             <Link as={ReachLink} to={'/'} w={'100%'}>
-              <Image src={'../logo.png'} w={'28px'} mx={'auto !important'} />
+              <Image src={'../logo.png'} w={'20px'} mx={'auto !important'} />
             </Link>
           </HStack>
         </Tooltip>
@@ -259,11 +273,18 @@ const CashierNav = () => {
                   to={n?.link}
                   className={
                     activeNav === n?.name?.toLowerCase()
-                      ? 'navIconContainer primaryBtn'
+                      ? 'navIconContainer selectedNav'
                       : 'navIconContainer'
                   }
                 >
-                  <Icon as={n?.icon} />
+                  <HStack
+                    justifyContent={'center'}
+                    w={'100%'}
+                    h={'100%'}
+                    alignItems={'center'}
+                  >
+                    <Icon as={n?.icon} />
+                  </HStack>
                 </Link>
               </Tooltip>
             );
@@ -1184,6 +1205,7 @@ const ReadOnlyData = props => {
   }
 };
 
+// item = {initialData, valueType, valueKey, onInput}
 const InputData = props => {
   // Utils
   const fn = useFormatNumber;
@@ -1348,11 +1370,11 @@ const SignOutNav = props => {
         <ModalOverlay backdropFilter={'blur(5px)'} />
         <ModalContent className={'modalContent'}>
           <ModalHeader className={'modalHeader'}>Signing Out</ModalHeader>{' '}
-          <ModalBody pb={'24px'}>Finish working? let's take a break</ModalBody>
+          <ModalBody py={'16px'}>Finish working? let's take a break</ModalBody>
           <ModalFooter className={'modalFooter'}>
             <HStack w={'100%'} h={'50px'} spacing={null}>
               <Button className={'btn'} onClick={onClose} w={'50%'} h={'100%'}>
-                Close
+                CANCEL
               </Button>
               <Button
                 className={'btn primaryBtn'}
@@ -1360,7 +1382,7 @@ const SignOutNav = props => {
                 w={'50%'}
                 h={'100%'}
               >
-                Sign Out
+                SIGN OUT
               </Button>
             </HStack>
           </ModalFooter>
@@ -1395,11 +1417,11 @@ const SignOutProfile = props => {
         <ModalOverlay backdropFilter={'blur(5px)'} />
         <ModalContent className={'modalContent'}>
           <ModalHeader className={'modalHeader'}>Signing Out</ModalHeader>
-          <ModalBody pb={'24px'}>Finish working? let's take a break</ModalBody>
+          <ModalBody py={'16px'}>Finish working? let's take a break</ModalBody>
           <ModalFooter className={'modalFooter'}>
             <HStack w={'100%'} h={'50px'} spacing={null}>
               <Button className={'btn'} onClick={onClose} w={'50%'} h={'100%'}>
-                Close
+                CANCEL
               </Button>
               <Button
                 className={'btn primaryBtn'}
@@ -1407,7 +1429,7 @@ const SignOutProfile = props => {
                 w={'50%'}
                 h={'100%'}
               >
-                Sign Out
+                SIGN OUT
               </Button>
             </HStack>
           </ModalFooter>
@@ -1458,7 +1480,7 @@ const Profile = props => {
                 mt={'8px'}
                 // border={'1px solid var(--divider)'}
               >
-                <Text p={'8px 16px'} opacity={'0.5'}>
+                <Text p={'8px 0'} opacity={'0.5'}>
                   Main Navigation
                 </Text>
                 {props?.navItems?.map((n, index) => {
@@ -1507,4 +1529,5 @@ export {
   InputModal,
   ReportDetails,
   CashierNav,
+  InputData,
 };

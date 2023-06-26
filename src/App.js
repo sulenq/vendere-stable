@@ -8,6 +8,7 @@ import AdminProducts from './Routes/AdminProducts';
 import AdminDebts from './Routes/AdminDebts';
 import AdminExpenses from './Routes/AdminExpenses.jsx';
 import AdminReports from './Routes/AdminReports.jsx';
+import CashierCashiering from './Routes/CashierCashiering.jsx';
 
 import {
   BrowserRouter,
@@ -76,7 +77,10 @@ function App() {
           <Route path={'/admin/expenses/'} element={<AdminExpenses />} />
           <Route path={'/admin/reports/'} element={<AdminReports />} />
           <Route path={'/cashier/'} element={<CashierEndPoint />} />
-          <Route path={'/cashier/cashiering/'} element={<CashierEndPoint />} />
+          <Route
+            path={'/cashier/cashiering/'}
+            element={<CashierCashiering />}
+          />
           <Route path={'*'} element={<NotFound />} />
         </Routes>
       </ChakraProvider>
