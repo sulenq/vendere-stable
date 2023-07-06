@@ -1445,7 +1445,7 @@ function AdminProducts() {
               Object.keys(detailsData).length !== 0
                 ? screenWidth < 1000
                   ? '100%'
-                  : 'calc(100% - 320px)'
+                  : 'calc(100% - 360px)'
                 : '100%'
             }
           >
@@ -1510,6 +1510,7 @@ function AdminProducts() {
                 <PageHeader title={'Details'} />
                 <Details detailsItems={detailsItems} hasImage />
               </VStack>
+
               <VStack w={'100%'} spacing={null}>
                 <HStack w={'100%'} spacing={null}>
                   <InputModal

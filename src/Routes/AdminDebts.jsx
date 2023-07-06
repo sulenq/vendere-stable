@@ -228,7 +228,7 @@ export default function AdminDebts() {
               Object.keys(detailsData).length !== 0
                 ? screenWidth < 1000
                   ? '100%'
-                  : 'calc(100% - 320px)'
+                  : 'calc(100% - 360px)'
                 : '100%'
             }
             // w={'100%'}

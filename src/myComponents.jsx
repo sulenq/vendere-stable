@@ -14,6 +14,8 @@ import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import PointOfSaleOutlinedIcon from '@mui/icons-material/PointOfSaleOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+
 import { ColorModeSwitcher } from './ColorModeSwitcher.js';
 import {
   useWidthResizeListener,
@@ -115,7 +117,7 @@ const AdminNav = () => {
             </Tooltip>
           );
         })}
-        <Profile navItems={navItems} />
+        <AdminProfile navItems={navItems} />
       </HStack>
     );
     // AdminNav
@@ -174,7 +176,7 @@ const AdminNav = () => {
           w={'100%'}
           // borderTop={'1px solid var(--divider)'}
         >
-          <Profile navItems={navItems} at={'nav'} />
+          <AdminProfile navItems={navItems} at={'nav'} />
           <SignOutNav />
         </VStack>
       </VStack>
@@ -383,6 +385,7 @@ const List = props => {
   const rfn = useReverseFormatNumber;
   const filterItems = props?.filterItems;
   const screenWidth = useWidthResizeListener();
+  const location = useLocation();
 
   // Component
   const ListFilter = () => {
@@ -394,7 +397,7 @@ const List = props => {
       ? JSON.parse(JSON.stringify(filterItems))
       : {};
     const [filter, setFilter] = useState(
-      filterItems ? JSON.parse(JSON.stringify(filterItems)) : {}
+      filterItems ? JSON.parse(JSON.stringify(filterItems)) : null
     );
 
     // Functions
@@ -674,7 +677,11 @@ const List = props => {
       l?.classList.remove('selectedList');
     });
     e.currentTarget?.classList.add('selectedList');
-    props?.selectList(selectedListData);
+    if (location.pathname === '/cashier/cashiering') {
+      props?.listItems?.listAction?.actionFunction(selectedListData);
+    } else {
+      props?.selectList(selectedListData);
+    }
   }
 
   return (
@@ -801,7 +808,9 @@ const Details = props => {
               py={'12px'}
               alignItems={'flex-start'}
             >
-              <Text opacity={0.5}>{a?.name}</Text>
+              <Text opacity={0.5} fontSize={'13px'}>
+                {a?.name}
+              </Text>
               <ReadOnlyData
                 attribute={a}
                 data={props?.detailsItems?.data}
@@ -831,17 +840,23 @@ const ReportDetails = props => {
     >
       <VStack w={'100%'} spacing={null}>
         <Box className={'reportDetailsItem'}>
-          <Text opacity={0.5}>Status</Text>
+          <Text opacity={0.5} fontSize={'13px'}>
+            Status
+          </Text>
           <Badge colorScheme={data?.status === 'profit' ? 'green' : 'red'}>
             {data?.status}
           </Badge>
         </Box>
         <Box className={'reportDetailsItem'}>
-          <Text opacity={0.5}>Period</Text>
+          <Text opacity={0.5} fontSize={'13px'}>
+            Period
+          </Text>
           <Text>{data?.period}</Text>
         </Box>
         <Box className={'reportDetailsItem'}>
-          <Text opacity={0.5}>Revenue</Text>
+          <Text opacity={0.5} fontSize={'13px'}>
+            Revenue
+          </Text>
           <HStack w={'100%'} justifyContent={'space-between'}>
             <Text>Penjualan</Text>
             <Text>{fn(data?.revenue?.penjualan) || 0}</Text>
@@ -852,7 +867,9 @@ const ReportDetails = props => {
           </HStack>
         </Box>
         <Box className={'reportDetailsItem'}>
-          <Text opacity={0.5}>Debt</Text>
+          <Text opacity={0.5} fontSize={'13px'}>
+            Debt
+          </Text>
           <HStack w={'100%'} justifyContent={'space-between'}>
             <Text>Piutang</Text>
             <Text>{fn(data?.debt?.piutang) || 0}</Text>
@@ -863,7 +880,9 @@ const ReportDetails = props => {
           </HStack>
         </Box>
         <Box className={'reportDetailsItem'}>
-          <Text opacity={0.5}>Cost of Sales</Text>
+          <Text opacity={0.5} fontSize={'13px'}>
+            Cost of Sales
+          </Text>
           <HStack className={'reportDetailsItemValue'}>
             <Text>Pembelian</Text>
             <Text>{fn(data?.cos?.pembelian) || 0}</Text>
@@ -882,7 +901,9 @@ const ReportDetails = props => {
           </HStack>
         </Box>
         <Box className={'reportDetailsItem'}>
-          <Text opacity={0.5}>Expenditure</Text>
+          <Text opacity={0.5} fontSize={'13px'}>
+            Expenditure
+          </Text>
           <Box>
             <Text>Beban Operasional</Text>
             <HStack className={'reportDetailsItemValue'} pl={'16px'}>
@@ -919,7 +940,9 @@ const ReportDetails = props => {
           </HStack>
         </Box>
         <Box className={'reportDetailsItem'} borderBottom={'none'} pb={'16px'}>
-          <Text opacity={0.5}>Total Profit</Text>
+          <Text opacity={0.5} fontSize={'13px'}>
+            Total Profit
+          </Text>
           <Badge
             w={'100%'}
             fontSize={'md'}
@@ -1449,6 +1472,7 @@ const Profile = props => {
           <Icon as={PersonOutlinedIcon} />
         </HStack>
       </Tooltip>
+
       <Modal
         size={'lg'}
         isOpen={isOpen}
@@ -1464,6 +1488,87 @@ const Profile = props => {
         >
           <ModalCloseButton className={'modalCloseBtn'} />
           <ModalHeader className={'modalHeader'}>Profile</ModalHeader>
+          <ModalBody pb={'24px'}>
+            <VStack maxW={'480px'} mx={'auto'}>
+              <Avatar name="Kios Melati" bg={'primary'} size={'2xl'} />
+              <Text fontSize={'24px'} fontWeight={'bold'}>
+                Kios Melati
+              </Text>
+              <Text>examplemail@email.com</Text>
+              <Badge colorScheme={'purple'}>admin</Badge>
+              <VStack
+                w={'100%'}
+                // bg={'var(--divider)'}
+                alignItems={'flex-start'}
+                spacing={null}
+                mt={'8px'}
+                // border={'1px solid var(--divider)'}
+              >
+                <Text p={'8px 0'} opacity={'0.5'}>
+                  Main Navigation
+                </Text>
+                {props?.navItems?.map((n, index) => {
+                  return (
+                    <Link
+                      key={index}
+                      as={ReachLink}
+                      textDecoration={'none !important'}
+                      to={n?.link}
+                      w={'100%'}
+                    >
+                      <HStack
+                        w={'100%'}
+                        p={'12px 16px'}
+                        justifyContent={'space-between'}
+                        className={'profileNav'}
+                      >
+                        <Text fontSize={'18px'}>{n?.name}</Text>
+                        <Icon as={n?.icon} />
+                      </HStack>
+                    </Link>
+                  );
+                })}
+              </VStack>
+              <VStack w={'100%'}>
+                <Button className={'btn'} w={'100%'} h={'50px'}>
+                  CHANGE PASSWORD
+                </Button>
+                <SignOutProfile />
+              </VStack>
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+const AdminProfile = props => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Tooltip label={'Profile'} placement={'right'} openDelay={'500'}>
+        <HStack className={'navIconContainer'} onClick={onOpen} spacing={null}>
+          <Icon as={StorefrontOutlinedIcon} />
+        </HStack>
+      </Tooltip>
+
+      <Modal
+        size={'lg'}
+        isOpen={isOpen}
+        onClose={onClose}
+        scrollBehavior={'inside'}
+        isCentered
+      >
+        <ModalOverlay backdropFilter={'blur(5px)'} />
+        <ModalContent
+          className={'modalContent'}
+          maxH={'100vh !important'}
+          m={'0 !important'}
+        >
+          <ModalCloseButton className={'modalCloseBtn'} />
+          <ModalHeader className={'modalHeader'}>Store Profile</ModalHeader>
           <ModalBody pb={'24px'}>
             <VStack maxW={'480px'} mx={'auto'}>
               <Avatar name="Kios Melati" bg={'primary'} size={'2xl'} />
